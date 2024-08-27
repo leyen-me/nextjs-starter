@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -30,4 +30,42 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+} */
+
+:root {
+  --login-background: radial-gradient(
+      rgb(210, 241, 223),
+      rgb(211, 215, 250),
+      rgb(186, 216, 244)
+    )
+    0% 0% / 400% 400%;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@layer utilities {
+  .login-background {
+    opacity: 0.3;
+    background: var(--login-background);
+    animation: 15s ease 0s infinite normal none running gradient;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body::backdrop {
+  background-color: rgb(238, 245, 249);
 }
