@@ -24,7 +24,6 @@
     "crypto-js": "^4.2.0",
     "next": "^14.2.7",
     "next-auth": "^4.24.7",
-    "next-intl": "^3.17.6",
     "react": "^18",
     "react-dom": "^18"
   },
