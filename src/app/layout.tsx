@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthSessionProvider } from "@/components/auth/AuthSessionProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { ToastProvider } from "@/components/ToastProvider";
+import { I18nProvider } from "@/components/I18nProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,11 +24,17 @@ export default function RootLayout({
 }>) {
   return (
     <AuthSessionProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
-        </body>
-      </html>
+      <I18nProvider>
+        <html lang="zh-CN">
+          <body className={inter.className}>
+            <AppRouterCacheProvider>
+              <ThemeProvider>
+                <ToastProvider>{children}</ToastProvider>
+              </ThemeProvider>
+            </AppRouterCacheProvider>
+          </body>
+        </html>
+      </I18nProvider>
     </AuthSessionProvider>
   );
 }

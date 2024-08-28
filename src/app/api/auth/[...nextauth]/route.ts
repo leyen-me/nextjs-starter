@@ -1,6 +1,7 @@
 import NextAuth, { RequestInternal, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import { compare } from "bcrypt"; // 用于密码比对
 import { prisma } from "@/libs/prisma"; // 你的数据库连接
 
@@ -21,6 +22,10 @@ const handler = NextAuth({
       httpOptions: {
         timeout: 50000,
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
     CredentialsProvider({
       credentials: {
@@ -63,23 +68,17 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ account, profile }) {
-      if (account?.provider === "github") {
+      if (account?.provider === "github" || account?.provider === "google") {
         const user = await prisma.user.findUnique({
           where: { email: profile?.email },
         });
-        if (user) {
-          return true;
-        } else {
-          return false;
-        }
+        return !!user;
       }
       return true;
     },
     async session({ session, token, user }) {
       // 验证redis中的用户是否存在
-
       // 验证redis中的用户是否被禁用
-
       return session;
     },
   },
