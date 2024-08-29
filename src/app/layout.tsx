@@ -24,17 +24,17 @@ export default function RootLayout({
 }>) {
   return (
     <AuthSessionProvider>
-      <I18nProvider>
-        <html lang="zh-CN">
-          <body className={inter.className}>
-            <AppRouterCacheProvider>
-              <ThemeProvider>
+      <ThemeProvider>
+        <I18nProvider>
+          <html lang="zh-CN">
+            <body className={inter.className}>
+              <AppRouterCacheProvider>
                 <ToastProvider>{children}</ToastProvider>
-              </ThemeProvider>
-            </AppRouterCacheProvider>
-          </body>
-        </html>
-      </I18nProvider>
+              </AppRouterCacheProvider>
+            </body>
+          </html>
+        </I18nProvider>
+      </ThemeProvider>
     </AuthSessionProvider>
   );
 }

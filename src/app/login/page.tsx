@@ -26,6 +26,9 @@ import { useToast } from "@/components/ToastProvider";
 import { getPassword, savePassword } from "@/utils";
 import AuthBg from "@/components/auth/AuthBg";
 import { useI18n } from "@/components/I18nProvider";
+import IconGoogle from "@/components/icons/IconGoogle";
+import IconGithub from "@/components/icons/IconGithub";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -123,44 +126,38 @@ export default function Login() {
           <div className="w-full flex justify-center ">
             <ul className="w-full flex gap-2">
               <li className="flex-1">
-                <LoginButton
+                <Button
                   variant="outlined"
                   className="w-full h-11"
                   onClick={handleGoogleLogin}
                   color="info"
                 >
                   <div className="flex items-center gap-2">
-                    <Image
-                      src="/assets/svgs/assets-logo-chrome.svg"
-                      width={20}
-                      height={20}
-                      alt="google"
-                    />
+                    <IconGoogle />
                     <span>Google</span>
                   </div>
-                </LoginButton>
+                </Button>
               </li>
               <li className="flex-1">
-                <LoginButton
+                <Button
                   className="w-full h-11"
                   variant="outlined"
                   onClick={handleGithubLogin}
                 >
                   <div className="flex items-center gap-2">
-                    <Image
-                      src="/assets/svgs/assets-logo-github.svg"
-                      width={20}
-                      height={20}
-                      alt="google"
-                    />
+                    <IconGithub />
                     <span>GitHub</span>
                   </div>
-                </LoginButton>
+                </Button>
               </li>
             </ul>
           </div>
-          <div className="my-8" style={{ color: "rgb(42, 53, 71)" }}>
-            <Divider>{t("pages.login.signwith")}</Divider>
+          <div className="my-8">
+            <Divider>
+              <Typography variant="body2" color="textSecondary">
+                {t("pages.login.signwith")}
+              </Typography>
+            </Divider>
           </div>
           <form onSubmit={handleEmailLogin} className="flex flex-col gap-4">
             <TextField

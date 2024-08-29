@@ -4,6 +4,8 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { compare } from "bcrypt"; // 用于密码比对
 import { prisma } from "@/libs/prisma"; // 你的数据库连接
+import { UserStatus } from "@prisma/client";
+import { signOut } from "next-auth/react";
 
 const handler = NextAuth({
   session: {
@@ -45,6 +47,10 @@ const handler = NextAuth({
 
         // 如果用户存在，比较密码
         if (user) {
+          if (user.status === UserStatus.DISABLED) {
+            return null;
+          }
+
           const isPasswordValid = await compare(
             credentials?.password || "",
             user.password
@@ -76,9 +82,15 @@ const handler = NextAuth({
       }
       return true;
     },
-    async session({ session, token, user }) {
-      // 验证redis中的用户是否存在
-      // 验证redis中的用户是否被禁用
+    async session({ session, token }) {
+      const user = await prisma.user.findUnique({
+        where: { email: token.email || "" },
+      });
+      if (user?.status === UserStatus.DISABLED) {
+        if (session.user) {
+          session.user.email = null;
+        }
+      }
       return session;
     },
   },
