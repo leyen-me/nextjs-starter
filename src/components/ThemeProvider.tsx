@@ -8,7 +8,9 @@ import {
 import { createContext, useContext, useEffect, useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 
-const createCustomTheme = (mode: "light" | "dark") =>
+type ThemeMode = "light" | "dark";
+
+const createCustomTheme = (mode: ThemeMode) =>
   createTheme({
     palette: {
       mode,
@@ -24,22 +26,27 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const defaultThemeValue: ThemeMode = "light";
+  const defaultTheme = createCustomTheme(defaultThemeValue);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    if (savedTheme) {
+      setIsDarkMode(savedTheme === "dark");
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+    setTheme(createCustomTheme(isDarkMode ? "dark" : "light"));
   }, [isDarkMode]);
 
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    setIsDarkMode(storedTheme === "dark");
-  }, []);
 
   const toggleTheme = () => {
     setIsDarkMode((prevMode) => !prevMode);
   };
-
-  const theme = createCustomTheme(isDarkMode ? "dark" : "light");
 
   return (
     <ThemeContext.Provider value={{ isDarkMode, theme, toggleTheme }}>

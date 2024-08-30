@@ -24,13 +24,55 @@ enum UserStatus {
   DISABLED
 }
 
+enum MenuType {
+  MENU
+  INTERFACE
+}
+
+enum OpenStyle {
+  INTERNAL
+  EXTERNAL
+}
+
 model User {
   id       String     @id @default(cuid())
   email    String     @unique
-  nickname String?     
+  nickname String?
   password String
   avatar   String?
   gender   Gender     @default(UNKNOWN)
   mobile   String?
   status   UserStatus @default(NORMAL)
+}
+
+model Menu {
+  id         String    @id @default(cuid())
+  pid        BigInt
+  name       String    @db.VarChar(200)
+  url        String    @db.VarChar(200)
+  type       MenuType
+  open_style OpenStyle
+  icon       String?   @db.VarChar(50)
+  sort       Int       @default(0)
+}
+
+model Role {
+  id   String @id @default(cuid())
+  name String
+}
+
+model RoleMenu {
+  id      String @id @default(cuid())
+  roleId  String
+  menuId  String
+
+  @@unique([roleId, menuId])
+}
+
+model UserRole {
+  id      String @id @default(cuid())
+  userId  String
+  roleId  String
+  
+  @@unique([userId, roleId])
 }

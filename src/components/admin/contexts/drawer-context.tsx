@@ -31,13 +31,13 @@ export const MENU_LIST: IMenuItem[] = [
     Icon: DashboardIcon,
     children: [
       {
-        route: `${ROUTES.main}/analytics`,
-        literal: "Analytics",
+        route: `/admin/dashboard`,
+        literal: "Dashboard",
         Icon: DashboardIcon,
       },
       {
-        route: `${ROUTES.main}/reports`,
-        literal: "Reports",
+        route: `/admin/user`,
+        literal: "User",
         Icon: DashboardIcon,
       },
     ],

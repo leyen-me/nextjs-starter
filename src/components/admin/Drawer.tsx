@@ -3,10 +3,13 @@ import {
   useTheme,
   Drawer as MuiDrawer,
   styled,
+  Box,
+  Divider,
 } from "@mui/material";
-import Image from "next/image";
 import { useDrawerContext } from "./contexts/drawer-context";
 import { MenuItemsList } from "./MenuItemsList";
+import { Logo } from "../Logo";
+import { useEffect } from "react";
 
 const StyledDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "isOpened",
@@ -29,24 +32,14 @@ const StyledDrawer = styled(MuiDrawer, {
   },
 }));
 
-export const Logo = () => {
-  return (
-    <div className="w-full h-14 flex items-center justify-center">
-      <Image
-        src="/assets/svgs/assets-dark-logo.svg"
-        alt="logo"
-        width={0}
-        height={0}
-        className="w-[80%]"
-      />
-    </div>
-  );
-};
-
-export const Drawer = () => {
+export const Drawer = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const { isOpened, toggleIsOpened, menu } = useDrawerContext();
-  const theme = useTheme();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
+
+  useEffect(() => {
+    if (isLargeScreen) {
+      toggleIsOpened(true);
+    }
+  }, [isLargeScreen, toggleIsOpened]);
 
   return (
     <StyledDrawer
@@ -55,7 +48,12 @@ export const Drawer = () => {
       onClose={() => toggleIsOpened(!isOpened)}
       isOpened={isOpened}
     >
-      <Logo />
+      {!isLargeScreen && (
+        <Box className="w-full h-14 px-4" sx={{ color: "primary.textColor" }}>
+          <Logo height="46%" />
+          <Divider />
+        </Box>
+      )}
       <MenuItemsList items={menu} />
     </StyledDrawer>
   );

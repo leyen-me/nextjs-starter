@@ -1,20 +1,36 @@
 import { List, Collapse } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MenuItem } from "./MenuItem";
 import { IMenuItem } from "./contexts/drawer-context";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 
 const renderMenuItems = (items: IMenuItem[], pathname: string, level = 0) => {
   return items.map(({ literal, route, Icon, children }) => {
     const [isOpen, setIsOpen] = useState(false);
     const hasChildren = children && children.length > 0;
+    const router = useRouter();
 
     const handleClick = () => {
       if (hasChildren) {
         setIsOpen(!isOpen);
+        return;
       }
+      router.push(route || "/");
     };
+
+    // 子项如果被激活，父菜单需要展开
+    // Check if any child route is active
+    const isChildActive =
+      hasChildren &&
+      children.some((child) => pathname.startsWith(child.route || "/"));
+
+    // If a child is active, ensure the parent menu is open
+    useEffect(() => {
+      if (isChildActive) {
+        setIsOpen(true);
+      }
+    }, [isChildActive]);
 
     return (
       <div key={route}>

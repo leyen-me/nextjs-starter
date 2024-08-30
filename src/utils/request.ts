@@ -33,7 +33,7 @@ class ApiClient {
     const headers = new Headers(customOptions.headers);
     headers.set(
       "X-Language",
-      getLanguage(localStorage.getItem("language") || "")
+      getLanguage(localStorage ? localStorage.getItem("language") || "" : "")
     );
 
     if (data) {

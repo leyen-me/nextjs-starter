@@ -22,8 +22,9 @@ import { useDrawerContext } from "./contexts/drawer-context";
 import { useState } from "react";
 import { useTheme } from "../ThemeProvider";
 import { signOut } from "next-auth/react";
+import { Logo } from "../Logo";
 
-export const Header = () => {
+export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const { isOpened, toggleIsOpened } = useDrawerContext();
   const { theme, toggleTheme } = useTheme();
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState<null | HTMLElement>(
@@ -48,6 +49,7 @@ export const Header = () => {
         <div className="w-full h-full flex justify-between">
           {/* Toggle button for opening/closing the drawer */}
           <div className="flex items-center gap-2">
+            {isLargeScreen && <Logo height="56%" />}
             <IconButton
               color="inherit"
               onClick={() => toggleIsOpened(!isOpened)}

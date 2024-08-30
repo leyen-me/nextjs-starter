@@ -23,6 +23,9 @@ export const MenuItem: React.FC<Props> = ({
   endIcon,
   level,
 }) => {
+  
+  const color = selected ? "primary.main" : "primary.textColor";
+
   const link = (
     <ListItemButton
       onClick={onClick}
@@ -31,6 +34,7 @@ export const MenuItem: React.FC<Props> = ({
         alignItems: "center",
         justifyContent: "space-between",
         ml: `${level * 16}px`,
+        color,
       }}
     >
       <div className="flex items-center">
@@ -39,6 +43,7 @@ export const MenuItem: React.FC<Props> = ({
             { minWidth: "auto" },
             (theme) => ({
               paddingRight: theme.spacing(2),
+              color,
             }),
           ]}
         >
