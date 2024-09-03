@@ -12,7 +12,8 @@
     "git:commit": "git-cz",
     "git:push": "git push",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev --name init"
+    "db:migrate": "prisma migrate dev --name init",
+    "db:seed": "node prisma/seed.mjs"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",

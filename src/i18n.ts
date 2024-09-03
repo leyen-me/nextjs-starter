@@ -22,6 +22,10 @@ export const translate = (key: string, translations: any): string => {
   return typeof value === "string" ? value : key;
 };
 
+export const getServerLanguage = (request: NextRequest): string => {
+  return getLanguage(request.headers.get("X-Language") || "");
+};
+
 export const serverTranslate = (key: string, request: NextRequest): string => {
   const lang = getLanguage(request.headers.get("X-Language") || "");
   const translations = translationsMap.get(lang);

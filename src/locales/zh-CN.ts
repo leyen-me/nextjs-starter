@@ -9,6 +9,26 @@ export default {
     },
   },
   pages: {
+    common: {
+      filter: "筛选",
+      results: "结果",
+      search: "搜索",
+      reset: "重置",
+      edit: "编辑",
+      delete: "删除",
+      actions: "操作",
+      pageSize: "每页显示数量",
+      total: "总数",
+    },
+    admin: {
+      user: {
+        email: "邮箱",
+        nickname: "昵称",
+        gender: "性别",
+        mobile: "手机号",
+        status: "状态",
+      },
+    },
     login: {
       welcome: "欢迎登录后台管理",
       description: "Welcome to login",

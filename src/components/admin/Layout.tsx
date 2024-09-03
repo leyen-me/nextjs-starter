@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Toolbar, Box, styled } from "@mui/material";
 
 import { Header } from "./Header";
@@ -9,12 +9,20 @@ import { Main } from "./Main";
 import { DrawerContextProvider } from "./contexts/drawer-context";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
+import api from "@/utils/request";
+import type { GlobalConfig } from "@/app/api/config/route";
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
-  
+  useEffect(() => {
+    const fetchConfig = async () => {
+      const { data } = await api.get<GlobalConfig>("/api/config");
+      // const { siteName } = data;
+    };
+    fetchConfig();
+  }, []);
 
   return (
     <DrawerContextProvider>

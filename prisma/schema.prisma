@@ -62,17 +62,28 @@ model Role {
 }
 
 model RoleMenu {
-  id      String @id @default(cuid())
-  roleId  String
-  menuId  String
+  id     String @id @default(cuid())
+  roleId String
+  menuId String
 
   @@unique([roleId, menuId])
 }
 
 model UserRole {
-  id      String @id @default(cuid())
-  userId  String
-  roleId  String
-  
+  id     String @id @default(cuid())
+  userId String
+  roleId String
+
   @@unique([userId, roleId])
+}
+
+enum Language {
+  ZH
+  EN
+}
+
+model GlobalConfig {
+  id       String   @id @default(cuid())
+  language Language
+  config   Json
 }

@@ -14,6 +14,9 @@ const createCustomTheme = (mode: ThemeMode) =>
   createTheme({
     palette: {
       mode,
+      background: {
+        // paper: mode === "dark" ? "#121212" : "#f0f0f0",
+      },
     },
   });
 
