@@ -77,13 +77,7 @@ model UserRole {
   @@unique([userId, roleId])
 }
 
-enum Language {
-  ZH
-  EN
-}
-
 model GlobalConfig {
   id       String   @id @default(cuid())
-  language Language
   config   Json
 }

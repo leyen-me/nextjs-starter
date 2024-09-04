@@ -1,5 +1,19 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  common: {
+    dict: {
+      all: "全部",
+      gender: {
+        male: "男",
+        female: "女",
+        unknown: "未知",
+      },
+      status: {
+        normal: "启用",
+        disabled: "禁用",
+      },
+    },
+  },
   server: {
     auth: {
       register: {

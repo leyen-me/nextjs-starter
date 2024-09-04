@@ -15,12 +15,13 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Chip,
 } from "@mui/material";
 import { useI18n } from "@/components/I18nProvider";
-import type { Gender, User, UserStatus } from "@prisma/client";
+import { Gender, UserStatus } from "@prisma/client";
 import api from "@/utils/request";
 import type { Page } from "@/types";
-import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from "@/contants";
+import { DEFAULT_PAGE_SIZE, DICT_KEYS, PAGE_SIZE_OPTIONS } from "@/contants";
 import { BaseTablePagination } from "@/components/BaseTablePagination";
 import { BaseCard } from "@/components/BaseCard";
 import { useFilter } from "@/hooks/useFilter";
@@ -28,8 +29,11 @@ import type {
   UserPageFilters,
   UserWithoutPassword,
 } from "@/app/api/user/page/route";
+import { BaseDictSelect } from "@/components/BaseDictSelect";
+import { CachedOutlined, SearchOutlined } from "@mui/icons-material";
+import { BaseDictTag } from "@/components/BaseDictTag";
 
-const User = () => {
+const UserPage = () => {
   const { t } = useI18n();
 
   const [total, setTotal] = useState(0);
@@ -112,20 +116,13 @@ const User = () => {
             onChange={handleFilterChange}
             size="small"
           />
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
-            <InputLabel>{t("pages.admin.user.gender")}</InputLabel>
-            <Select
-              label={t("pages.admin.user.gender")}
-              name="gender"
-              value={filters.gender}
-              onChange={handleFilterChange}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="MALE">Male</MenuItem>
-              <MenuItem value="FEMALE">Female</MenuItem>
-              <MenuItem value="UNKNOWN">Unknown</MenuItem>
-            </Select>
-          </FormControl>
+          <BaseDictSelect
+            dictKey={DICT_KEYS.Gender}
+            label={t("pages.admin.user.gender")}
+            name="gender"
+            value={filters.gender}
+            onChange={handleFilterChange}
+          ></BaseDictSelect>
           <TextField
             label={t("pages.admin.user.mobile")}
             variant="outlined"
@@ -134,24 +131,26 @@ const User = () => {
             onChange={handleFilterChange}
             size="small"
           />
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
-            <InputLabel>{t("pages.admin.user.status")}</InputLabel>
-            <Select
-              label={t("pages.admin.user.status")}
-              name="status"
-              value={filters.status}
-              onChange={handleFilterChange}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="NORMAL">Normal</MenuItem>
-              <MenuItem value="DISABLED">Disabled</MenuItem>
-            </Select>
-          </FormControl>
+          <BaseDictSelect
+            dictKey={DICT_KEYS.UserStatus}
+            label={t("pages.admin.user.status")}
+            name="status"
+            value={filters.status}
+            onChange={handleFilterChange}
+          ></BaseDictSelect>
           <Box sx={{ display: "flex", gap: 2 }}>
-            <Button variant="outlined" onClick={handleReset}>
+            <Button
+              variant="outlined"
+              onClick={handleReset}
+              startIcon={<CachedOutlined />}
+            >
               {t("pages.common.reset")}
             </Button>
-            <Button variant="contained" onClick={handleSearch}>
+            <Button
+              variant="contained"
+              onClick={handleSearch}
+              startIcon={<SearchOutlined />}
+            >
               {t("pages.common.search")}
             </Button>
           </Box>
@@ -197,9 +196,22 @@ const User = () => {
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.nickname}</TableCell>
-                  <TableCell>{user.gender}</TableCell>
+
+                  {/* tag */}
+                  <TableCell>
+                    <BaseDictTag
+                      dictKey={DICT_KEYS.Gender}
+                      value={user.gender}
+                    ></BaseDictTag>
+                    {/* <Chip label={user.gender} size="small" color="" /> */}
+                  </TableCell>
                   <TableCell>{user.mobile}</TableCell>
-                  <TableCell>{user.status}</TableCell>
+                  <TableCell>
+                    <BaseDictTag
+                      dictKey={DICT_KEYS.UserStatus}
+                      value={user.status}
+                    ></BaseDictTag>
+                  </TableCell>
                   <TableCell
                     sx={{
                       position: { xs: "static", sm: "sticky" },
@@ -244,4 +256,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default UserPage;

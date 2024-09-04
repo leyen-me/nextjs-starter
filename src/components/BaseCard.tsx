@@ -9,7 +9,12 @@ type BaseCardProps = {
 export function BaseCard({ title, children }: BaseCardProps) {
   return (
     <Card sx={{ marginBottom: 2, padding: 2 }}>
-      {title && <CardHeader title={title} />}
+      {title && (
+        <CardHeader
+          title={title}
+          titleTypographyProps={{ variant: "h6" }}
+        />
+      )}
       <CardContent>{children}</CardContent>
     </Card>
   );
