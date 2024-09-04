@@ -23,6 +23,9 @@ import { useState } from "react";
 import { useTheme } from "../ThemeProvider";
 import { signOut } from "next-auth/react";
 import { Logo } from "../Logo";
+import { LANGUAGES } from "@/contants";
+import { I18nMenu } from "../I18nMenu";
+import { ProfileMenu } from "./ProfileMenu";
 
 export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const { isOpened, toggleIsOpened } = useDrawerContext();
@@ -30,9 +33,7 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState<null | HTMLElement>(
     null
   );
-  const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(
-    null
-  );
+  const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenuItemClick = (item: string) => {
     setUserMenuAnchorEl(null);
@@ -63,6 +64,8 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
             <IconButton color="inherit" aria-label="notifications">
               <NotificationsOutlinedIcon />
             </IconButton>
+
+
             <IconButton
               color="inherit"
               aria-label="change language"
@@ -70,31 +73,8 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
             >
               <LanguageOutlinedIcon />
             </IconButton>
-            {/* 国际化也是一个Menu，里面显示国旗和国家 */}
-            <Menu
-              anchorEl={languageAnchorEl}
-              open={Boolean(languageAnchorEl)}
-              onClose={() => setLanguageAnchorEl(null)}
-            >
-              <MenuItem>
-                <Image
-                  src="/assets/pngs/assets-icon-cn.png"
-                  alt="Chinese"
-                  width={20}
-                  height={20}
-                />
-                <span className="ml-2">Chinese</span>
-              </MenuItem>
-              <MenuItem>
-                <Image
-                  src="/assets/pngs/assets-icon-us.png"
-                  alt="English"
-                  width={20}
-                  height={20}
-                />
-                <span className="ml-2">English</span>
-              </MenuItem>
-            </Menu>
+            <I18nMenu anchorEl={languageAnchorEl} open={Boolean(languageAnchorEl)} onClose={() => setLanguageAnchorEl(null)} />
+
 
             <IconButton
               color="inherit"
@@ -110,27 +90,14 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
               )}
             </IconButton>
 
-            {/* Menu items for profile and logout */}
+
             <IconButton
               color="inherit"
               onClick={(event) => setUserMenuAnchorEl(event.currentTarget)}
             >
               <AccountCircleOutlinedIcon />
             </IconButton>
-            <Menu
-              anchorEl={userMenuAnchorEl}
-              open={Boolean(userMenuAnchorEl)}
-              onClose={() => setUserMenuAnchorEl(null)}
-            >
-              <MenuItem onClick={() => handleMenuItemClick("profile")}>
-                <AccountCircleOutlinedIcon fontSize="small" sx={{ mr: 1 }} />
-                个人中心
-              </MenuItem>
-              <MenuItem onClick={() => handleMenuItemClick("logout")}>
-                <LogoutIcon fontSize="small" sx={{ mr: 1 }} />
-                登出
-              </MenuItem>
-            </Menu>
+            <ProfileMenu anchorEl={userMenuAnchorEl} open={Boolean(userMenuAnchorEl)} onClose={() => setUserMenuAnchorEl(null)} onItemClick={handleMenuItemClick} />
           </div>
         </div>
       </Toolbar>

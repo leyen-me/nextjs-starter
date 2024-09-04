@@ -68,8 +68,64 @@ const initGlobalConfig = async () => {
   }
 };
 
+const USERS = [
+  {
+    nickname: "a",
+    email: "a@a.com",
+    password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
+    gender: "MALE",
+  },
+  {
+    nickname: "b",
+    email: "b@b.com",
+    password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
+    gender: "MALE",
+  },
+  {
+    nickname: "c",
+    email: "c@c.com",
+    password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
+    gender: "MALE",
+  },
+];
+
+const initUser = async () => {
+  USERS.forEach(async (user) => {
+    const _user = await prisma.user.findFirst({
+      where: {
+        email: user.email,
+      },
+    });
+    if (_user) {
+      // 修改
+      await prisma.user.update({
+        where: {
+          id: _user.id,
+        },
+        data: {
+          nickname: user.nickname,
+          password: user.password,
+          email: user.email,
+          gender: user.gender,
+        },
+      });
+      return;
+    }
+    await prisma.user.create({
+      data: {
+        nickname: user.nickname,
+        email: user.email,
+        password: user.password,
+        gender: user.gender,
+      },
+    });
+  });
+};
+
+
 async function main() {
   await initGlobalConfig();
+  await initUser();
 }
 
 main()

@@ -1,5 +1,19 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  common: {
+    dict: {
+      all: "All",
+      gender: {
+        male: "Male",
+        female: "Female",
+        unknown: "Unknown",
+      },
+      status: {
+        normal: "Enabled",
+        disabled: "Disabled",
+      },
+    },
+  },
   server: {
     auth: {
       register: {
@@ -9,9 +23,31 @@ export default {
     },
   },
   pages: {
+    common: {
+      filter: "Filter",
+      results: "Results",
+      search: "Search",
+      reset: "Reset",
+      edit: "Edit",
+      delete: "Delete",
+      actions: "Actions",
+      pageSize: "Items per page",
+      total: "Total",
+      profile: "Profile",
+      logout: "Logout",
+    },
+    admin: {
+      user: {
+        email: "Email",
+        nickname: "Nickname",
+        gender: "Gender",
+        mobile: "Mobile",
+        status: "Status",
+      },
+    },
     login: {
-      welcome: "Welcome to Nextjs",
-      description: "Your Admin Dashboard",
+      welcome: "Welcome to Admin Dashboard",
+      description: "Welcome to login",
       signwith: "or sign in with",
       email: "Email",
       password: "Password",
@@ -26,7 +62,7 @@ export default {
       googleError: "Google login failed",
     },
     register: {
-      welcome: "Welcome to Register",
+      welcome: "Welcome to Admin Registration",
       description: "Welcome to register",
       email: "Email",
       password: "Password",

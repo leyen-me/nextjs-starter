@@ -33,6 +33,12 @@ export default {
       actions: "操作",
       pageSize: "每页显示数量",
       total: "总数",
+      profile: "个人中心",
+      logout: "登出",
+      deleteConfirm: "确定删除这条数据吗？",
+      cancel: "取消",
+      deleteSuccess: "删除成功",
+      deleteFailed: "删除失败",
     },
     admin: {
       user: {
