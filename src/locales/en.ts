@@ -24,17 +24,25 @@ export default {
   },
   pages: {
     common: {
-      filter: "Filter",
-      results: "Results",
+      add: "Add",
+      delete: "Delete",
+      edit: "Edit",
       search: "Search",
       reset: "Reset",
-      edit: "Edit",
-      delete: "Delete",
+      export: "Export",
+      filter: "Filter",
+      results: "Results",
+      save: "Save",
+      index: "Index",
       actions: "Actions",
       pageSize: "Items per page",
       total: "Total",
       profile: "Profile",
       logout: "Logout",
+      deleteConfirm: "Are you sure you want to delete this data?",
+      cancel: "Cancel",
+      deleteSuccess: "Delete successful",
+      deleteFailed: "Delete failed",
     },
     admin: {
       user: {
@@ -43,6 +51,7 @@ export default {
         gender: "Gender",
         mobile: "Mobile",
         status: "Status",
+        password: "Password",
       },
     },
     login: {

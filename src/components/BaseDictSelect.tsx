@@ -15,6 +15,7 @@ export function BaseDictSelect({
   value,
   name,
   onChange,
+  onBlur,
   allowAll = true,
 }: {
   dictKey: string;
@@ -23,6 +24,7 @@ export function BaseDictSelect({
   allowAll?: boolean;
   name: string;
   onChange: (e: SelectChangeEvent<string>) => void;
+  onBlur?: () => void;
 }) {
   const { t } = useI18n();
   const { getDictItems } = useDictionaryStore();
@@ -35,6 +37,7 @@ export function BaseDictSelect({
         name={name}
         value={value}
         onChange={(e) => onChange(e)}
+        onBlur={onBlur}
       >
         {allowAll && <MenuItem value="">{t("common.dict.all")}</MenuItem>}
         {getDictItems(dictKey).map((item: DictItem) => {

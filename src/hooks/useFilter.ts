@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export type FiltersValue = string | number | boolean | string[] | number[];
 export type FiltersType = "text" | "dict";
 export type FiltersOption = {
   label: string;
+  labelType: string;
   name: string;
   value: FiltersValue;
   type: FiltersType;

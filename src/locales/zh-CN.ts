@@ -24,12 +24,19 @@ export default {
   },
   pages: {
     common: {
+      add: "新增",
+      delete: "删除",
+      edit: "编辑",
+      search: "搜索",
+
+      reset: "重置",
+      export: "导出",
+
       filter: "筛选",
       results: "结果",
-      search: "搜索",
-      reset: "重置",
-      edit: "编辑",
-      delete: "删除",
+
+      save: "保存",
+      index: "序号",
       actions: "操作",
       pageSize: "每页显示数量",
       total: "总数",
@@ -47,6 +54,7 @@ export default {
         gender: "性别",
         mobile: "手机号",
         status: "状态",
+        password: "密码",
       },
     },
     login: {
