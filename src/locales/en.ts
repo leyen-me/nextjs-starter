@@ -15,6 +15,28 @@ export default {
     },
   },
   server: {
+    common: {
+      failed: "Operation failed",
+      success: "Operation successful",
+      create: {
+        success: "Creation successful",
+        failed: "Creation failed",
+      },
+      update: {
+        success: "Update successful",
+        failed: "Update failed",
+      },
+      delete: {
+        success: "Deletion successful",
+        failed: "Deletion failed",
+      },
+      info: {
+        failed: "Data not found",
+      },
+    },
+    config: {
+      notFound: "Configuration not found",
+    },
     auth: {
       register: {
         emailAlreadyExists: "Email already exists",
@@ -52,6 +74,27 @@ export default {
         mobile: "Mobile",
         status: "Status",
         password: "Password",
+        error: {
+          email: {
+            required: "Email is required",
+            format: "Invalid email format",
+          },
+          password: {
+            required: "Password is required",
+          },
+          nickname: {
+            required: "Nickname is required",
+          },
+          gender: {
+            required: "Gender is required",
+          },
+          mobile: {
+            required: "Mobile number is required",
+          },
+          status: {
+            required: "Status is required",
+          },
+        },
       },
     },
     login: {

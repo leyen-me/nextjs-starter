@@ -57,20 +57,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
 
     const validate = () => {
       let tempErrors: any = {};
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      tempErrors.email = data.email
-        ? emailRegex.test(data.email)
-          ? ""
-          : t("pages.admin.user.error.email.format")
-        : t("pages.admin.user.error.email.required");
-
-      if (!id) {
-        tempErrors.password = data.password ? "" : t("pages.admin.user.error.password.required");
-      }
-      tempErrors.nickname = data.nickname ? "" : t("pages.admin.user.error.nickname.required");
-      tempErrors.gender = data.gender ? "" : t("pages.admin.user.error.gender.required");
-      tempErrors.mobile = data.mobile ? "" : t("pages.admin.user.error.mobile.required");
-      tempErrors.status = data.status ? "" : t("pages.admin.user.error.status.required");
+      tempErrors.name = data.name ? "" : t("pages.admin.role.error.name.required");
       setErrors(tempErrors);
       return Object.values(tempErrors).every((x) => x === "");
     };
@@ -135,66 +122,14 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
           <TextField
-            label={t("pages.admin.user.email")}
-            name="email"
-            value={data.email || ""}
+            label={t("pages.admin.role.name")}
+            name="name"
+            value={data.name || ""}
             onChange={handleChange}
-            error={!!errors.email}
-            helperText={errors.email}
+            error={!!errors.name}
+            helperText={errors.name}
             fullWidth
           />
-          {!id && (
-            <TextField
-              label={t("pages.admin.user.password")}
-              name="password"
-              type="password"
-              value={data.password || ""}
-              onChange={handleChange}
-              error={!!errors.password}
-              helperText={errors.password}
-              fullWidth
-            />
-          )}
-          <TextField
-            label={t("pages.admin.user.nickname")}
-            name="nickname"
-            value={data.nickname || ""}
-            onChange={handleChange}
-            error={!!errors.nickname}
-            helperText={errors.nickname}
-            fullWidth
-          />
-          <FormControl fullWidth error={!!errors.gender}>
-            <BaseDictSelect
-              label={t("pages.admin.user.gender")}
-              name="gender"
-              allowAll={false}
-              value={data.gender || ""}
-              onChange={handleChange}
-              dictKey={DICT_KEYS.Gender}
-            />
-            {errors.gender && <p style={{ color: "red" }}>{errors.gender}</p>}
-          </FormControl>
-          <TextField
-            label={t("pages.admin.user.mobile")}
-            name="mobile"
-            value={data.mobile || ""}
-            onChange={handleChange}
-            error={!!errors.mobile}
-            helperText={errors.mobile}
-            fullWidth
-          />
-          <FormControl fullWidth error={!!errors.status}>
-            <BaseDictSelect
-              label={t("pages.admin.user.status")}
-              name="status"
-              allowAll={false}
-              value={data.status || ""}
-              onChange={handleChange}
-              dictKey={DICT_KEYS.UserStatus}
-            />
-            {errors.status && <p style={{ color: "red" }}>{errors.status}</p>}
-          </FormControl>
         </Box>
       </Card>
     );

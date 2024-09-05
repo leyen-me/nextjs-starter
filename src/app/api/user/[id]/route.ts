@@ -1,5 +1,6 @@
 import { prisma } from "@/libs/prisma";
-import { NextResponse } from "next/server";
+import { encryptPassword } from "@/utils";
+import { buildError, buildSuccess } from "@/utils/response";
 
 export async function PUT(
   req: Request,
@@ -19,15 +20,9 @@ export async function PUT(
     });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Failed to update user" },
-      { status: 500 }
-    );
+    return buildError({ message: "server.common.update.failed" });
   }
-  return NextResponse.json(
-    { message: "User updated successfully" },
-    { status: 200 }
-  );
+  return buildSuccess({ message: "server.common.update.success" });
 }
 
 export async function DELETE(
@@ -43,15 +38,9 @@ export async function DELETE(
     });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Failed to delete user" },
-      { status: 500 }
-    );
+    return buildError({ message: "server.common.delete.failed" });
   }
-  return NextResponse.json(
-    { message: "User deleted successfully" },
-    { status: 200 }
-  );
+  return buildSuccess({ message: "server.common.delete.success" });
 }
 
 export async function GET(
@@ -68,12 +57,9 @@ export async function GET(
     if (user) {
       user.password = "";
     }
-    return NextResponse.json(user, { status: 200 });
+    return buildSuccess({ data: user });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
+    return buildError({ message: "server.common.info.failed" });
   }
-}
-function encryptPassword(password: any) {
-  throw new Error("Function not implemented.");
 }

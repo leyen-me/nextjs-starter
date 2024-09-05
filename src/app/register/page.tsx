@@ -24,10 +24,10 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const { t } = useI18n();
-  const { showToast } = useToast();
+  const { showSuccess, showError } = useToast();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -38,13 +38,13 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await api.post("/api/auth/register", { email, password });
-      showToast(t("pages.register.registerSuccess"));
+      const res = await api.post("/api/auth/register", { email, password });
+      showSuccess(res);
       setTimeout(() => {
         router.push(callbackUrl);
       }, 1000);
     } catch (error: any) {
-      showToast(error.message || t("pages.register.registerFailed"), "error");
+      showError(error);
     } finally {
       setLoading(false);
     }

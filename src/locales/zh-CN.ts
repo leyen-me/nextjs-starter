@@ -15,10 +15,36 @@ export default {
     },
   },
   server: {
+    common: {
+      failed: "操作失败",
+      success: "操作成功",
+      create: {
+        success: "创建成功",
+        failed: "创建失败",
+      },
+      update: {
+        success: "修改成功",
+        failed: "修改失败",
+      },
+      delete: {
+        success: "删除成功",
+        failed: "删除失败",
+      },
+      info: {
+        failed: "找不到数据",
+      },
+    },
+    config: {
+      notFound: "配置不存在",
+    },
     auth: {
       register: {
         emailAlreadyExists: "邮箱已注册",
-        success: "注册成功",
+      },
+    },
+    role: {
+      create: {
+        nameAlreadyExists: "角色名已存在",
       },
     },
   },
@@ -55,6 +81,35 @@ export default {
         mobile: "手机号",
         status: "状态",
         password: "密码",
+        error: {
+          email: {
+            required: "邮箱是必填项",
+            format: "邮箱格式不正确",
+          },
+          password: {
+            required: "密码是必填项",
+          },
+          nickname: {
+            required: "昵称是必填项",
+          },
+          gender: {
+            required: "性别是必填项",
+          },
+          mobile: {
+            required: "手机号是必填项",
+          },
+          status: {
+            required: "状态是必填项",
+          },
+        },
+      },
+      role: {
+        name: "角色名",
+        error: {
+          name: {
+            required: "角色名是必填项",
+          },
+        },
       },
     },
     login: {

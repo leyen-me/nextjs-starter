@@ -1,5 +1,4 @@
-import { SETTING_CONFIG } from "@/contants";
-import { getLanguage } from "@/i18n";
+import { I18nError } from "./error";
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, string>;
@@ -31,11 +30,6 @@ class ApiClient {
     }
 
     const headers = new Headers(customOptions.headers);
-    headers.set(
-      "X-Language",
-      getLanguage(localStorage ? localStorage.getItem("language") || "" : "")
-    );
-
     if (data) {
       headers.set("Content-Type", "application/json");
     }
@@ -47,15 +41,15 @@ class ApiClient {
     };
 
     const response = await fetch(url, config);
+    if (response.status === 404) {
+      throw new I18nError("404");
+    }
     const responseData = await response.json();
     // 处理ok
     if (!response.ok) {
-      throw new Error(responseData.message);
+      throw new I18nError(responseData.message);
     }
-    return {
-      data: responseData,
-      message: responseData.message,
-    };
+    return responseData;
   }
 
   async get<T>(

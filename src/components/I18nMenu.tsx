@@ -1,8 +1,7 @@
-import Image from "next/image";
 import { LANGUAGES } from "@/contants";
 import { Menu, MenuItem } from "@mui/material";
-import { useState } from "react";
 import { useI18n } from "./I18nProvider";
+import CheckIcon from '@mui/icons-material/Check';
 
 type I18nMenuProps = {
     anchorEl: HTMLElement | null;
@@ -12,24 +11,24 @@ type I18nMenuProps = {
 
 export function I18nMenu({ anchorEl, open, onClose }: I18nMenuProps) {
     const { t, lang, setLang } = useI18n();
-
     return <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={onClose}
+        sx={{
+            "& .MuiMenu-list": {
+                padding: 0
+            }
+        }}
     >
         {
             LANGUAGES.map((language) => (
-                <MenuItem key={language.value} onClick={() => {
+                <MenuItem sx={{
+                    color: language.value === lang ? "text.primary" : "text.secondary"
+                }} key={language.value} onClick={() => {
                     setLang(language.value);
                 }}>
-                    <Image
-                        src={language.icon}
-                        alt={language.label}
-                        width={20}
-                        height={20}
-                    />
-                    <span className="ml-2">{language.label}</span>
+                    {language.label}{language.value === lang ? <CheckIcon /> : null}
                 </MenuItem>
             ))}
     </Menu>

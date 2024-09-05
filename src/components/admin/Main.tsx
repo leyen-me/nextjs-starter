@@ -3,8 +3,6 @@ import { useTheme } from "../ThemeProvider";
 
 export const Main = ({ children }: PropsWithChildren<unknown>) => {
   const { theme } = useTheme();
-  console.log(theme);
-  
   return (
     <main
       className="h-full flex-1 overflow-auto p-4"

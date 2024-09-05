@@ -4,10 +4,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import { LoginButton } from "./components/LoginButton";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -28,6 +26,7 @@ import AuthBg from "@/components/auth/AuthBg";
 import { useI18n } from "@/components/I18nProvider";
 import IconGoogle from "@/components/icons/IconGoogle";
 import IconGithub from "@/components/icons/IconGithub";
+import { I18nError } from "@/utils/error";
 
 
 export default function Login() {
@@ -50,7 +49,7 @@ export default function Login() {
   }, []);
 
   const { t } = useI18n();
-  const { showToast } = useToast();
+  const { showError } = useToast();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -74,7 +73,7 @@ export default function Login() {
     });
     if (result?.error) {
       setLoading(false);
-      showToast(t("pages.login.invalidCredentials"), "error");
+      showError(new I18nError("pages.login.invalidCredentials"));
       return;
     }
     setLoading(false);
@@ -95,7 +94,7 @@ export default function Login() {
   const handleGithubLogin = async () => {
     const result = await signIn("github", { callbackUrl, redirect: false });
     if (result?.error) {
-      showToast(t("pages.login.githubError"), "error");
+      showError(new I18nError("pages.login.githubError"));
       return;
     }
     router.push(callbackUrl);
@@ -104,7 +103,7 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     const result = await signIn("google", { callbackUrl, redirect: false });
     if (result?.error) {
-      showToast(t("pages.login.googleError"), "error");
+      showError(new I18nError("pages.login.googleError"));
       return;
     }
     router.push(callbackUrl);
@@ -181,7 +180,6 @@ export default function Login() {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"

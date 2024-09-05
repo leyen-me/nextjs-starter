@@ -3,11 +3,22 @@
 import React, { createContext, useContext, useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { LabelType } from "@/contants";
+import { useI18n } from "./I18nProvider";
+import { I18nError } from "@/utils/error";
 
 type ToastType = "success" | "error" | "info" | "warning";
 
+type SuccessOrErrorType = {
+  message: string;
+  messageType?: LabelType;
+  [key: string]: any;
+};
+
 interface ToastContextType {
   showToast: (message: string, type?: ToastType) => void;
+  showSuccess: (data: SuccessOrErrorType) => void;
+  showError: (error: SuccessOrErrorType | I18nError) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -18,11 +29,37 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [type, setType] = useState<ToastType>("info");
+  const { t } = useI18n();
+
 
   const showToast = (message: string, type: ToastType = "info") => {
     setMessage(message);
     setType(type);
     setOpen(true);
+  };
+
+  const showSuccess = (data: SuccessOrErrorType) => {
+    if (data.messageType) {
+      if (data.messageType === "i18n") {
+        showToast(t(data.message), "success");
+      } else {
+        showToast(data.message, "success");
+      }
+    } else {
+      showToast(data.message, "success");
+    }
+  };
+
+  const showError = (error: SuccessOrErrorType | I18nError) => {
+    if (error.messageType) {
+      if (error.messageType === "i18n") {
+        showToast(t(error.message), "error");
+      } else {
+        showToast(error.message, "error");
+      }
+    } else {
+      showToast(error.message, "error");
+    }
   };
 
   const handleClose = (
@@ -34,7 +71,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={{ showToast, showSuccess, showError }}>
       {children}
       <Snackbar
         open={open}

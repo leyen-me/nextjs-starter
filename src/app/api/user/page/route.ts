@@ -1,9 +1,9 @@
 import { prisma } from "@/libs/prisma";
 import { Page } from "@/types";
 import { extractFiltersWithPagination } from "@/utils/extractFilters";
+import { buildSuccess } from "@/utils/response";
 import { Gender, User, UserStatus } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
 
 export type UserPageFilters = {
   email?: string;
@@ -36,5 +36,5 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     return userWithoutPassword;
   });
 
-  return NextResponse.json<Page<UserWithoutPassword>>({ total, data: users });
+  return buildSuccess<Page<UserWithoutPassword>>({ data: { total, data: users } });
 }

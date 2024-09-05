@@ -1,13 +1,16 @@
+export const RESPONSE_CODE = {
+  SUCCESS: 200,
+  ERROR: 500,
+};
+
 export const LANGUAGES = [
-  {
-    label: "English",
-    value: "en",
-    icon: "/assets/pngs/assets-icon-us.png",
-  },
   {
     label: "Chinese",
     value: "zh-CN",
-    icon: "/assets/pngs/assets-icon-cn.png",
+  },
+  {
+    label: "English",
+    value: "en",
   },
 ];
 
@@ -28,4 +31,6 @@ export const ADD_ID = "-1";
 export const LABEL_TYPE = {
   I18N: "i18n",
   TEXT: "text",
-};
+} as const;
+
+export type LabelType = (typeof LABEL_TYPE)[keyof typeof LABEL_TYPE];

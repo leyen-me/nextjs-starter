@@ -1,20 +1,16 @@
 import { prisma } from "@/libs/prisma";
 import { encryptPassword } from "@/utils";
-import { NextResponse } from "next/server";
+import { buildError, buildSuccess } from "@/utils/response";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  
   const existingUser = await prisma.user.findUnique({
     where: {
       email: data.email,
     },
   });
   if (existingUser) {
-    return NextResponse.json(
-      { message: "Email already exists" },
-      { status: 400 }
-    );
+    return buildError({ message: "server.auth.register.emailAlreadyExists" });
   }
   data.password = encryptPassword(data.password);
   try {
@@ -23,13 +19,7 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { message: "Failed to create user" },
-      { status: 500 }
-    );
+    return buildError({ message: "server.common.create.failed" });
   }
-  return NextResponse.json(
-    { message: "User created successfully" },
-    { status: 200 }
-  );
+  return buildSuccess({ message: "server.common.create.success" });
 }

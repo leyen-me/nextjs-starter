@@ -58,7 +58,7 @@ model Menu {
 
 model Role {
   id   String @id @default(cuid())
-  name String
+  name String @unique
 }
 
 model RoleMenu {

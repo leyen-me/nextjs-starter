@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import { prisma } from "@/libs/prisma";
-import { serverTranslate } from "@/i18n";
+import { buildError, buildSuccess } from "@/utils/response";
 
 export async function POST(request: NextRequest) {
   const { email, password } = await request.json();
@@ -12,17 +12,8 @@ export async function POST(request: NextRequest) {
     },
   });
   if (user) {
-    return NextResponse.json(
-      {
-        message: serverTranslate(
-          "server.auth.register.emailAlreadyExists",
-          request
-        ),
-      },
-      { status: 400 }
-    );
+    return buildError({ message: "server.auth.register.emailAlreadyExists" })
   }
-
   const hashedPassword = await hash(password, 10);
   await prisma.user.create({
     data: {
@@ -30,8 +21,7 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
     },
   });
-
-  return NextResponse.json({
-    message: serverTranslate("server.auth.register.success", request),
+  return buildSuccess({
+    message: "server.auth.register.success",
   });
 }

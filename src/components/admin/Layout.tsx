@@ -12,17 +12,23 @@ import { useTheme } from "@mui/material";
 import api from "@/utils/request";
 import type { GlobalConfig } from "@/app/api/config/route";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
+import { useToast } from "../ToastProvider";
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
   const { setDictMap } = useDictionaryStore();
+  const { showError } = useToast();
 
   useEffect(() => {
     const fetchConfig = async () => {
-      const { data } = await api.get<GlobalConfig>("/api/config");
-      const { dictMap } = data;
-      setDictMap(dictMap);
+      try {
+        const { data } = await api.get<GlobalConfig>("/api/config");
+        const { dictMap } = data;
+        setDictMap(dictMap);
+      } catch (error: any) {
+        showError(error)
+      }
     };
     fetchConfig();
   }, []);

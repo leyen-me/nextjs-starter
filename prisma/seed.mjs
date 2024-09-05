@@ -122,10 +122,50 @@ const initUser = async () => {
   });
 };
 
+const ROLES = [
+  {
+    id: "admin",
+    name: "admin",
+  },
+  {
+    id: "user",
+    name: "user",
+  },
+];
+
+const initRole = async () => {
+  ROLES.forEach(async (role) => {
+    const _role = await prisma.role.findFirst({
+      where: {
+        id: role.id,
+      },
+    });
+    if (_role) {
+      // 修改
+      await prisma.role.update({
+        where: {
+          id: _role.id,
+        },
+        data: {
+          name: role.name,
+        },
+      });
+      return;
+    }
+    await prisma.role.create({
+      data: {
+        id: role.id,
+        name: role.name,
+      },
+    });
+  });
+};
+
 
 async function main() {
   await initGlobalConfig();
   await initUser();
+  await initRole();
 }
 
 main()

@@ -1,7 +1,6 @@
 "use client";
 
 import { BaseCrud, ResultColumn } from "@/components/BaseCrud";
-import { useI18n } from "@/components/I18nProvider";
 import { DICT_KEYS, LABEL_TYPE } from "@/contants";
 import { FiltersOption } from "@/hooks/useFilter";
 import { SavePage } from "./_save";

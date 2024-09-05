@@ -61,14 +61,13 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
             <Typography variant="h6">Header</Typography>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            <IconButton color="inherit" aria-label="notifications">
+            <IconButton color="inherit">
               <NotificationsOutlinedIcon />
             </IconButton>
 
 
             <IconButton
               color="inherit"
-              aria-label="change language"
               onClick={(event) => setLanguageAnchorEl(event.currentTarget)}
             >
               <LanguageOutlinedIcon />
@@ -78,7 +77,6 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
 
             <IconButton
               color="inherit"
-              aria-label="toggle theme"
               onClick={() => {
                 toggleTheme();
               }}
