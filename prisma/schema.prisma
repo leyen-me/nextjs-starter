@@ -65,16 +65,12 @@ model RoleMenu {
   id     String @id @default(cuid())
   roleId String
   menuId String
-
-  @@unique([roleId, menuId])
 }
 
 model UserRole {
   id     String @id @default(cuid())
   userId String
   roleId String
-
-  @@unique([userId, roleId])
 }
 
 model GlobalConfig {

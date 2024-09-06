@@ -7,16 +7,34 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-  const data = await req.json();
+  const { roleIdList, ...data } = await req.json();
   try {
-    await prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        ...data,
-        password: data.password ? encryptPassword(data.password) : undefined,
-      },
+    await prisma.$transaction(async (prisma) => {
+      await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          ...data,
+          password: data.password ? encryptPassword(data.password) : undefined,
+        },
+      });
+      // 删除不在roleIdList中的roleId
+      await prisma.userRole.deleteMany({
+        where: {
+          userId: id,
+          roleId: {
+            notIn: roleIdList,
+          },
+        },
+      });
+      // 添加不在userRoleIdList中的roleId
+      await prisma.userRole.createMany({
+        data: roleIdList.map((roleId: string) => ({
+          userId: id,
+          roleId,
+        })),
+      });
     });
   } catch (error) {
     console.error(error);
@@ -54,10 +72,18 @@ export async function GET(
         id,
       },
     });
-    if (user) {
-      user.password = "";
-    }
-    return buildSuccess({ data: user });
+    user!.password = "";
+    const userRoles = await prisma.userRole.findMany({
+      where: {
+        userId: id,
+      },
+    });
+    return buildSuccess({
+      data: {
+        ...user,
+        roleIdList: userRoles.map((userRole) => userRole.roleId),
+      },
+    });
   } catch (error) {
     console.error(error);
     return buildError({ message: "server.common.info.failed" });

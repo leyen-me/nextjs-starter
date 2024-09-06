@@ -47,6 +47,9 @@ export default {
         nameAlreadyExists: "角色名已存在",
       },
     },
+    error: {
+      internalServerError: "服务器内部错误",
+    },
   },
   pages: {
     common: {
@@ -81,6 +84,7 @@ export default {
         mobile: "手机号",
         status: "状态",
         password: "密码",
+        roles: "角色列表",
         error: {
           email: {
             required: "邮箱是必填项",

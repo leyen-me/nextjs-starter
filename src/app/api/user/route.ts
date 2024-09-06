@@ -3,7 +3,7 @@ import { encryptPassword } from "@/utils";
 import { buildError, buildSuccess } from "@/utils/response";
 
 export async function POST(req: Request) {
-  const data = await req.json();
+  const { roleIdList, ...data } = await req.json();
   const existingUser = await prisma.user.findUnique({
     where: {
       email: data.email,
@@ -14,8 +14,16 @@ export async function POST(req: Request) {
   }
   data.password = encryptPassword(data.password);
   try {
-    await prisma.user.create({
-      data,
+    await prisma.$transaction(async (prisma) => {
+      const user = await prisma.user.create({
+        data,
+      });
+      await prisma.userRole.createMany({
+        data: roleIdList.map((roleId: string) => ({
+          userId: user.id,
+          roleId,
+        })),
+      });
     });
   } catch (error) {
     console.error(error);

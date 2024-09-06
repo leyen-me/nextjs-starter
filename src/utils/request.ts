@@ -44,10 +44,14 @@ class ApiClient {
     if (response.status === 404) {
       throw new I18nError("404");
     }
-    const responseData = await response.json();
-    // 处理ok
-    if (!response.ok) {
-      throw new I18nError(responseData.message);
+    let responseData = null as unknown as ApiResponse;
+    try {
+      responseData = await response.json();
+      if (response.status === 500) {
+        throw new I18nError(responseData.message);
+      }
+    } catch (error) {
+      throw new I18nError("server.common.error.internalServerError");
     }
     return responseData;
   }

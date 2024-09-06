@@ -16,6 +16,7 @@ export function BaseDictSelect({
   name,
   onChange,
   onBlur,
+  size = "small",
   allowAll = true,
 }: {
   dictKey: string;
@@ -23,6 +24,7 @@ export function BaseDictSelect({
   value?: string;
   allowAll?: boolean;
   name: string;
+  size?: "small" | "medium";
   onChange: (e: SelectChangeEvent<string>) => void;
   onBlur?: () => void;
 }) {
@@ -30,7 +32,7 @@ export function BaseDictSelect({
   const { getDictItems } = useDictionaryStore();
 
   return (
-    <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
+    <FormControl variant="outlined" size={size} sx={{ minWidth: 120 }}>
       <InputLabel>{label}</InputLabel>
       <Select
         label={label}

@@ -70,18 +70,21 @@ const initGlobalConfig = async () => {
 
 const USERS = [
   {
+    id: "1",
     nickname: "a",
     email: "a@a.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
     gender: "MALE",
   },
   {
+    id: "2",
     nickname: "b",
     email: "b@b.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
     gender: "MALE",
   },
   {
+    id: "3",
     nickname: "c",
     email: "c@c.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
@@ -102,22 +105,12 @@ const initUser = async () => {
         where: {
           id: _user.id,
         },
-        data: {
-          nickname: user.nickname,
-          password: user.password,
-          email: user.email,
-          gender: user.gender,
-        },
+        data: user,
       });
       return;
     }
     await prisma.user.create({
-      data: {
-        nickname: user.nickname,
-        email: user.email,
-        password: user.password,
-        gender: user.gender,
-      },
+      data: user,
     });
   });
 };
@@ -162,10 +155,48 @@ const initRole = async () => {
 };
 
 
+const USER_ROLES = [
+  {
+    id: "1",
+    userId: "1",
+    roleId: "admin",
+  },
+  {
+    id: "2",
+    userId: "1",
+    roleId: "user",
+  },
+];
+
+const initUserRole = async () => {
+  USER_ROLES.forEach(async (userRole) => {
+    const _userRole = await prisma.userRole.findFirst({
+      where: {
+        userId: userRole.userId,
+        roleId: userRole.roleId,
+      },
+    });
+    if (_userRole) {
+      // 修改
+      await prisma.userRole.update({
+        where: {
+          id: _userRole.id,
+        },
+        data: userRole,
+      });
+      return;
+    }
+    await prisma.userRole.create({
+      data: userRole,
+    });
+  });
+};
+
 async function main() {
   await initGlobalConfig();
   await initUser();
   await initRole();
+  await initUserRole();
 }
 
 main()

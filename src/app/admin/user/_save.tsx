@@ -1,3 +1,4 @@
+import { BaseDataSelect } from "@/components/BaseDataSelect";
 import { BaseDictSelect } from "@/components/BaseDictSelect";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/ToastProvider";
@@ -12,6 +13,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { Role } from "@prisma/client";
 import {
   ChangeEvent,
   forwardRef,
@@ -34,15 +36,19 @@ type SavePageProps = {
 };
 
 export const SavePage = forwardRef<SavePageRef, SavePageProps>(
-  (
-    { id: _id, baseUrl, onClose, setEditLoading, onRefresh },
-    ref
-  ) => {
+  ({ id: _id, baseUrl, onClose, setEditLoading, onRefresh }, ref) => {
     const id = _id === ADD_ID ? "" : _id;
     const { t } = useI18n();
 
     const [data, setData] = useState<any>({});
     const [errors, setErrors] = useState<any>({});
+    const [roles, setRoles] = useState<Role[]>([
+      { id: "admin", name: "admin" },
+      { id: "user", name: "user" },
+      { id: "guest", name: "guest" },
+      { id: "editor", name: "editor" },
+      { id: "viewer", name: "viewer" },
+    ]);
 
     const { showSuccess, showError } = useToast();
 
@@ -65,12 +71,22 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
         : t("pages.admin.user.error.email.required");
 
       if (!id) {
-        tempErrors.password = data.password ? "" : t("pages.admin.user.error.password.required");
+        tempErrors.password = data.password
+          ? ""
+          : t("pages.admin.user.error.password.required");
       }
-      tempErrors.nickname = data.nickname ? "" : t("pages.admin.user.error.nickname.required");
-      tempErrors.gender = data.gender ? "" : t("pages.admin.user.error.gender.required");
-      tempErrors.mobile = data.mobile ? "" : t("pages.admin.user.error.mobile.required");
-      tempErrors.status = data.status ? "" : t("pages.admin.user.error.status.required");
+      tempErrors.nickname = data.nickname
+        ? ""
+        : t("pages.admin.user.error.nickname.required");
+      tempErrors.gender = data.gender
+        ? ""
+        : t("pages.admin.user.error.gender.required");
+      tempErrors.mobile = data.mobile
+        ? ""
+        : t("pages.admin.user.error.mobile.required");
+      tempErrors.status = data.status
+        ? ""
+        : t("pages.admin.user.error.status.required");
       setErrors(tempErrors);
       return Object.values(tempErrors).every((x) => x === "");
     };
@@ -81,22 +97,22 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
         if (!id) {
           try {
             const res = await api.post(`${baseUrl}`, data);
-            showSuccess(res)
+            showSuccess(res);
             onClose();
             onRefresh();
           } catch (error: any) {
-            showError(error)
+            showError(error);
           } finally {
             setEditLoading(false);
           }
         } else {
           try {
             const res = await api.put(`${baseUrl}/${id}`, data);
-            showSuccess(res)
+            showSuccess(res);
             onClose();
             onRefresh();
           } catch (error: any) {
-            showError(error)
+            showError(error);
           } finally {
             setEditLoading(false);
           }
@@ -168,6 +184,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             <BaseDictSelect
               label={t("pages.admin.user.gender")}
               name="gender"
+              size="medium"
               allowAll={false}
               value={data.gender || ""}
               onChange={handleChange}
@@ -188,12 +205,25 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             <BaseDictSelect
               label={t("pages.admin.user.status")}
               name="status"
+              size="medium"
               allowAll={false}
               value={data.status || ""}
               onChange={handleChange}
               dictKey={DICT_KEYS.UserStatus}
             />
             {errors.status && <p style={{ color: "red" }}>{errors.status}</p>}
+          </FormControl>
+          <FormControl fullWidth error={!!errors.status}>
+            <BaseDataSelect
+              label={t("pages.admin.user.roles")}
+              name="roleIdList"
+              value={data.roleIdList}
+              data={roles}
+              onChange={handleChange}
+            />
+            {errors.roleIdList && (
+              <p style={{ color: "red" }}>{errors.roleIdList}</p>
+            )}
           </FormControl>
         </Box>
       </Card>
