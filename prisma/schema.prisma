@@ -35,45 +35,50 @@ enum OpenStyle {
 }
 
 model User {
-  id       String     @id @default(cuid())
-  email    String     @unique
-  nickname String?
-  password String
-  avatar   String?
-  gender   Gender     @default(UNKNOWN)
-  mobile   String?
-  status   UserStatus @default(NORMAL)
+  id        String     @id @default(cuid())
+  email     String     @unique
+  nickname  String?
+  password  String
+  avatar    String?
+  gender    Gender     @default(UNKNOWN)
+  mobile    String?
+  status    UserStatus @default(NORMAL)
+  createdAt DateTime   @default(now())
 }
 
 model Menu {
   id         String    @id @default(cuid())
-  pid        BigInt
+  pid        String
   name       String    @db.VarChar(200)
   url        String    @db.VarChar(200)
   type       MenuType
-  open_style OpenStyle
+  openStyle  OpenStyle
   icon       String?   @db.VarChar(50)
   sort       Int       @default(0)
+  createdAt  DateTime  @default(now())
 }
 
 model Role {
-  id   String @id @default(cuid())
-  name String @unique
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
 }
 
 model RoleMenu {
-  id     String @id @default(cuid())
-  roleId String
-  menuId String
+  id        String   @id @default(cuid())
+  roleId    String
+  menuId    String
+  createdAt DateTime @default(now())
 }
 
 model UserRole {
-  id     String @id @default(cuid())
-  userId String
-  roleId String
+  id        String   @id @default(cuid())
+  userId    String
+  roleId    String
+  createdAt DateTime @default(now())
 }
 
 model GlobalConfig {
-  id       String   @id @default(cuid())
-  config   Json
+  id        String   @id @default(cuid())
+  config    Json
 }

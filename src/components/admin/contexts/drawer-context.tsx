@@ -45,6 +45,11 @@ export const MENU_LIST: IMenuItem[] = [
         literal: "Role",
         Icon: DashboardIcon,
       },
+      {
+        route: `/admin/menu`,
+        literal: "Menu",
+        Icon: DashboardIcon,
+      },
     ],
   },
   {

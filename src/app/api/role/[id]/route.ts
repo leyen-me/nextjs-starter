@@ -21,6 +21,8 @@ export async function PUT(
     return buildSuccess({ message: "server.common.update.success" });
 }
 
+// todo: 删除角色时，需要判断角色是否被用户关联
+// todo: 删除角色时，需要删除角色关联的菜单
 export async function DELETE(
     req: Request,
     { params }: { params: { id: string } }

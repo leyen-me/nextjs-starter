@@ -42,19 +42,18 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
 
     const [data, setData] = useState<any>({});
     const [errors, setErrors] = useState<any>({});
-    const [roles, setRoles] = useState<Role[]>([
-      { id: "admin", name: "admin" },
-      { id: "user", name: "user" },
-      { id: "guest", name: "guest" },
-      { id: "editor", name: "editor" },
-      { id: "viewer", name: "viewer" },
-    ]);
+    const [roles, setRoles] = useState<Role[]>([]);
 
     const { showSuccess, showError } = useToast();
 
     const getModelById = async () => {
       const res = await api.get(`${baseUrl}/${id}`);
       setData(res.data);
+    };
+
+    const getRoles = async () => {
+      const res = await api.get<Role[]>("/api/role/list");
+      setRoles(res.data);
     };
 
     const handleChange = (e: any) => {
@@ -134,6 +133,10 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
+
+    useEffect(() => {
+      getRoles();
+    }, []);
 
     return (
       <Card

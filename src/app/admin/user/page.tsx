@@ -99,7 +99,7 @@ const UserPage = () => {
       labelType: LABEL_TYPE.I18N,
       type: "actions",
       name: "actions",
-      minWidth: 150,
+      minWidth: 200,
     },
   ];
   return (

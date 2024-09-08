@@ -12,6 +12,16 @@ export default {
         normal: "启用",
         disabled: "禁用",
       },
+      menu: {
+        type: {
+          menu: "菜单",
+          interface: "接口",
+        },
+        openStyle: {
+          internal: "内部",
+          external: "外部",
+        }
+      },
     },
   },
   server: {
@@ -114,6 +124,14 @@ export default {
             required: "角色名是必填项",
           },
         },
+      },
+      menu: {
+        name: "菜单名",
+        url: "菜单路径",
+        type: "菜单类型",
+        openStyle: "打开方式",
+        icon: "菜单图标",
+        sort: "排序",
       },
     },
     login: {

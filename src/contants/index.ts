@@ -24,9 +24,12 @@ export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 export const DICT_KEYS = {
   Gender: "Gender",
   UserStatus: "UserStatus",
+  MenuType: "MenuType",
+  MenuOpenStyle: "MenuOpenStyle",
 };
 
 export const ADD_ID = "-1";
+export const TREE_ROOT_ID = "0";
 
 export const LABEL_TYPE = {
   I18N: "i18n",

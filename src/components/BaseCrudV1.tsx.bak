@@ -5,6 +5,12 @@ import {
     Box,
     TextField,
     Button,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
     Dialog,
     AppBar,
     Toolbar,
@@ -34,7 +40,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { TransitionProps } from "@mui/material/transitions";
 import { Add, Download } from "@mui/icons-material";
 import { DataGrid } from '@mui/x-data-grid';
-import { DataGridPremium, GridColDef, GridColType, GridRenderCellParams } from "@mui/x-data-grid-premium";
+import { DataGridPremium, GridColDef } from "@mui/x-data-grid-premium";
 import { LicenseInfo } from '@mui/x-license';
 
 // 设置许可证
@@ -67,6 +73,20 @@ const Transition = React.forwardRef(function Transition(
 ) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
+
+
+// const rows: any = [
+//     { path: 'Sarah', jobTitle: 'CEO', id: 0 },
+//     { path: 'Sarah/Thomas', jobTitle: 'Head of Sales', id: 1 },
+//     { path: 'Sarah/Thomas/Robert', jobTitle: 'Sales Person', id: 2 },
+//     { path: 'Sarah/Thomas/Karen', jobTitle: 'Sales Person', id: 3 },
+// ];
+
+const getTreeDataPath: any = (row: any) =>
+    row.url.split('/');
+
+// const columns: any[] = [{ field: 'jobTitle', width: 250 }];
 
 export function BaseCrud({
     type = "page",
@@ -122,59 +142,17 @@ export function BaseCrud({
         }
     };
 
-    const getTreeDataPath = React.useCallback((row: any) => row.url.replace(/\//, '').split('/'), []);
-
-    const columns = resultColumns.map((column) => {
-        let type: GridColType = "string"
-        if (column.type === "text") {
-            type = "string"
-        } else if (column.type === "index") {
-            type = "number"
-        } else if (column.type === "dict") {
-            type = "string"
+    const treeColumns = resultColumns.map((column) => {
+        if (column.type === "index" || column.type === "actions") {
+            return null
         }
-
-        const baseColumn = {
+        return {
             field: column.name,
-            headerAlign: "left",
-            align: "left",
-            headerName: column.labelType === LABEL_TYPE.I18N ? t(column.label) : column.label,
-            type: type,
-            minWidth: column.minWidth,
-            flex: 1,
+            headerName: column.label,
+            type: column.type,
+            width: column.minWidth,
         }
-
-        if (column.type === "index") {
-            return {
-                ...baseColumn,
-                field: "id",
-            }
-        }
-        if (column.type === "dict") {
-            return {
-                ...baseColumn,
-                renderCell: (params: any) => (
-                    params.value ? <BaseDictTag dictKey={column.dictKey || ""} value={params.value} /> : null
-                )
-            }
-        }
-        if (column.type === "actions") {
-            return {
-                ...baseColumn,
-                renderCell: (params: any) => (
-                    <Box sx={{ display: "flex", height: "100%", alignItems: "center", gap: 2, mr: 100 }}>
-                        <Button variant="outlined" color="primary" size="small" onClick={() => handleEdit(params.id)}>
-                            {t("pages.common.edit")}
-                        </Button>
-                        <Button variant="outlined" color="error" size="small" onClick={() => handleDelete(params.id)}>
-                            {t("pages.common.delete")}
-                        </Button>
-                    </Box>
-                )
-            }
-        }
-        return baseColumn
-    }).filter((column) => column !== null) as GridColDef<any>[]
+    }).filter((column) => column !== null)
 
     const handleSearch = () => {
         fetchData();
@@ -318,15 +296,107 @@ export function BaseCrud({
                     </Box>
                 }
             >
-                <DataGridPremium
-                    autoHeight={true}
-                    treeData={type === "tree"}
-                    getTreeDataPath={getTreeDataPath}
-                    rows={data}
-                    columns={columns}
-                    hideFooter={true}
-                    disableDensitySelector={true}
-                />
+                <TableContainer>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                {resultColumns.map((column) => {
+                                    if (column.type === "actions") {
+                                        return (
+                                            <TableCell
+                                                key={column.name}
+                                                sx={{
+                                                    minWidth: column.minWidth,
+                                                    position: { xs: "static", sm: "sticky" },
+                                                    right: 0,
+                                                    backgroundColor: (theme) =>
+                                                        theme.palette.background.paper,
+                                                    backgroundImage: (theme) => "var(--Paper-overlay)",
+                                                }}
+                                            >
+                                                {column.labelType === LABEL_TYPE.I18N
+                                                    ? t(column.label)
+                                                    : column.label}
+                                            </TableCell>
+                                        );
+                                    }
+                                    return (
+                                        <TableCell
+                                            key={column.name}
+                                            sx={{ minWidth: column.minWidth }}
+                                        >
+                                            {column.labelType === LABEL_TYPE.I18N
+                                                ? t(column.label)
+                                                : column.label}
+                                        </TableCell>
+                                    );
+                                })}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.map((model, index) => (
+                                <TableRow key={model.id}>
+                                    {resultColumns.map((column) => {
+                                        if (column.type === "index") {
+                                            return (
+                                                <TableCell key={column.name}>{index + 1}</TableCell>
+                                            );
+                                        }
+                                        if (column.type === "text") {
+                                            return (
+                                                <TableCell key={column.name}>
+                                                    {model[column.name]}
+                                                </TableCell>
+                                            );
+                                        }
+                                        if (column.type === "dict") {
+                                            return (
+                                                <TableCell key={column.name}>
+                                                    <BaseDictTag
+                                                        dictKey={column.dictKey || ""}
+                                                        value={model[column.name]}
+                                                    ></BaseDictTag>
+                                                </TableCell>
+                                            );
+                                        }
+                                        if (column.type === "actions") {
+                                            return (
+                                                <TableCell
+                                                    key={column.name}
+                                                    sx={{
+                                                        position: { xs: "static", sm: "sticky" },
+                                                        right: 0,
+                                                        backgroundColor: (theme) =>
+                                                            theme.palette.background.paper,
+                                                        backgroundImage: (theme) => "var(--Paper-overlay)",
+                                                    }}
+                                                >
+                                                    <Box sx={{ display: "flex", gap: 2 }}>
+                                                        <Button
+                                                            aria-hidden="false"
+                                                            variant="outlined"
+                                                            onClick={() => handleEdit(model.id)}
+                                                        >
+                                                            {t("pages.common.edit")}
+                                                        </Button>
+                                                        <Button
+                                                            aria-hidden="false"
+                                                            variant="outlined"
+                                                            color="error"
+                                                            onClick={() => handleDelete(model.id)}
+                                                        >
+                                                            {t("pages.common.delete")}
+                                                        </Button>
+                                                    </Box>
+                                                </TableCell>
+                                            );
+                                        }
+                                    })}
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
                 {
                     !isTreeOrList && <BaseTablePagination
 
