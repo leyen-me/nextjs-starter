@@ -1,7 +1,7 @@
 import { LabelType, RESPONSE_CODE } from "@/contants";
 import { NextResponse } from "next/server";
 
-type ResponseType<T> = {
+export type ResponseType<T> = {
     code: number;
     message: string;
     messageType: LabelType;

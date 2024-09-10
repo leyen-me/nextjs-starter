@@ -12,10 +12,10 @@ import {
     Typography,
     Slide,
     CircularProgress,
+    Icon,
 } from "@mui/material";
 import { useI18n } from "@/components/I18nProvider";
 import api from "@/utils/request";
-import type { Page } from "@/types";
 import {
     ADD_ID,
     DEFAULT_PAGE_SIZE,
@@ -35,16 +35,13 @@ import { TransitionProps } from "@mui/material/transitions";
 import { Add, Download } from "@mui/icons-material";
 import { DataGrid } from '@mui/x-data-grid';
 import { DataGridPremium, GridColDef, GridColType, GridRenderCellParams } from "@mui/x-data-grid-premium";
-import { LicenseInfo } from '@mui/x-license';
-
-// 设置许可证
-LicenseInfo.setLicenseKey("e0d9bb8070ce0054c9d9ecb6e82cb58fTz0wLEU9MzI0NzIxNDQwMDAwMDAsUz1wcmVtaXVtLExNPXBlcnBldHVhbCxLVj0y");
+import { BaseDynamicIcon } from "./BaseDynamicIcon";
 
 export type ResultColumn = {
     label: string;
     labelType: string;
     name: string;
-    type: "index" | "actions" | "text" | "dict";
+    type: "index" | "actions" | "text" | "dict" | "icon";
     dictKey?: string;
     minWidth?: number;
 };
@@ -100,11 +97,13 @@ export function BaseCrud({
     const { filters, handleFilterChange, handleReset, getFilterWithRequest } =
         useFilter(filtersOptions);
 
-    const isTreeOrList = type === "tree" || type === "list";
+    // 是否是树形结构
+    const isTree = type === "tree";
+    const isTreeOrList = isTree || type === "list";
 
     // 获取数据
     const fetchData = async () => {
-        const fetchUrl = type === "tree" ? `${baseUrl}/tree` : type === "list" ? `${baseUrl}/list` : `${baseUrl}/page`;
+        const fetchUrl = isTreeOrList ? `${baseUrl}/list` : `${baseUrl}/page`;
         const params = isTreeOrList ? getFilterWithRequest() : {
             page: page.toString(),
             pageSize: pageSize.toString(),
@@ -122,7 +121,15 @@ export function BaseCrud({
         }
     };
 
-    const getTreeDataPath = React.useCallback((row: any) => row.url.replace(/\//, '').split('/'), []);
+    const getTreeDataPath = (row: any) => {
+        const path: string[] = [];
+        let currentId: string | null = row.id;
+        while (currentId) {
+            path.unshift(currentId);
+            currentId = data.find(item => item.id === currentId)?.pid || null;
+        }
+        return path;
+    }
 
     const columns = resultColumns.map((column) => {
         let type: GridColType = "string"
@@ -158,11 +165,23 @@ export function BaseCrud({
                 )
             }
         }
+        if (column.type === "icon") {
+            return {
+                ...baseColumn,
+                type: "string",
+                renderCell: (params: any) => (
+                    params.value ? <BaseDynamicIcon name={params.value.replace("Icon", "")}></BaseDynamicIcon> : null
+                )
+            }
+        }
         if (column.type === "actions") {
             return {
                 ...baseColumn,
-                renderCell: (params: any) => (
-                    <Box sx={{ display: "flex", height: "100%", alignItems: "center", gap: 2, mr: 100 }}>
+                renderCell: (params: any) => {
+                    if(!params.id.search("auto-")){
+                        return null
+                    }
+                    return <Box sx={{ display: "flex", height: "100%", alignItems: "center", gap: 2, mr: 100 }}>
                         <Button variant="outlined" color="primary" size="small" onClick={() => handleEdit(params.id)}>
                             {t("pages.common.edit")}
                         </Button>
@@ -170,11 +189,20 @@ export function BaseCrud({
                             {t("pages.common.delete")}
                         </Button>
                     </Box>
-                )
+                }
+                
             }
         }
         return baseColumn
     }).filter((column) => column !== null) as GridColDef<any>[]
+
+    const dataComponentAttr = {
+        autoHeight: true,
+        rows: data,
+        columns: columns,
+        hideFooter: true,
+        disableDensitySelector: true,
+    }
 
     const handleSearch = () => {
         fetchData();
@@ -318,15 +346,28 @@ export function BaseCrud({
                     </Box>
                 }
             >
-                <DataGridPremium
-                    autoHeight={true}
-                    treeData={type === "tree"}
+                {isTree ? <DataGridPremium
+                    initialState={{
+                        // pagination: { paginationModel: { pageSize: 100 } },
+                        columns: {
+                            columnVisibilityModel: {
+                                id: true,
+                            },
+                        },
+                    }}
+                    defaultGroupingExpansionDepth={-1}
+                    treeData={isTree}
+                    getRowId={(row) => row.id}
                     getTreeDataPath={getTreeDataPath}
-                    rows={data}
-                    columns={columns}
-                    hideFooter={true}
-                    disableDensitySelector={true}
+                    groupingColDef={{
+                        headerName: "分组",
+                        hideable: false,
+                    }}
+                    {...dataComponentAttr}
+                /> : <DataGridPremium
+                    {...dataComponentAttr}
                 />
+                }
                 {
                     !isTreeOrList && <BaseTablePagination
 

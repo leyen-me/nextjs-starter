@@ -126,6 +126,7 @@ export default {
         },
       },
       menu: {
+        parent: "父级菜单",
         name: "菜单名",
         url: "菜单路径",
         type: "菜单类型",

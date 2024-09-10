@@ -21,13 +21,6 @@ const MenuPage = () => {
     // 查询结果
     const resultColumns: ResultColumn[] = [
         {
-            label: "pages.common.index",
-            labelType: LABEL_TYPE.I18N,
-            type: "index",
-            name: "index",
-            minWidth: 80,
-        },
-        {
             label: "pages.admin.menu.name",
             labelType: LABEL_TYPE.I18N,
             type: "text",
@@ -60,7 +53,7 @@ const MenuPage = () => {
         {
             label: "pages.admin.menu.icon",
             labelType: LABEL_TYPE.I18N,
-            type: "text",
+            type: "icon",
             name: "icon",
             minWidth: 150,
         },
@@ -76,7 +69,7 @@ const MenuPage = () => {
             labelType: LABEL_TYPE.I18N,
             type: "actions",
             name: "actions",
-            minWidth: 150,
+            minWidth: 200,
         },
     ];
     return (

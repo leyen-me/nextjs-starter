@@ -1,13 +1,9 @@
 import { I18nError } from "./error";
+import { ResponseType } from "./response";
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, string>;
   data?: any;
-}
-
-interface ApiResponse<T = any> {
-  data: T;
-  message: string;
 }
 
 class ApiClient {
@@ -20,7 +16,7 @@ class ApiClient {
   private async request<T>(
     endpoint: string,
     options: RequestOptions = {}
-  ): Promise<ApiResponse<T>> {
+  ): Promise<ResponseType<T>> {
     const { params, data, ...customOptions } = options;
     let url = `${this.baseURL}${endpoint}`;
 
@@ -44,7 +40,7 @@ class ApiClient {
     if (response.status === 404) {
       throw new I18nError("404");
     }
-    let responseData = null as unknown as ApiResponse;
+    let responseData = null as unknown as ResponseType<T>;
     try {
       responseData = await response.json();
       if (response.status === 500) {
@@ -59,7 +55,7 @@ class ApiClient {
   async get<T>(
     endpoint: string,
     options?: RequestOptions
-  ): Promise<ApiResponse<T>> {
+  ): Promise<ResponseType<T>> {
     return this.request<T>(endpoint, { ...options, method: "GET" });
   }
 
@@ -67,7 +63,7 @@ class ApiClient {
     endpoint: string,
     data?: any,
     options?: RequestOptions
-  ): Promise<ApiResponse<T>> {
+  ): Promise<ResponseType<T>> {
     return this.request<T>(endpoint, { ...options, method: "POST", data });
   }
 
@@ -75,14 +71,14 @@ class ApiClient {
     endpoint: string,
     data?: any,
     options?: RequestOptions
-  ): Promise<ApiResponse<T>> {
+  ): Promise<ResponseType<T>> {
     return this.request<T>(endpoint, { ...options, method: "PUT", data });
   }
 
   async delete<T>(
     endpoint: string,
     options?: RequestOptions
-  ): Promise<ApiResponse<T>> {
+  ): Promise<ResponseType<T>> {
     return this.request<T>(endpoint, { ...options, method: "DELETE" });
   }
 }
