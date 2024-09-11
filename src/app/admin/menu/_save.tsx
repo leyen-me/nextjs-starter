@@ -189,16 +189,15 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
           onSubmit={handleSubmit}
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
-          <FormControl fullWidth error={!!errors.type}>
-            <BaseTreeSelect
-              label={t("pages.admin.menu.parent")}
-              name="pid"
-              items={menus}
-              value={data.pid || ""}
-              onChange={handleChange}
-            />
-            <BaseFormError error={errors.pid} />
-          </FormControl>
+          <BaseTreeSelect
+            label={t("pages.admin.menu.parent")}
+            name="pid"
+            items={menus}
+            value={data.pid || ""}
+            error={!!errors.pid}
+            helperText={errors.pid}
+            onChange={handleChange}
+          />
           <TextField
             label={t("pages.admin.menu.name")}
             name="name"
@@ -213,6 +212,8 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             name="icon"
             value={data.icon || ""}
             onChange={handleChange}
+            error={!!errors.icon}
+            helperText={errors.icon}
           />
           <TextField
             label={t("pages.admin.menu.url")}
@@ -223,30 +224,28 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             helperText={errors.url}
             fullWidth
           />
-          <FormControl fullWidth error={!!errors.type}>
-            <BaseDictSelect
-              label={t("pages.admin.menu.type")}
-              name="type"
-              size="medium"
-              allowAll={false}
-              value={data.type || ""}
-              onChange={handleChange}
-              dictKey={DICT_KEYS.MenuType}
-            />
-            <BaseFormError error={errors.type} />
-          </FormControl>
-          <FormControl fullWidth error={!!errors.openStyle}>
-            <BaseDictSelect
-              label={t("pages.admin.menu.openStyle")}
-              name="openStyle"
-              size="medium"
-              allowAll={false}
-              value={data.openStyle || ""}
-              onChange={handleChange}
-              dictKey={DICT_KEYS.MenuOpenStyle}
-            />
-            <BaseFormError error={errors.openStyle} />
-          </FormControl>
+          <BaseDictSelect
+            label={t("pages.admin.menu.type")}
+            name="type"
+            size="medium"
+            allowAll={false}
+            value={data.type || ""}
+            onChange={handleChange}
+            dictKey={DICT_KEYS.MenuType}
+            error={!!errors.type}
+            helperText={errors.type}
+          />
+          <BaseDictSelect
+            label={t("pages.admin.menu.openStyle")}
+            name="openStyle"
+            size="medium"
+            allowAll={false}
+            value={data.openStyle || ""}
+            error={!!errors.openStyle}
+            helperText={errors.openStyle}
+            onChange={handleChange}
+            dictKey={DICT_KEYS.MenuOpenStyle}
+          />
           <TextField
             label={t("pages.admin.menu.sort")}
             name="sort"

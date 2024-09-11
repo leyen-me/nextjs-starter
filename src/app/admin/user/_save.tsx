@@ -184,18 +184,17 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             helperText={errors.nickname}
             fullWidth
           />
-          <FormControl fullWidth error={!!errors.gender}>
-            <BaseDictSelect
-              label={t("pages.admin.user.gender")}
-              name="gender"
-              size="medium"
-              allowAll={false}
-              value={data.gender || ""}
-              onChange={handleChange}
-              dictKey={DICT_KEYS.Gender}
-            />
-            <BaseFormError error={errors.gender} />
-          </FormControl>
+          <BaseDictSelect
+            label={t("pages.admin.user.gender")}
+            name="gender"
+            size="medium"
+            allowAll={false}
+            value={data.gender || ""}
+            error={!!errors.gender}
+            helperText={errors.gender}
+            onChange={handleChange}
+            dictKey={DICT_KEYS.Gender}
+          />
           <TextField
             label={t("pages.admin.user.mobile")}
             name="mobile"
@@ -205,28 +204,24 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             helperText={errors.mobile}
             fullWidth
           />
-          <FormControl fullWidth error={!!errors.status}>
-            <BaseDictSelect
-              label={t("pages.admin.user.status")}
-              name="status"
-              size="medium"
-              allowAll={false}
-              value={data.status || ""}
-              onChange={handleChange}
-              dictKey={DICT_KEYS.UserStatus}
-            />
-            <BaseFormError error={errors.status} />
-          </FormControl>
-          <FormControl fullWidth error={!!errors.status}>
-            <BaseDataSelect
-              label={t("pages.admin.user.roles")}
-              name="roleIdList"
-              value={data.roleIdList}
-              data={roles}
-              onChange={handleChange}
-            />
-            <BaseFormError error={errors.roleIdList} />
-          </FormControl>
+          <BaseDictSelect
+            label={t("pages.admin.user.status")}
+            name="status"
+            size="medium"
+            allowAll={false}
+            value={data.status || ""}
+            error={!!errors.status}
+            helperText={errors.status}
+            onChange={handleChange}
+            dictKey={DICT_KEYS.UserStatus}
+          />
+          <BaseDataSelect
+            label={t("pages.admin.user.roles")}
+            name="roleIdList"
+            value={data.roleIdList}
+            data={roles}
+            onChange={handleChange}
+          />
         </Box>
       </Card>
     );

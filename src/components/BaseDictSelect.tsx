@@ -8,31 +8,43 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useI18n } from "./I18nProvider";
+import { BaseFormError } from "./BaseFormError";
 
-export function BaseDictSelect({
-  dictKey,
-  label,
-  value,
-  name,
-  onChange,
-  onBlur,
-  size = "small",
-  allowAll = true,
-}: {
+
+type BaseDictSelectProps = {
   dictKey: string;
   label: string;
   value?: string;
   allowAll?: boolean;
   name: string;
   size?: "small" | "medium";
+  error?: boolean;
+  helperText?: string;
+  fullWidth?: boolean;
+  
   onChange: (e: SelectChangeEvent<string>) => void;
   onBlur?: () => void;
-}) {
+};
+export function BaseDictSelect({
+  dictKey,
+  label,
+  value,
+  name,
+  fullWidth = true,
+  error = false,
+  helperText = "",
+  onChange,
+  onBlur,
+  size = "small",
+  allowAll = true,
+}: BaseDictSelectProps) {
   const { t } = useI18n();
   const { getDictItems } = useDictionaryStore();
 
   return (
     <FormControl
+      error={error}
+      fullWidth={fullWidth}
       variant="outlined"
       size={size}
       sx={{ minWidth: 120 }}
@@ -54,6 +66,7 @@ export function BaseDictSelect({
           );
         })}
       </Select>
+      <BaseFormError error={helperText} />
     </FormControl>
   );
 }

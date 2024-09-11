@@ -293,6 +293,7 @@ export function BaseCrud({
                             return (
                                 <BaseDictSelect
                                     key={option.name}
+                                    fullWidth={false}
                                     dictKey={option.dictKey || ""}
                                     label={
                                         option.labelType === LABEL_TYPE.I18N

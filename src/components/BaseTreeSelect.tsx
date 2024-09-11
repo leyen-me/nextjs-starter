@@ -15,6 +15,7 @@ import { useEffect, useMemo, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { treeToMap } from "../utils/tree";
 import { TREE_ROOT_ID } from "@/contants";
+import { BaseFormError } from "./BaseFormError";
 
 export type TreeViewBaseItem = {
   id: string;
@@ -28,7 +29,9 @@ type BaseTreeSelectProps = {
   name: string;
   value: string | string[];
   items: TreeViewBaseItem[];
-
+  
+  error?: boolean;
+  helperText?: string;
   multiple?: boolean;
   onChange?: (e: SelectChangeEvent<string>) => void;
 };
@@ -38,6 +41,9 @@ export function BaseTreeSelect({
   name,
   value,
   items,
+
+  error = false,
+  helperText = "",
   multiple = false,
   onChange,
 }: BaseTreeSelectProps) {
@@ -106,7 +112,13 @@ export function BaseTreeSelect({
   };
 
   return (
-    <FormControl variant="outlined" size={"medium"} sx={{ minWidth: 120 }}>
+    <FormControl
+      fullWidth
+      variant="outlined"
+      size={"medium"}
+      sx={{ minWidth: 120 }}
+      error={error}
+    >
       <TextField
         label={label}
         defaultValue={formatValue}
@@ -125,6 +137,7 @@ export function BaseTreeSelect({
           },
         }}
       />
+      <BaseFormError error={helperText} />
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogContent>
           <RichTreeViewPro
