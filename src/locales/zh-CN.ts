@@ -20,7 +20,7 @@ export default {
         openStyle: {
           internal: "内部",
           external: "外部",
-        }
+        },
       },
     },
   },
@@ -133,6 +133,27 @@ export default {
         openStyle: "打开方式",
         icon: "菜单图标",
         sort: "排序",
+        error: {
+          pid: {
+            required: "父级菜单是必填项",
+          },
+          name: {
+            required: "菜单名是必填项",
+          },
+          url: {
+            required: "菜单路径是必填项",
+          },
+          type: {
+            required: "菜单类型是必填项",
+          },
+          openStyle: {
+            required: "打开方式是必填项",
+          },
+          sort: {
+            required: "排序是必填项",
+            min: "排序不能小于0",
+          },
+        },
       },
     },
     login: {

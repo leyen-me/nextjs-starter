@@ -32,7 +32,11 @@ export function BaseDictSelect({
   const { getDictItems } = useDictionaryStore();
 
   return (
-    <FormControl variant="outlined" size={size} sx={{ minWidth: 120 }}>
+    <FormControl
+      variant="outlined"
+      size={size}
+      sx={{ minWidth: 120 }}
+    >
       <InputLabel>{label}</InputLabel>
       <Select
         label={label}

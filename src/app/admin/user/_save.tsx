@@ -1,5 +1,6 @@
 import { BaseDataSelect } from "@/components/BaseDataSelect";
 import { BaseDictSelect } from "@/components/BaseDictSelect";
+import { BaseFormError } from "@/components/BaseFormError";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/ToastProvider";
 import { ADD_ID, DICT_KEYS } from "@/contants";
@@ -193,7 +194,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
               onChange={handleChange}
               dictKey={DICT_KEYS.Gender}
             />
-            {errors.gender && <p style={{ color: "red" }}>{errors.gender}</p>}
+            <BaseFormError error={errors.gender} />
           </FormControl>
           <TextField
             label={t("pages.admin.user.mobile")}
@@ -214,7 +215,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
               onChange={handleChange}
               dictKey={DICT_KEYS.UserStatus}
             />
-            {errors.status && <p style={{ color: "red" }}>{errors.status}</p>}
+            <BaseFormError error={errors.status} />
           </FormControl>
           <FormControl fullWidth error={!!errors.status}>
             <BaseDataSelect
@@ -224,9 +225,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
               data={roles}
               onChange={handleChange}
             />
-            {errors.roleIdList && (
-              <p style={{ color: "red" }}>{errors.roleIdList}</p>
-            )}
+            <BaseFormError error={errors.roleIdList} />
           </FormControl>
         </Box>
       </Card>
