@@ -1,18 +1,29 @@
 import { prisma } from "@/libs/prisma";
+import { updateManyToManyRelation } from "@/utils/relationUtils";
 import { buildError, buildSuccess } from "@/utils/response";
+import { Role } from "@prisma/client";
 
 export async function PUT(
     req: Request,
     { params }: { params: { id: string } }
 ) {
     const { id } = params;
-    const data = await req.json();
+    const { menuIdList, ...data }: { menuIdList: string[]; data: Role } = await req.json();
     try {
-        await prisma.role.update({
-            where: {
-                id,
-            },
-            data,
+        await prisma.$transaction(async (prisma) => {
+            // Update role data
+            await prisma.role.update({
+                where: { id },
+                data,
+            });
+            // Update role-menu relation
+            await updateManyToManyRelation(prisma, {
+                parentId: id,
+                newChildIds: menuIdList,
+                relationModel: prisma.roleMenu,
+                parentIdField: "roleId",
+                childIdField: "menuId",
+            });
         });
     } catch (error) {
         console.error(error);
@@ -52,7 +63,14 @@ export async function GET(
                 id,
             },
         });
-        return buildSuccess({ data: role });
+        // todo: 获取角色关联的菜单
+        const roleMenus = await prisma.roleMenu.findMany({
+            where: {
+                roleId: id,
+            },
+        });
+        const menuIdList = roleMenus.map((roleMenu) => roleMenu.menuId);
+        return buildSuccess({ data: { ...role, menuIdList } });
     } catch (error) {
         console.error(error);
         return buildError({ message: "server.common.info.failed" });

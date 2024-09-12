@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { compare } from "bcrypt"; // 用于密码比对
 import { prisma } from "@/libs/prisma"; // 你的数据库连接
 import { UserStatus } from "@prisma/client";
-
+import type { NextAuthOptions } from "next-auth"
 
 const clearSession = (session: Session) => {
   if (session.user) {
@@ -14,7 +14,7 @@ const clearSession = (session: Session) => {
   return session;
 };
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -99,9 +99,18 @@ const handler = NextAuth({
       if (user?.status === UserStatus.DISABLED) {
         return clearSession(session);
       }
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          email: user.email,
+        },
+      };
     },
   },
-});
+}
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

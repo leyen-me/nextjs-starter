@@ -1,5 +1,6 @@
 import { prisma } from "@/libs/prisma";
 import { encryptPassword } from "@/utils";
+import { updateManyToManyRelation } from "@/utils/relationUtils";
 import { buildError, buildSuccess } from "@/utils/response";
 
 export async function PUT(
@@ -19,21 +20,13 @@ export async function PUT(
           password: data.password ? encryptPassword(data.password) : undefined,
         },
       });
-      // 删除不在roleIdList中的roleId
-      await prisma.userRole.deleteMany({
-        where: {
-          userId: id,
-          roleId: {
-            notIn: roleIdList,
-          },
-        },
-      });
-      // 添加不在userRoleIdList中的roleId
-      await prisma.userRole.createMany({
-        data: roleIdList.map((roleId: string) => ({
-          userId: id,
-          roleId,
-        })),
+      // Update user-role relation
+      await updateManyToManyRelation(prisma, {
+        parentId: id,
+        newChildIds: roleIdList,
+        relationModel: prisma.userRole,
+        parentIdField: "userId",
+        childIdField: "roleId",
       });
     });
   } catch (error) {

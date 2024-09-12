@@ -1,4 +1,5 @@
 import { BaseDictSelect } from "@/components/BaseDictSelect";
+import { BaseTreeSelect, TreeViewBaseItem } from "@/components/BaseTreeSelect";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/ToastProvider";
 import { ADD_ID, DICT_KEYS } from "@/contants";
@@ -12,6 +13,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { Menu } from "@prisma/client";
 import {
   ChangeEvent,
   forwardRef,
@@ -41,6 +43,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
     const id = _id === ADD_ID ? "" : _id;
     const { t } = useI18n();
 
+    const [menus, setMenus] = useState<any>([]);
     const [data, setData] = useState<any>({});
     const [errors, setErrors] = useState<any>({});
 
@@ -49,6 +52,17 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
     const getModelById = async () => {
       const res = await api.get(`${baseUrl}/${id}`);
       setData(res.data);
+    };
+
+    const getMenus = async () => {
+      const { data: _data } = await api.get<Menu[]>(`/api/menu/tree`);
+      const addLabel = (item: TreeViewBaseItem): TreeViewBaseItem => ({
+        ...item,
+        label: item.name,
+        children: item.children.length > 0 ? item.children.map(addLabel) : [],
+      });
+      const newData = _data.map(addLabel as any);
+      setMenus(newData);
     };
 
     const handleChange = (e: any) => {
@@ -100,6 +114,10 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
     }));
 
     useEffect(() => {
+      getMenus();
+    }, []);
+
+    useEffect(() => {
       if (id) {
         getModelById();
       }
@@ -129,6 +147,14 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             error={!!errors.name}
             helperText={errors.name}
             fullWidth
+          />
+          <BaseTreeSelect
+            label={t("pages.admin.role.menuIdList")}
+            name="menuIdList"
+            value={data.menuIdList || []}
+            onChange={handleChange}
+            items={menus}
+            multiple
           />
         </Box>
       </Card>

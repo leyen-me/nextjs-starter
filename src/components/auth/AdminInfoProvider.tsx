@@ -1,24 +1,38 @@
 import api from "@/utils/request";
 import { useEffect, useState } from "react";
 import Loading from "../Loading";
+import { createContext, useContext } from "react";
+import { Menu } from "@prisma/client";
 
 type AdminInfoProviderProps = {
   children: React.ReactNode;
 };
 
+type MenuContextType = {
+  menuList: Menu[];
+};
+
+const MenuContext = createContext<MenuContextType | undefined>(undefined);
+
+export const useMenuContext = () => {
+  const context = useContext(MenuContext);
+  if (!context) {
+    throw new Error("useMenuContext must be used within a MenuProvider");
+  }
+  return context;
+};
+
+
 export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [menuList, setMenuList] = useState<Menu[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        // 步骤 2: 获取用户菜单
-        await api.get("/api/user/menu");
-
-        // 步骤 3: 获取字典
-        // await api.get("/api/dictionary");
-
+        const { data } = await api.get<Menu[]>("/api/user/menu");
+        setMenuList(data);
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to load data:", error);
@@ -41,5 +55,5 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
       </div>
     );
   }
-  return <>{children}</>;
+  return <MenuContext.Provider value={{ menuList }}>{children}</MenuContext.Provider>;
 }

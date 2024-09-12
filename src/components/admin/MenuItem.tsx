@@ -1,29 +1,34 @@
 import {
+  Icon,
   Link,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { IMenuItem } from "./contexts/drawer-context";
+import { Menu } from "@prisma/client";
+import { BaseDynamicIcon } from "../BaseDynamicIcon";
 
-type Props = IMenuItem & {
-  selected?: boolean;
-  onClick?: () => void;
+type Props = Menu & {
+  icon: string;
+  name: string;
+  url?: string;
+  selected: boolean;
+  onClick: () => void;
   endIcon?: React.ReactNode;
   level: number;
 };
 
-export const MenuItem: React.FC<Props> = ({
-  route,
-  literal,
-  Icon,
+export const MenuItem = ({
+  url,
+  name,
+  icon,
   selected,
   onClick,
   endIcon,
   level,
-}) => {
-  
+}: Props) => {
+
   const color = selected ? "primary.main" : "primary.textColor";
 
   const link = (
@@ -47,9 +52,9 @@ export const MenuItem: React.FC<Props> = ({
             }),
           ]}
         >
-          <Icon sx={{ color: "primary.textColor" }} />
+          <BaseDynamicIcon name={icon} />
         </ListItemIcon>
-        <ListItemText primary={literal} />
+        <ListItemText primary={name} />
       </div>
       {endIcon && (
         <ListItemIcon sx={{ minWidth: "auto" }}>{endIcon}</ListItemIcon>

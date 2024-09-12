@@ -119,6 +119,7 @@ export default {
       },
       role: {
         name: "角色名",
+        menuIdList: "菜单列表",
         error: {
           name: {
             required: "角色名是必填项",

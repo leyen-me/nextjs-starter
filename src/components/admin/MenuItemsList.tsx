@@ -1,12 +1,12 @@
 import { List, Collapse } from "@mui/material";
 import { useEffect, useState } from "react";
 import { MenuItem } from "./MenuItem";
-import { IMenuItem } from "./contexts/drawer-context";
 import { usePathname, useRouter } from "next/navigation";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
+import { Menu } from "@prisma/client";
 
-const renderMenuItems = (items: IMenuItem[], pathname: string, level = 0) => {
-  return items.map(({ literal, route, Icon, children }) => {
+const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
+  return items.map(({ name, url, type, openStyle, icon, sort, createdAt, children }) => {
     const [isOpen, setIsOpen] = useState(false);
     const hasChildren = children && children.length > 0;
     const router = useRouter();
@@ -16,14 +16,14 @@ const renderMenuItems = (items: IMenuItem[], pathname: string, level = 0) => {
         setIsOpen(!isOpen);
         return;
       }
-      router.push(route || "/");
+      router.push(url || "/");
     };
 
     // 子项如果被激活，父菜单需要展开
     // Check if any child route is active
     const isChildActive =
       hasChildren &&
-      children.some((child) => pathname.startsWith(child.route || "/"));
+      children.some((child: Menu) => pathname.startsWith(child.url || "/"));
 
     // If a child is active, ensure the parent menu is open
     useEffect(() => {
@@ -33,12 +33,12 @@ const renderMenuItems = (items: IMenuItem[], pathname: string, level = 0) => {
     }, [isChildActive]);
 
     return (
-      <div key={route}>
+      <div key={url}>
         <MenuItem
-          Icon={Icon}
-          literal={literal}
-          route={route}
-          selected={pathname === route}
+          icon={icon || ""}
+          name={name}
+          url={url}
+          selected={pathname === url}
           onClick={handleClick}
           endIcon={hasChildren ? <ExpandMoreIcon /> : undefined}
           level={level}
@@ -55,7 +55,7 @@ const renderMenuItems = (items: IMenuItem[], pathname: string, level = 0) => {
   });
 };
 
-export const MenuItemsList = ({ items = [] }: { items?: IMenuItem[] }) => {
+export const MenuItemsList = ({ items = [] }: { items?: Menu[] }) => {
   const pathname = usePathname();
   if (!items.length) return null;
 
