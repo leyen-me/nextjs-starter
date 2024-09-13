@@ -1,5 +1,5 @@
 export type Filters = {
-  [key: string]: string | undefined;
+  [key: string]: any;
 };
 
 export const extractFiltersWithPagination = <T extends Filters>(
@@ -38,4 +38,3 @@ export const extractFiltersWithoutPagination = <T extends Filters>(
 
   return { filters };
 };
-

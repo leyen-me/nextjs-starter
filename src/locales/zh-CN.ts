@@ -87,6 +87,13 @@ export default {
       deleteFailed: "删除失败",
     },
     admin: {
+      menus: {
+        dashboard: "Dashboard",
+        system: "System",
+        user: "User",
+        role: "Role",
+        menu: "Menu",
+      },
       user: {
         email: "邮箱",
         nickname: "昵称",

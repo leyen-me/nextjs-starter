@@ -28,8 +28,9 @@ import IconGoogle from "@/components/icons/IconGoogle";
 import IconGithub from "@/components/icons/IconGithub";
 import { I18nError } from "@/utils/error";
 
-
 export default function Login() {
+  const { t, lang } = useI18n();
+  const { showError } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberPassword, setRememberPassword] = useState(false);
@@ -47,9 +48,6 @@ export default function Login() {
     const password = getPassword() || "";
     setPassword(password);
   }, []);
-
-  const { t } = useI18n();
-  const { showError } = useToast();
 
   const router = useRouter();
   const searchParams = useSearchParams();

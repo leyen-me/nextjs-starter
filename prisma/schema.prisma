@@ -34,28 +34,35 @@ enum OpenStyle {
   EXTERNAL
 }
 
+enum LabelType {
+  TEXT
+  I18N
+}
+
 model User {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  nickname  String?
-  password  String
-  avatar    String?
-  gender    Gender     @default(UNKNOWN)
-  mobile    String?
-  status    UserStatus @default(NORMAL)
-  createdAt DateTime   @default(now())
+  id         String     @id @default(cuid())
+  email      String     @unique
+  nickname   String?
+  password   String
+  avatar     String?
+  gender     Gender     @default(UNKNOWN)
+  mobile     String?
+  status     UserStatus @default(NORMAL)
+  superAdmin Boolean    @default(true)
+  createdAt  DateTime   @default(now())
 }
 
 model Menu {
-  id         String    @id @default(cuid())
-  pid        String
-  name       String    @db.VarChar(200)
-  url        String    @db.VarChar(200)
-  type       MenuType
-  openStyle  OpenStyle
-  icon       String?   @db.VarChar(50)
-  sort       Int       @default(0)
-  createdAt  DateTime  @default(now())
+  id        String    @id @default(cuid())
+  pid       String
+  name      String    @db.VarChar(200)
+  nameType  LabelType @default(I18N)
+  url       String    @db.VarChar(200)
+  type      MenuType
+  openStyle OpenStyle
+  icon      String?   @db.VarChar(50)
+  sort      Int       @default(0)
+  createdAt DateTime  @default(now())
 }
 
 model Role {
@@ -79,6 +86,6 @@ model UserRole {
 }
 
 model GlobalConfig {
-  id        String   @id @default(cuid())
-  config    Json
+  id     String @id @default(cuid())
+  config Json
 }

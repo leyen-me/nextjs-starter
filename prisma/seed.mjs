@@ -3,24 +3,39 @@ const prisma = new PrismaClient();
 
 const CONFIG_DATA = {
   dictMap: {
+    LabelType: {
+      type: "dict",
+      data: [
+        {
+          label: "common.dict.labelType.text",
+          labelType: "TEXT",
+          value: "TEXT",
+        },
+        {
+          label: "common.dict.labelType.i18n",
+          labelType: "I18N",
+          value: "I18N",
+        },
+      ],
+    },
     Gender: {
       type: "dict",
       data: [
         {
           label: "common.dict.gender.male",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "MALE",
           color: "primary",
         },
         {
           label: "common.dict.gender.female",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "FEMALE",
           color: "secondary",
         },
         {
           label: "common.dict.gender.unknown",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "UNKNOWN",
           color: "default",
         },
@@ -31,13 +46,13 @@ const CONFIG_DATA = {
       data: [
         {
           label: "common.dict.status.normal",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "NORMAL",
           color: "success",
         },
         {
           label: "common.dict.status.disabled",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "DISABLED",
           color: "error",
         },
@@ -48,13 +63,13 @@ const CONFIG_DATA = {
       data: [
         {
           label: "common.dict.menu.type.menu",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "MENU",
           color: "primary",
         },
         {
           label: "common.dict.menu.type.interface",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "INTERFACE",
           color: "secondary",
         },
@@ -65,13 +80,13 @@ const CONFIG_DATA = {
       data: [
         {
           label: "common.dict.menu.openStyle.internal",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "INTERNAL",
           color: "primary",
         },
         {
           label: "common.dict.menu.openStyle.external",
-          labelType: "i18n",
+          labelType: "I18N",
           value: "EXTERNAL",
           color: "secondary",
         },
@@ -84,7 +99,7 @@ const initGlobalConfig = async () => {
   const config = await prisma.globalConfig.findFirst();
   await prisma.globalConfig.upsert({
     where: {
-      id: config?.id || 'default'
+      id: config?.id || "default",
     },
     update: {
       config: CONFIG_DATA,
@@ -101,6 +116,7 @@ const USERS = [
     nickname: "a",
     email: "a@a.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
+    superAdmin: true,
     gender: "MALE",
   },
   {
@@ -159,7 +175,6 @@ const initRole = async () => {
   });
 };
 
-
 const USER_ROLES = [
   {
     id: "1",
@@ -185,187 +200,56 @@ const initUserRole = async () => {
   });
 };
 
-
 const MENUS = [
   {
     id: "1",
     pid: "0",
-    name: "Dashboard",
+    name: "pages.admin.menus.dashboard",
     url: "/admin/dashboard",
     type: "MENU",
     openStyle: "INTERNAL",
-    icon: "DashboardIcon",
+    icon: "HomeOutlined",
     sort: 1,
   },
   {
     id: "2",
     pid: "0",
-    name: "User",
-    url: "/admin/user",
+    name: "pages.admin.menus.system",
+    url: "/admin/system-management",
     type: "MENU",
     openStyle: "INTERNAL",
-    icon: "PersonIcon",
+    icon: "SettingsOutlined",
     sort: 2,
   },
   {
     id: "3",
-    pid: "0",
-    name: "Role",
-    url: "/admin/role",
+    pid: "2",
+    name: "pages.admin.menus.user",
+    url: "/admin/user",
     type: "MENU",
     openStyle: "INTERNAL",
-    icon: "SecurityIcon",
-    sort: 3,
+    icon: "AccountCircleOutlined",
+    sort: 1,
   },
   {
     id: "4",
-    pid: "0",
-    name: "Menu",
-    url: "/admin/menu",
+    pid: "2",
+    name: "pages.admin.menus.role",
+    url: "/admin/role",
     type: "MENU",
     openStyle: "INTERNAL",
-    icon: "MenuIcon",
-    sort: 4,
+    icon: "VerifiedUserOutlined",
+    sort: 2,
   },
   {
     id: "5",
-    pid: "0",
-    name: "Orders",
-    url: "/orders",
+    pid: "2",
+    name: "pages.admin.menus.menu",
+    url: "/admin/menu",
     type: "MENU",
     openStyle: "INTERNAL",
-    icon: "ShoppingCartIcon",
-    sort: 5,
-  },
-  {
-    id: "6",
-    pid: "5",
-    name: "New Orders",
-    url: "/orders/new",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "AddShoppingCartIcon",
-    sort: 1,
-  },
-  {
-    id: "7",
-    pid: "5",
-    name: "Processing",
-    url: "/orders/processing",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "LoopIcon",
-    sort: 2,
-  },
-  {
-    id: "8",
-    pid: "5",
-    name: "Completed",
-    url: "/orders/completed",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "CheckCircleIcon",
+    icon: "MenuOutlined",
     sort: 3,
-  },
-  {
-    id: "9",
-    pid: "0",
-    name: "Customers",
-    url: "/customers",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "PeopleIcon",
-    sort: 6,
-  },
-  {
-    id: "10",
-    pid: "9",
-    name: "Customer List",
-    url: "/customers/list",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "ListIcon",
-    sort: 1,
-  },
-  {
-    id: "11",
-    pid: "10",
-    name: "Active Customers",
-    url: "/customers/list/active",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "CheckIcon",
-    sort: 1,
-  },
-  {
-    id: "12",
-    pid: "10",
-    name: "Inactive Customers",
-    url: "/customers/list/inactive",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "BlockIcon",
-    sort: 2,
-  },
-  {
-    id: "13",
-    pid: "9",
-    name: "Customer Segments",
-    url: "/customers/segments",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "GroupWorkIcon",
-    sort: 2,
-  },
-  {
-    id: "14",
-    pid: "13",
-    name: "Create Segment",
-    url: "/customers/segments/create",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "AddIcon",
-    sort: 1,
-  },
-  {
-    id: "15",
-    pid: "13",
-    name: "Manage Segments",
-    url: "/customers/segments/manage",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "SettingsIcon",
-    sort: 2,
-  },
-  {
-    id: "16",
-    pid: "0",
-    name: "Inventory",
-    url: "/inventory",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "InventoryIcon",
-    sort: 7,
-  },
-  {
-    id: "17",
-    pid: "16",
-    name: "Stock Management",
-    url: "/inventory/stock",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "InventoryIcon",
-    sort: 1,
-  },
-  {
-    id: "18",
-    pid: "16",
-    name: "Suppliers",
-    url: "/inventory/suppliers",
-    type: "MENU",
-    openStyle: "INTERNAL",
-    icon: "LocalShippingIcon",
-    sort: 2,
   },
 ];
 
@@ -378,7 +262,6 @@ const initMenu = async () => {
     });
   }
 };
-
 
 async function main() {
   await initGlobalConfig();

@@ -15,16 +15,18 @@ type Translations = { [key: string]: string };
 const I18nContext = createContext<I18nContextType | null>(null);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang] = useState(getLanguage(SETTING_CONFIG.language));
+  const [lang, setLang] = useState(SETTING_CONFIG.language);
   const [translations, setTranslations] = useState<Translations>(
-    translationsMap.get(lang) || {}
+    translationsMap.get(lang)
   );
 
   useEffect(() => {
-    const savedLang = localStorage.getItem("language");
-    if (savedLang) {
-      setLang(getLanguage(savedLang));
-    }
+    const savedLang =
+      typeof window !== "undefined"
+        ? localStorage.getItem("language") || SETTING_CONFIG.language
+        : SETTING_CONFIG.language;
+
+    setLang(getLanguage(savedLang));
   }, []);
 
   useEffect(() => {

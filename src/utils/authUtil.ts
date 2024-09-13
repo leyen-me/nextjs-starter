@@ -1,8 +1,8 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { getServerSession, Session } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { User } from "@prisma/client";
+import { getServerSession } from "next-auth";
 
-export const getUserId = async () => {
-    const session = await getServerSession(authOptions)
-    // @ts-ignore
-    return session?.user?.id
-}
+export const getUser = async (): Promise<User> => {
+  const session = await getServerSession(authOptions);
+  return session?.user as User;
+};

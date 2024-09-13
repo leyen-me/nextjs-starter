@@ -1,5 +1,4 @@
 import { prisma } from "@/libs/prisma";
-import { Page } from "@/types";
 import { extractFiltersWithPagination } from "@/utils/extractFilters";
 import { buildSuccess } from "@/utils/response";
 import { Gender, Role, User, UserStatus } from "@prisma/client";

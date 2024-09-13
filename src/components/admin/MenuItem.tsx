@@ -1,13 +1,8 @@
-import {
-  Icon,
-  Link,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Menu } from "@prisma/client";
 import { BaseDynamicIcon } from "../BaseDynamicIcon";
+import { useI18n } from "../I18nProvider";
+import { LABEL_TYPE } from "@/contants";
 
 type Props = Menu & {
   icon: string;
@@ -27,8 +22,9 @@ export const MenuItem = ({
   onClick,
   endIcon,
   level,
+  nameType,
 }: Props) => {
-
+  const { t } = useI18n();
   const color = selected ? "primary.main" : "primary.textColor";
 
   const link = (
@@ -45,16 +41,16 @@ export const MenuItem = ({
       <div className="flex items-center">
         <ListItemIcon
           sx={[
-            { minWidth: "auto" },
+            { minWidth: "auto", width: "24px", height: "24px" },
             (theme) => ({
-              paddingRight: theme.spacing(2),
+              marginRight: theme.spacing(2),
               color,
             }),
           ]}
         >
           <BaseDynamicIcon name={icon} />
         </ListItemIcon>
-        <ListItemText primary={name} />
+        <ListItemText primary={nameType === LABEL_TYPE.I18N ? t(name) : name} />
       </div>
       {endIcon && (
         <ListItemIcon sx={{ minWidth: "auto" }}>{endIcon}</ListItemIcon>

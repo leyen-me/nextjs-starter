@@ -1,4 +1,4 @@
-export type Page<T> = {
+type Page<T> = {
   total: number;
   data: T[];
 };

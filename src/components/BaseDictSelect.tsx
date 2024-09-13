@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useI18n } from "./I18nProvider";
 import { BaseFormError } from "./BaseFormError";
+import { LABEL_TYPE } from "@/contants";
 
 
 type BaseDictSelectProps = {
@@ -61,7 +62,7 @@ export function BaseDictSelect({
         {getDictItems(dictKey).map((item: DictItem) => {
           return (
             <MenuItem key={item.value} value={item.value}>
-              {item.labelType === "i18n" ? t(item.label) : item.label}
+              {item.labelType === LABEL_TYPE.I18N ? t(item.label) : item.label}
             </MenuItem>
           );
         })}

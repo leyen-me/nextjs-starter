@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { LabelType } from "@/contants";
+import { LABEL_TYPE, LabelType } from "@/contants";
 import { useI18n } from "./I18nProvider";
 import { I18nError } from "@/utils/error";
 
@@ -40,7 +40,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const showSuccess = (data: SuccessOrErrorType) => {
     if (data.messageType) {
-      if (data.messageType === "i18n") {
+      if (data.messageType === LABEL_TYPE.I18N) {
         showToast(t(data.message), "success");
       } else {
         showToast(data.message, "success");
@@ -52,7 +52,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const showError = (error: SuccessOrErrorType | I18nError) => {
     if (error.messageType) {
-      if (error.messageType === "i18n") {
+      if (error.messageType === LABEL_TYPE.I18N) {
         showToast(t(error.message), "error");
       } else {
         showToast(error.message, "error");

@@ -1,5 +1,5 @@
 import { prisma } from "@/libs/prisma";
-import { Page } from "@/types";
+import { getUser } from "@/utils/authUtil";
 import { extractFiltersWithPagination } from "@/utils/extractFilters";
 import { buildSuccess } from "@/utils/response";
 import { Gender, User, UserStatus } from "@prisma/client";
@@ -21,6 +21,16 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     ["email", "nickname", "gender", "mobile", "status"]
   );
 
+  const { superAdmin } = await getUser();
+
+  // 过滤掉超级管理员
+  if (!superAdmin) {
+    // @ts-ignore
+    filters.superAdmin = {
+      not: true,
+    };
+  }
+
   const dbUsers = await prisma.user.findMany({
     skip: (Number(page) - 1) * Number(pageSize),
     take: Number(pageSize),
@@ -36,5 +46,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     return userWithoutPassword;
   });
 
-  return buildSuccess<Page<UserWithoutPassword>>({ data: { total, data: users } });
+  return buildSuccess<Page<UserWithoutPassword>>({
+    data: { total, data: users },
+  });
 }

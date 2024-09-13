@@ -15,7 +15,7 @@ export const LANGUAGES = [
 ];
 
 export const SETTING_CONFIG = {
-  language: "zh-CN",
+  language: LANGUAGES[0].value,
 };
 
 export const DEFAULT_PAGE_SIZE = 10;
@@ -32,8 +32,8 @@ export const ADD_ID = "-1";
 export const TREE_ROOT_ID = "0";
 
 export const LABEL_TYPE = {
-  I18N: "i18n",
-  TEXT: "text",
+  I18N: "I18N",
+  TEXT: "TEXT",
 } as const;
 
 export type LabelType = (typeof LABEL_TYPE)[keyof typeof LABEL_TYPE];
