@@ -26,14 +26,18 @@ import { Logo } from "../Logo";
 import { LANGUAGES } from "@/contants";
 import { I18nMenu } from "../I18nMenu";
 import { ProfileMenu } from "./ProfileMenu";
+import { useMenuStore } from "@/stores/menuStore";
 
 export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const { isOpened, toggleIsOpened } = useDrawerContext();
   const { theme, toggleTheme } = useTheme();
+  const { getHeader } = useMenuStore();
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState<null | HTMLElement>(
     null
   );
-  const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(null);
+  const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
 
   const handleMenuItemClick = (item: string) => {
     setUserMenuAnchorEl(null);
@@ -51,20 +55,23 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
           {/* Toggle button for opening/closing the drawer */}
           <div className="flex items-center gap-2">
             {isLargeScreen && <Logo height="56%" />}
-            <IconButton
-              color="inherit"
-              onClick={() => toggleIsOpened(!isOpened)}
-              sx={{ padding: theme.spacing(1) }}
-            >
-              {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
-            </IconButton>
-            <Typography variant="h6">Header</Typography>
+            {!isLargeScreen && (
+              <>
+                <IconButton
+                  color="inherit"
+                  onClick={() => toggleIsOpened(!isOpened)}
+                  sx={{ padding: theme.spacing(1) }}
+                >
+                  {isOpened ? <ChevronLeftIcon /> : <MenuIcon />}
+                </IconButton>
+                <Typography variant="h6">{getHeader()}</Typography>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <IconButton color="inherit">
               <NotificationsOutlinedIcon />
             </IconButton>
-
 
             <IconButton
               color="inherit"
@@ -72,8 +79,11 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
             >
               <LanguageOutlinedIcon />
             </IconButton>
-            <I18nMenu anchorEl={languageAnchorEl} open={Boolean(languageAnchorEl)} onClose={() => setLanguageAnchorEl(null)} />
-
+            <I18nMenu
+              anchorEl={languageAnchorEl}
+              open={Boolean(languageAnchorEl)}
+              onClose={() => setLanguageAnchorEl(null)}
+            />
 
             <IconButton
               color="inherit"
@@ -88,14 +98,18 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
               )}
             </IconButton>
 
-
             <IconButton
               color="inherit"
               onClick={(event) => setUserMenuAnchorEl(event.currentTarget)}
             >
               <AccountCircleOutlinedIcon />
             </IconButton>
-            <ProfileMenu anchorEl={userMenuAnchorEl} open={Boolean(userMenuAnchorEl)} onClose={() => setUserMenuAnchorEl(null)} onItemClick={handleMenuItemClick} />
+            <ProfileMenu
+              anchorEl={userMenuAnchorEl}
+              open={Boolean(userMenuAnchorEl)}
+              onClose={() => setUserMenuAnchorEl(null)}
+              onItemClick={handleMenuItemClick}
+            />
           </div>
         </div>
       </Toolbar>

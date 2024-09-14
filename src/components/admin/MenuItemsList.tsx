@@ -4,6 +4,10 @@ import { MenuItem } from "./MenuItem";
 import { usePathname, useRouter } from "next/navigation";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { Menu } from "@prisma/client";
+import { LABEL_TYPE, MENU_OPEN_STYLE } from "@/contants";
+import { isExternalUrl } from "@/utils/stringUtil";
+import { useMenuStore } from "@/stores/menuStore";
+import { useI18n } from "../I18nProvider";
 
 const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
   return items.map(
@@ -19,15 +23,30 @@ const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
       children,
     }) => {
       const [isOpen, setIsOpen] = useState(false);
+      const { t } = useI18n();
+      const { setHeader } = useMenuStore();
+
       const hasChildren = children && children.length > 0;
       const router = useRouter();
+
+      if (pathname === url) {
+        setHeader(nameType === LABEL_TYPE.I18N ? t(name) : name);
+      }
 
       const handleClick = () => {
         if (hasChildren) {
           setIsOpen(!isOpen);
           return;
         }
-        router.push(url || "/");
+        if (openStyle === MENU_OPEN_STYLE.INTERNAL) {
+          if (isExternalUrl(url)) {
+            router.push(`/admin/iframe/${encodeURIComponent(url)}`);
+          } else {
+            router.push(url || "/");
+          }
+        } else {
+          window.open(url, "_blank");
+        }
       };
 
       // 子项如果被激活，父菜单需要展开

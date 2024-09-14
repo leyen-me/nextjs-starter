@@ -1,4 +1,3 @@
-import { BaseDataSelect } from "@/components/BaseDataSelect";
 import { BaseDictSelect } from "@/components/BaseDictSelect";
 import { BaseTreeSelect, TreeViewBaseItem } from "@/components/BaseTreeSelect";
 import { useI18n } from "@/components/I18nProvider";
@@ -8,8 +7,6 @@ import api from "@/utils/request";
 import { Box, Card, FormControl, TextField } from "@mui/material";
 import { Menu } from "@prisma/client";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { ResponseType } from "@/utils/response";
-import { BaseFormError } from "@/components/BaseFormError";
 import { BaseIconSelect } from "@/components/BaseIconSelect";
 
 export type SavePageRef = {
@@ -76,30 +73,6 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
 
     const validate = () => {
       let tempErrors: any = {};
-      // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      // tempErrors.email = data.email
-      //     ? emailRegex.test(data.email)
-      //         ? ""
-      //         : t("pages.admin.user.error.email.format")
-      //     : t("pages.admin.user.error.email.required");
-
-      // if (!id) {
-      //     tempErrors.password = data.password
-      //         ? ""
-      //         : t("pages.admin.user.error.password.required");
-      // }
-      // tempErrors.nickname = data.nickname
-      //     ? ""
-      //     : t("pages.admin.user.error.nickname.required");
-      // tempErrors.gender = data.gender
-      //     ? ""
-      //     : t("pages.admin.user.error.gender.required");
-      // tempErrors.mobile = data.mobile
-      //     ? ""
-      //     : t("pages.admin.user.error.mobile.required");
-      // tempErrors.status = data.status
-      //     ? ""
-      //     : t("pages.admin.user.error.status.required");
 
       // 父级菜单
       if (!data.pid) {
@@ -108,6 +81,10 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
       // 菜单名
       if (!data.name) {
         tempErrors.name = t("pages.admin.menu.error.name.required");
+      }
+      // 菜单名类型
+      if (!data.nameType) {
+        tempErrors.nameType = t("pages.admin.menu.error.nameType.required");
       }
       // 菜单路径
       if (!data.url) {
@@ -206,6 +183,17 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             error={!!errors.name}
             helperText={errors.name}
             fullWidth
+          />
+          <BaseDictSelect
+            label={t("pages.admin.menu.nameType")}
+            name="nameType"
+            size="medium"
+            allowAll={false}
+            value={data.nameType || ""}
+            onChange={handleChange}
+            dictKey={DICT_KEYS.LabelType}
+            error={!!errors.nameType}
+            helperText={errors.nameType}
           />
           <BaseIconSelect
             label={t("pages.admin.menu.icon")}

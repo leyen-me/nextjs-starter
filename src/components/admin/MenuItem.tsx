@@ -2,7 +2,7 @@ import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Menu } from "@prisma/client";
 import { BaseDynamicIcon } from "../BaseDynamicIcon";
 import { useI18n } from "../I18nProvider";
-import { LABEL_TYPE } from "@/contants";
+import { LABEL_TYPE, MenuOpenStyle } from "@/contants";
 
 type Props = Menu & {
   icon: string;

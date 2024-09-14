@@ -11,11 +11,19 @@ const MenuPage = () => {
     // 过滤条件选项
     const filtersOptions: FiltersOption[] = [
         {
-            label: "pages.admin.role.name",
+            label: "pages.admin.menu.url",
             labelType: LABEL_TYPE.I18N,
-            name: "name",
+            name: "url",
             type: "text",
             value: "",
+        },
+        {
+            label: "pages.admin.menu.type",
+            labelType: LABEL_TYPE.I18N,
+            name: "type",
+            type: "dict",
+            value: "",
+            dictKey: DICT_KEYS.MenuType,
         },
     ];
     // 查询结果

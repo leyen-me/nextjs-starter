@@ -3,6 +3,10 @@ export default {
   common: {
     dict: {
       all: "全部",
+      labelType: {
+        text: "文本",
+        i18n: "国际化",
+      },
       gender: {
         male: "男",
         female: "女",
@@ -141,12 +145,16 @@ export default {
         openStyle: "打开方式",
         icon: "菜单图标",
         sort: "排序",
+        nameType: "菜单名类型",
         error: {
           pid: {
             required: "父级菜单是必填项",
           },
           name: {
             required: "菜单名是必填项",
+          },
+          nameType: {
+            required: "菜单名类型是必填项",
           },
           url: {
             required: "菜单路径是必填项",

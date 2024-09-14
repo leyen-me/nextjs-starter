@@ -8,7 +8,7 @@ const CONFIG_DATA = {
       data: [
         {
           label: "common.dict.labelType.text",
-          labelType: "TEXT",
+          labelType: "I18N",
           value: "TEXT",
         },
         {
