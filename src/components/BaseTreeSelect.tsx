@@ -30,6 +30,7 @@ type BaseTreeSelectProps = {
   value: string | string[];
   items: TreeViewBaseItem[];
 
+  disableSelections?: string[];
   error?: boolean;
   helperText?: string;
   multiple?: boolean;
@@ -46,7 +47,11 @@ function getItemDescendantsIds(item: TreeViewBaseItem) {
   return ids;
 }
 
-const getParentIds = (id: string, treeMap: Map<string, TreeViewBaseItem>, acc: string[] = []): string[] => {
+const getParentIds = (
+  id: string,
+  treeMap: Map<string, TreeViewBaseItem>,
+  acc: string[] = []
+): string[] => {
   const parent = treeMap.get(id)?.pid;
   if (parent && parent !== TREE_ROOT_ID) {
     return getParentIds(parent, treeMap, [...acc, parent]);
@@ -60,6 +65,7 @@ export function BaseTreeSelect({
   value,
   items,
 
+  disableSelections = [],
   error = false,
   helperText = "",
   multiple = false,
@@ -78,19 +84,27 @@ export function BaseTreeSelect({
 
   const [formatValue, setFormatValue] = useState<string>("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [defaultExpandedItems, setDefaultExpandedItems] = useState<string[]>([]);
+  const [defaultExpandedItems, setDefaultExpandedItems] = useState<string[]>(
+    []
+  );
   const toggledItemRef = useRef<{ [itemId: string]: boolean }>({});
   const apiRef = useTreeViewApiRef();
+
+  const isItemDisabled = (item: TreeViewBaseItem) => {
+    return disableSelections.includes(item.id);
+  };
 
   useEffect(() => {
     // 默认选择
     setSelectedItems(Array.isArray(value) ? value : [value]);
     // 默认展开
-    setDefaultExpandedItems(Array.isArray(value)
-      ? value.flatMap((id) => getParentIds(id, treeMap))
-      : value !== TREE_ROOT_ID
+    setDefaultExpandedItems(
+      Array.isArray(value)
+        ? value.flatMap((id) => getParentIds(id, treeMap))
+        : value !== TREE_ROOT_ID
         ? getParentIds(value, treeMap)
-        : [])
+        : []
+    );
     // 格式化值
     setFormatValue(
       Array.isArray(value)
@@ -125,10 +139,10 @@ export function BaseTreeSelect({
 
     const newSelectedItemsWithChildren = Array.from(
       new Set(
-        [...itemIds as string[], ...itemsToSelect].filter(
-          (itemId) => !itemsToUnSelect[itemId],
-        ),
-      ),
+        [...(itemIds as string[]), ...itemsToSelect].filter(
+          (itemId) => !itemsToUnSelect[itemId]
+        )
+      )
     );
 
     setSelectedItems(newSelectedItemsWithChildren);
@@ -138,7 +152,7 @@ export function BaseTreeSelect({
   const handleItemSelectionToggle = (
     event: React.SyntheticEvent,
     itemId: string,
-    isSelected: boolean,
+    isSelected: boolean
   ) => {
     toggledItemRef.current[itemId] = isSelected;
   };
@@ -189,6 +203,7 @@ export function BaseTreeSelect({
         <DialogContent>
           <RichTreeViewPro
             apiRef={apiRef}
+            isItemDisabled={isItemDisabled}
             selectedItems={selectedItems}
             defaultExpandedItems={defaultExpandedItems}
             multiSelect={multiple}

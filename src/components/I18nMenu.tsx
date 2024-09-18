@@ -28,7 +28,7 @@ export function I18nMenu({ anchorEl, open, onClose }: I18nMenuProps) {
                 }} key={language.value} onClick={() => {
                     setLang(language.value);
                 }}>
-                    {language.label}{language.value === lang ? <CheckIcon /> : null}
+                    {t(language.label)}{language.value === lang ? <CheckIcon /> : null}
                 </MenuItem>
             ))}
     </Menu>

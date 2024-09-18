@@ -48,7 +48,7 @@ model User {
   gender     Gender     @default(UNKNOWN)
   mobile     String?
   status     UserStatus @default(NORMAL)
-  superAdmin Boolean    @default(true)
+  superAdmin Boolean    @default(false)
   createdAt  DateTime   @default(now())
 }
 

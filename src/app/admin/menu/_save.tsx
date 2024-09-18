@@ -2,7 +2,13 @@ import { BaseDictSelect } from "@/components/BaseDictSelect";
 import { BaseTreeSelect, TreeViewBaseItem } from "@/components/BaseTreeSelect";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/ToastProvider";
-import { ADD_ID, DICT_KEYS } from "@/contants";
+import {
+  ADD_ID,
+  DICT_KEYS,
+  LABEL_TYPE,
+  MENU_OPEN_STYLE,
+  MENU_TYPE,
+} from "@/contants";
 import api from "@/utils/request";
 import { Box, Card, FormControl, TextField } from "@mui/material";
 import { Menu } from "@prisma/client";
@@ -32,8 +38,9 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
       name: "",
       icon: "",
       url: "",
-      type: "",
-      openStyle: "",
+      type: MENU_TYPE.MENU,
+      openStyle: MENU_OPEN_STYLE.INTERNAL,
+      nameType: LABEL_TYPE.I18N,
       sort: 0,
     });
     const [errors, setErrors] = useState<any>({});
@@ -53,22 +60,26 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
     const getMenus = async () => {
       const { data: _data } = await api.get<Menu[]>(`${baseUrl}/tree`);
 
+      const newData1: TreeViewBaseItem[] = [
+        {
+          id: "0",
+          pid: "0",
+          name: t("pages.admin.menus.root"),
+          label: t("pages.admin.menus.root"),
+          nameType: LABEL_TYPE.I18N,
+          children: [],
+        } as TreeViewBaseItem,
+      ];
+
       const addLabel = (item: TreeViewBaseItem): TreeViewBaseItem => ({
         ...item,
-        label: item.name,
+        label: item.nameType === LABEL_TYPE.I18N ? t(item.name) : item.name,
         children: item.children.length > 0 ? item.children.map(addLabel) : [],
       });
       const newData = _data.map(addLabel as any);
+      newData1[0].children = newData as TreeViewBaseItem[];
 
-      newData.unshift({
-        id: "0",
-        pid: "0",
-        name: "顶级菜单",
-        label: "顶级菜单",
-        children: [],
-      } as TreeViewBaseItem);
-
-      setMenus(newData);
+      setMenus(newData1);
     };
 
     const validate = () => {
@@ -173,6 +184,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
             value={data.pid || ""}
             error={!!errors.pid}
             helperText={errors.pid}
+            disableSelections={[data.id || ""]}
             onChange={handleChange}
           />
           <TextField

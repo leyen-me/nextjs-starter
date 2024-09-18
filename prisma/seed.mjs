@@ -251,6 +251,16 @@ const MENUS = [
     icon: "MenuOutlined",
     sort: 3,
   },
+  {
+    id: "6",
+    pid: "2",
+    name: "pages.admin.menus.config",
+    url: "/admin/config",
+    type: "MENU",
+    openStyle: "INTERNAL",
+    icon: "SettingsOutlined",
+    sort: 4,
+  },
 ];
 
 const initMenu = async () => {

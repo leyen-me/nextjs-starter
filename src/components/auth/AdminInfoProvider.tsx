@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import Loading from "../Loading";
 import { createContext, useContext } from "react";
 import { Menu } from "@prisma/client";
+import { usePathname, useRouter } from "next/navigation";
+import { treeToMap } from "@/utils/tree";
+import { MenuWithChildren } from "@/app/api/menu/[id]/route";
 
 type AdminInfoProviderProps = {
   children: React.ReactNode;
@@ -22,21 +25,40 @@ export const useMenuContext = () => {
   return context;
 };
 
-
 export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [menuList, setMenuList] = useState<Menu[]>([]);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data } = await api.get<Menu[]>("/api/user/menu");
+        const { data } = await api.get<MenuWithChildren[]>("/api/user/menu");
+        const menuMap = treeToMap<MenuWithChildren>(data);
+        const menuList = Array.from(menuMap.values());
+        menuList.push({
+          url: "/admin/iframe/[url]",
+        } as MenuWithChildren);
+
         setMenuList(data);
-        setIsLoading(false);
+        if (menuList.length === 0) {
+          router.replace("/admin/login");
+        } else {
+          const hasRoute = menuList.find((menu) => {
+            // 处理/admin/xxx/[url]
+            const regex = new RegExp(`^${menu.url.replace(/\[.*?\]/, ".*")}$`);
+            return regex.test(pathname);
+          });
+          if (!hasRoute) {
+            router.replace("/404");
+          }
+        }
       } catch (error) {
         console.error("Failed to load data:", error);
         setError("Failed to load necessary data. Please try again.");
+      } finally {
         setIsLoading(false);
       }
     };
@@ -55,5 +77,7 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
       </div>
     );
   }
-  return <MenuContext.Provider value={{ menuList }}>{children}</MenuContext.Provider>;
+  return (
+    <MenuContext.Provider value={{ menuList }}>{children}</MenuContext.Provider>
+  );
 }

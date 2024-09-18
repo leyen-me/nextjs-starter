@@ -2,9 +2,9 @@ import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { Menu } from "@prisma/client";
 import { BaseDynamicIcon } from "../BaseDynamicIcon";
 import { useI18n } from "../I18nProvider";
-import { LABEL_TYPE, MenuOpenStyle } from "@/contants";
+import { LABEL_TYPE, LabelType, MenuOpenStyle } from "@/contants";
 
-type Props = Menu & {
+type Props = {
   icon: string;
   name: string;
   url?: string;
@@ -12,6 +12,7 @@ type Props = Menu & {
   onClick: () => void;
   endIcon?: React.ReactNode;
   level: number;
+  nameType: LabelType;
 };
 
 export const MenuItem = ({

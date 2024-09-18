@@ -1,11 +1,16 @@
 import { TREE_ROOT_ID } from "@/contants";
 
 // 树转Map
-export const treeToMap = (tree: any[]) => {
+export const treeToMap = <T extends { id: string; children: T[] }>(
+  tree: T[]
+): Map<string, T> => {
   const map = new Map();
   const stack = [...tree];
   while (stack.length) {
     const node = stack.pop();
+    if (!node) {
+      continue;
+    }
     map.set(node.id, node);
     if (node.children) {
       stack.push(...node.children);

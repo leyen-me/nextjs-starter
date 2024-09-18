@@ -29,10 +29,6 @@ const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
       const hasChildren = children && children.length > 0;
       const router = useRouter();
 
-      if (pathname === url) {
-        setHeader(nameType === LABEL_TYPE.I18N ? t(name) : name);
-      }
-
       const handleClick = () => {
         if (hasChildren) {
           setIsOpen(!isOpen);
@@ -61,6 +57,12 @@ const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
           setIsOpen(true);
         }
       }, [isChildActive]);
+
+      useEffect(() => {
+        if (pathname === url) {
+          setHeader(nameType === LABEL_TYPE.I18N ? t(name) : name);
+        }
+      }, [pathname, url, name, nameType]);
 
       return (
         <div key={url}>

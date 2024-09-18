@@ -2,7 +2,7 @@ import { BaseDictSelect } from "@/components/BaseDictSelect";
 import { BaseTreeSelect, TreeViewBaseItem } from "@/components/BaseTreeSelect";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/ToastProvider";
-import { ADD_ID, DICT_KEYS } from "@/contants";
+import { ADD_ID, DICT_KEYS, LABEL_TYPE } from "@/contants";
 import api from "@/utils/request";
 import {
   Box,
@@ -58,7 +58,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
       const { data: _data } = await api.get<Menu[]>(`/api/menu/tree`);
       const addLabel = (item: TreeViewBaseItem): TreeViewBaseItem => ({
         ...item,
-        label: item.name,
+        label: item.nameType === LABEL_TYPE.I18N ? t(item.name) : item.name,
         children: item.children.length > 0 ? item.children.map(addLabel) : [],
       });
       const newData = _data.map(addLabel as any);

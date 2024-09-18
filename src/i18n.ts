@@ -2,11 +2,13 @@ import { LANGUAGES, SETTING_CONFIG } from "./contants";
 
 export const translationsMap = new Map<string, any>();
 
-LANGUAGES.forEach((lang) => {
-  import(`./locales/${lang.value}.ts`).then((res) => {
-    translationsMap.set(lang.value, res.default);
+export const initTranslations = () => {
+  LANGUAGES.forEach((lang) => {
+    import(`./locales/${lang.value}.ts`).then((res) => {
+      translationsMap.set(lang.value, res.default);
+    });
   });
-});
+};
 
 export const translate = (key: string, translations: any): string => {
   // server component

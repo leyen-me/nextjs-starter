@@ -5,11 +5,11 @@ export const RESPONSE_CODE = {
 
 export const LANGUAGES = [
   {
-    label: "Chinese",
+    label: "common.language.zh",
     value: "zh-CN",
   },
   {
-    label: "English",
+    label: "common.language.en",
     value: "en",
   },
 ];
@@ -21,6 +21,9 @@ export const SETTING_CONFIG = {
 export const DEFAULT_PAGE_SIZE = 10;
 export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 
+export const ADD_ID = "-1";
+export const TREE_ROOT_ID = "0";
+
 export const DICT_KEYS = {
   LabelType: "LabelType",
   Gender: "Gender",
@@ -28,9 +31,6 @@ export const DICT_KEYS = {
   MenuType: "MenuType",
   MenuOpenStyle: "MenuOpenStyle",
 };
-
-export const ADD_ID = "-1";
-export const TREE_ROOT_ID = "0";
 
 export const LABEL_TYPE = {
   I18N: "I18N",
@@ -45,3 +45,10 @@ export const MENU_OPEN_STYLE = {
 } as const;
 
 export type MenuOpenStyle = (typeof MENU_OPEN_STYLE)[keyof typeof MENU_OPEN_STYLE];
+
+export const MENU_TYPE = {
+  MENU: "MENU",
+  INTERFACE: "INTERFACE",
+} as const;
+
+export type MenuType = (typeof MENU_TYPE)[keyof typeof MENU_TYPE];

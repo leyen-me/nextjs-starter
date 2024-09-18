@@ -27,6 +27,10 @@ export default {
         },
       },
     },
+    language: {
+      zh: "中文",
+      en: "英文",
+    },
   },
   server: {
     common: {
@@ -92,11 +96,13 @@ export default {
     },
     admin: {
       menus: {
-        dashboard: "Dashboard",
-        system: "System",
-        user: "User",
-        role: "Role",
-        menu: "Menu",
+        root: "根菜单",
+        dashboard: "仪表盘",
+        system: "系统",
+        user: "用户",
+        role: "角色",
+        menu: "菜单",
+        config: "配置",
       },
       user: {
         email: "邮箱",

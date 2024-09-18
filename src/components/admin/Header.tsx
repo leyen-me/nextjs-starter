@@ -1,19 +1,14 @@
-import Image from "next/image";
 import {
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Button,
-  Menu,
-  MenuItem,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
 } from "@mui/icons-material";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import LogoutIcon from "@mui/icons-material/Logout";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import Brightness4OutlinedIcon from "@mui/icons-material/Brightness4Outlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
@@ -23,7 +18,6 @@ import { useState } from "react";
 import { useTheme } from "../ThemeProvider";
 import { signOut } from "next-auth/react";
 import { Logo } from "../Logo";
-import { LANGUAGES } from "@/contants";
 import { I18nMenu } from "../I18nMenu";
 import { ProfileMenu } from "./ProfileMenu";
 import { useMenuStore } from "@/stores/menuStore";

@@ -1,6 +1,11 @@
 import { prisma } from "@/libs/prisma";
 import { encryptPassword } from "@/utils";
 import { buildError, buildSuccess } from "@/utils/response";
+import { Menu } from "@prisma/client";
+
+export type MenuWithChildren = Menu & {
+  children: MenuWithChildren[];
+};
 
 export async function PUT(
   req: Request,

@@ -7,7 +7,14 @@ export type DictItem = {
   label: string;
   labelType: LabelType;
   value: string;
-  color: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning";
+  color:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
 };
 
 export type DictMap = {
@@ -18,7 +25,7 @@ export type DictMap = {
 };
 
 export type GlobalConfig = {
-  dictMap: DictMap
+  dictMap: DictMap;
 };
 
 export async function GET(request: NextRequest) {
@@ -27,4 +34,21 @@ export async function GET(request: NextRequest) {
     return buildError({ message: "server.config.notFound" });
   }
   return buildSuccess({ data: config.config as GlobalConfig });
+}
+
+export async function PUT(request: NextRequest) {
+  const config = await request.json();
+  const existingConfig = await prisma.globalConfig.findFirst();
+  if (existingConfig) {
+    await prisma.globalConfig.update({
+      where: { id: existingConfig.id },
+      data: { config },
+    });
+  } else {
+    return buildError({ message: "server.common.update.failed" });
+  }
+  return buildSuccess({
+    data: config,
+    message: "server.common.update.success",
+  });
 }
