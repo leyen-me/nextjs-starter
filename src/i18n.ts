@@ -2,12 +2,11 @@ import { LANGUAGES, SETTING_CONFIG } from "./contants";
 
 export const translationsMap = new Map<string, any>();
 
-export const initTranslations = () => {
-  LANGUAGES.forEach((lang) => {
-    import(`./locales/${lang.value}.ts`).then((res) => {
-      translationsMap.set(lang.value, res.default);
-    });
-  });
+export const initTranslations = async () => {
+  await Promise.all(LANGUAGES.map(async (lang) => {
+    const res = await import(`./locales/${lang.value}.ts`);
+    translationsMap.set(lang.value, res.default);
+  }));
 };
 
 export const translate = (key: string, translations: any): string => {

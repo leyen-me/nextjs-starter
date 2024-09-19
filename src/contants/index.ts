@@ -44,7 +44,8 @@ export const MENU_OPEN_STYLE = {
   EXTERNAL: "EXTERNAL",
 } as const;
 
-export type MenuOpenStyle = (typeof MENU_OPEN_STYLE)[keyof typeof MENU_OPEN_STYLE];
+export type MenuOpenStyle =
+  (typeof MENU_OPEN_STYLE)[keyof typeof MENU_OPEN_STYLE];
 
 export const MENU_TYPE = {
   MENU: "MENU",
@@ -52,3 +53,19 @@ export const MENU_TYPE = {
 } as const;
 
 export type MenuType = (typeof MENU_TYPE)[keyof typeof MENU_TYPE];
+
+// 每个人都可以访问的路由
+export const CONSTENTS_MENU_URL = [
+  "/admin/account-setting",
+  "/admin/iframe/[url]",
+];
+
+export const IMAGE_MIME_TYPE = {
+  JPEG: "image/jpeg",
+  PNG: "image/png",
+  GIF: "image/gif",
+  WEBP: "image/webp",
+  BMP: "image/bmp",
+  TIFF: "image/tiff",
+  SVG: "image/svg+xml",
+};

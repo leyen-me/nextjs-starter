@@ -1,3 +1,4 @@
+import { useUserStore } from "@/stores/userStore";
 import { signOut, useSession } from "next-auth/react";
 
 type AdminAuthProviderProps = {
@@ -6,6 +7,7 @@ type AdminAuthProviderProps = {
 
 export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
   const { data: session, status } = useSession();
+
   if (status === "authenticated") {
     const email = session?.user?.email;
     if (!email) {

@@ -21,13 +21,15 @@ export async function PUT(
         },
       });
       // Update user-role relation
-      await updateManyToManyRelation(prisma, {
-        parentId: id,
-        newChildIds: roleIdList,
-        relationModel: prisma.userRole,
-        parentIdField: "userId",
-        childIdField: "roleId",
-      });
+      if (roleIdList) {
+        await updateManyToManyRelation(prisma, {
+          parentId: id,
+          newChildIds: roleIdList,
+          relationModel: prisma.userRole,
+          parentIdField: "userId",
+          childIdField: "roleId",
+        });
+      }
     });
   } catch (error) {
     console.error(error);

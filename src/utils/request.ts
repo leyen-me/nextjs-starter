@@ -25,15 +25,17 @@ class ApiClient {
       url += `?${searchParams.toString()}`;
     }
 
+    const isFormData = data instanceof FormData;
+
     const headers = new Headers(customOptions.headers);
-    if (data) {
+    if (data && !isFormData) {
       headers.set("Content-Type", "application/json");
     }
 
     const config: RequestInit = {
       ...customOptions,
       headers,
-      body: data ? JSON.stringify(data) : undefined,
+      body: isFormData ? data : data ? JSON.stringify(data) : undefined,
     };
 
     const response = await fetch(url, config);
@@ -47,6 +49,9 @@ class ApiClient {
         throw new I18nError(responseData.message);
       }
     } catch (error) {
+      if(error instanceof I18nError) {
+        throw error;
+      }
       throw new I18nError("server.common.error.internalServerError");
     }
     return responseData;

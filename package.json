@@ -10,7 +10,7 @@
     "prepare": "husky",
     "git:add": "git add .",
     "git:commit": "git-cz",
-    "git:push": "git push",
+    "git:push": "git pull && git push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --name init",
     "db:seed": "node prisma/seed.mjs"

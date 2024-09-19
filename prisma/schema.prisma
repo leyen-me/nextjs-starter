@@ -39,6 +39,16 @@ enum LabelType {
   I18N
 }
 
+enum ImageMimeType {
+  JPEG
+  PNG
+  GIF
+  WEBP
+  BMP
+  TIFF
+  SVG
+}
+
 model User {
   id         String     @id @default(cuid())
   email      String     @unique
@@ -88,4 +98,11 @@ model UserRole {
 model GlobalConfig {
   id     String @id @default(cuid())
   config Json
+}
+
+model Image {
+  id        String        @id @default(cuid())
+  data      Bytes
+  mimeType  ImageMimeType
+  createdAt DateTime      @default(now())
 }

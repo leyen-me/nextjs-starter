@@ -51,6 +51,13 @@ export default {
       info: {
         failed: "找不到数据",
       },
+      upload: {
+        success: "上传成功",
+        failed: "上传失败",
+      },
+      error: {
+        internalServerError: "服务器内部错误",
+      },
     },
     config: {
       notFound: "配置不存在",
@@ -65,8 +72,12 @@ export default {
         nameAlreadyExists: "角色名已存在",
       },
     },
-    error: {
-      internalServerError: "服务器内部错误",
+    image: {
+      upload: {
+        mimeType: {
+          invalid: "上传的文件类型不支持",
+        },
+      },
     },
   },
   pages: {
@@ -76,6 +87,7 @@ export default {
       edit: "编辑",
       search: "搜索",
 
+      upload: "上传",
       reset: "重置",
       export: "导出",
 
@@ -207,6 +219,23 @@ export default {
       passwordMismatch: "两次输入的密码不一致",
       registerSuccess: "注册成功",
       registerFailed: "注册失败",
+    },
+    accountSetting: {
+      account: {
+        label: "账户",
+        profile: {
+          title: "修改个人资料",
+          description: "从这里更改您的个人资料图片",
+          tip: "允许使用 JPG、GIF 或 PNG。最大大小为 800K",
+        },
+        password: {
+          title: "密码",
+          description: "密码信息",
+        },
+      },
+      password: {
+        label: "密码",
+      },
     },
   },
 };

@@ -2,10 +2,12 @@ import api from "@/utils/request";
 import { useEffect, useState } from "react";
 import Loading from "../Loading";
 import { createContext, useContext } from "react";
-import { Menu } from "@prisma/client";
+import { Menu, User } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
 import { treeToMap } from "@/utils/tree";
 import { MenuWithChildren } from "@/app/api/menu/[id]/route";
+import { CONSTENTS_MENU_URL } from "@/contants";
+import { useUserStore } from "@/stores/userStore";
 
 type AdminInfoProviderProps = {
   children: React.ReactNode;
@@ -29,19 +31,25 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [menuList, setMenuList] = useState<Menu[]>([]);
+  const userStore = useUserStore();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
     const loadData = async () => {
       try {
+        const { data:userInfo } = await api.get<User>("/api/user/info");
+        userStore.setUser(userInfo);
+        
         const { data } = await api.get<MenuWithChildren[]>("/api/user/menu");
         const menuMap = treeToMap<MenuWithChildren>(data);
         const menuList = Array.from(menuMap.values());
-        menuList.push({
-          url: "/admin/iframe/[url]",
-        } as MenuWithChildren);
-
+        CONSTENTS_MENU_URL.forEach((url) => {
+          menuList.push({
+            url,
+          } as MenuWithChildren);
+        });
+       
         setMenuList(data);
         if (menuList.length === 0) {
           router.replace("/admin/login");

@@ -1,9 +1,4 @@
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
@@ -21,11 +16,13 @@ import { Logo } from "../Logo";
 import { I18nMenu } from "../I18nMenu";
 import { ProfileMenu } from "./ProfileMenu";
 import { useMenuStore } from "@/stores/menuStore";
+import { useRouter } from "next/navigation";
 
 export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const { isOpened, toggleIsOpened } = useDrawerContext();
   const { theme, toggleTheme } = useTheme();
   const { getHeader } = useMenuStore();
+  const router = useRouter();
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState<null | HTMLElement>(
     null
   );
@@ -36,7 +33,7 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const handleMenuItemClick = (item: string) => {
     setUserMenuAnchorEl(null);
     if (item === "profile") {
-      console.log("个人中心");
+      router.push("/admin/account-setting");
     } else if (item === "logout") {
       signOut();
     }
