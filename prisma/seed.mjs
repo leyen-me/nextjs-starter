@@ -114,6 +114,7 @@ const USERS = [
   {
     id: "1",
     nickname: "a",
+    avatar: "/assets/jpegs/user.jpg",
     email: "a@a.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
     superAdmin: true,
@@ -122,6 +123,7 @@ const USERS = [
   {
     id: "2",
     nickname: "b",
+    avatar: "/assets/jpegs/user.jpg",
     email: "b@b.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
     gender: "MALE",
@@ -129,6 +131,7 @@ const USERS = [
   {
     id: "3",
     nickname: "c",
+    avatar: "/assets/jpegs/user.jpg",
     email: "c@c.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
     gender: "MALE",

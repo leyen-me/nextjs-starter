@@ -77,6 +77,9 @@ export default {
         mimeType: {
           invalid: "上传的文件类型不支持",
         },
+        size: {
+          invalid: "图片最大10M",
+        },
       },
     },
   },
@@ -95,6 +98,8 @@ export default {
       results: "结果",
 
       save: "保存",
+      update: "更新",
+
       index: "序号",
       actions: "操作",
       pageSize: "每页显示数量",
@@ -229,8 +234,12 @@ export default {
           tip: "允许使用 JPG、GIF 或 PNG。最大大小为 800K",
         },
         password: {
-          title: "密码",
-          description: "密码信息",
+          title: "修改密码",
+          description: "从这里更改您的密码",
+        },
+        detail: {
+          title: "修改账户信息",
+          description: "从这里更改您的账户信息",
         },
       },
       password: {

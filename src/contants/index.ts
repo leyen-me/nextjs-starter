@@ -60,6 +60,7 @@ export const CONSTENTS_MENU_URL = [
   "/admin/iframe/[url]",
 ];
 
+// 图片上传的类型
 export const IMAGE_MIME_TYPE = {
   JPEG: "image/jpeg",
   PNG: "image/png",
@@ -69,3 +70,6 @@ export const IMAGE_MIME_TYPE = {
   TIFF: "image/tiff",
   SVG: "image/svg+xml",
 };
+
+// 图片上传的文件大小
+export const IMAGE_MAX_SIZE = 10 * 1024 * 1024;

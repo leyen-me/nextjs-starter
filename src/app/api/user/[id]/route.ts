@@ -1,7 +1,7 @@
 import { prisma } from "@/libs/prisma";
-import { encryptPassword } from "@/utils";
 import { updateManyToManyRelation } from "@/utils/relationUtils";
 import { buildError, buildSuccess } from "@/utils/response";
+import { hash } from "bcrypt";
 
 export async function PUT(
   req: Request,
@@ -17,7 +17,7 @@ export async function PUT(
         },
         data: {
           ...data,
-          password: data.password ? encryptPassword(data.password) : undefined,
+          password: data.password ? await hash(data.password, 10) : undefined,
         },
       });
       // Update user-role relation

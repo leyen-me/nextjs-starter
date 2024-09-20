@@ -8,19 +8,21 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader,
   styled,
   Tab,
   Tabs,
+  TextField,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState } from "react";
 import api from "@/utils/request";
 import { useToast } from "@/components/ToastProvider";
 import { I18nError } from "@/utils/error";
-import { Image } from "@prisma/client";
+import { Gender, Image, User, UserStatus } from "@prisma/client";
+import { DICT_KEYS, IMAGE_MAX_SIZE, IMAGE_MIME_TYPE } from "@/contants";
+import { useRouter } from "next/navigation";
+import { BaseDictSelect } from "@/components/BaseDictSelect";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,8 +41,28 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 4 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
     </div>
+  );
+}
+
+function CustomCardHeader({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <>
+      <Typography variant="h6">{title}</Typography>
+      <Typography
+        variant="body1"
+        sx={{ fontSize: 14, color: "text.secondary", opacity: 0.6 }}
+      >
+        {description}
+      </Typography>
+    </>
   );
 }
 
@@ -64,11 +86,11 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function AccountSettingPage() {
-  const [value, setValue] = useState(0);
+  const profileHeight = "400px";
   const { t } = useI18n();
   const { showSuccess, showError } = useToast();
-  const userStore = useUserStore();
-  const user = userStore.getUser();
+  const router = useRouter();
+
   const tabs = [
     {
       label: t("pages.accountSetting.account.label"),
@@ -80,6 +102,10 @@ export default function AccountSettingPage() {
     },
   ];
 
+  const [value, setValue] = useState(0);
+  const userStore = useUserStore();
+  const user = userStore.getUser();
+
   const handleUpload = async (event: React.SyntheticEvent) => {
     const { files } = event.target as HTMLInputElement;
     const file = files?.[0];
@@ -87,6 +113,14 @@ export default function AccountSettingPage() {
     const formData = new FormData();
     formData.append("file", file);
     try {
+      // 校验文件类型
+      if (!Object.values(IMAGE_MIME_TYPE).includes(file.type)) {
+        throw new I18nError("server.image.upload.mimeType.invalid");
+      }
+      // 校验文件大小
+      if (file.size > IMAGE_MAX_SIZE) {
+        throw new I18nError("server.image.upload.size.invalid");
+      }
       const res = await api.post<Image>("/api/image", formData);
       showSuccess(res);
       userStore.updateAvatar("/api/image/" + res.data);
@@ -106,6 +140,101 @@ export default function AccountSettingPage() {
     setValue(newValue);
   };
 
+  const [passwordState, setPasswordState] = useState<{
+    password: string;
+    confirmPassword: string;
+  }>({
+    password: "",
+    confirmPassword: "",
+  });
+  const [passwordErrors, setPasswordErrors] = useState<any>({});
+
+  const handlePasswordValidate = () => {
+    let tempErrors: any = {};
+
+    tempErrors.password = passwordState.password
+      ? ""
+      : t("pages.admin.user.error.password.required");
+
+    if (passwordState.password !== passwordState.confirmPassword) {
+      tempErrors.confirmPassword =
+        t("pages.register.passwordMismatch") || "Passwords do not match";
+    }
+
+    setPasswordErrors(tempErrors);
+    return Object.values(tempErrors).every((x) => x === "");
+  };
+
+  const handlePasswordSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    if (handlePasswordValidate()) {
+      try {
+        const res = await userStore.updatePassword(passwordState.password);
+        showSuccess(res);
+        // 重新登录
+        router.push("/login");
+      } catch (error: any) {
+        showError(error);
+      }
+    }
+  };
+
+  const handlePasswordChange = (event: React.SyntheticEvent) => {
+    const { value, name } = event.target as HTMLInputElement;
+    setPasswordState({ ...passwordState, [name]: value });
+  };
+
+  type DetailUser = Omit<
+    User,
+    "id" | "createdAt" | "superAdmin" | "status" | "password" | "avatar"
+  >;
+  const [detailState, setDetailState] = useState<DetailUser>({
+    nickname: user.nickname || "",
+    email: user.email || "",
+    mobile: user.mobile || "",
+    gender: user.gender || Gender.MALE,
+  });
+  const [detailErrors, setDetailErrors] = useState<any>({});
+
+  const handleDetailChange = (event: React.SyntheticEvent) => {
+    const { value, name } = event.target as HTMLInputElement;
+    setDetailState({ ...detailState, [name]: value });
+  };
+
+  const handleDetailValidate = () => {
+    let tempErrors: any = {};
+
+    tempErrors.nickname = detailState.nickname
+      ? ""
+      : t("pages.admin.user.error.nickname.required");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    tempErrors.email = detailState.email
+      ? emailRegex.test(detailState.email)
+        ? ""
+        : t("pages.admin.user.error.email.format")
+      : t("pages.admin.user.error.email.required");
+
+    tempErrors.mobile = detailState.mobile
+      ? ""
+      : t("pages.admin.user.error.mobile.required");
+
+    setDetailErrors(tempErrors);
+    return Object.values(tempErrors).every((x) => x === "");
+  };
+
+  const handleDetailSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    if (handleDetailValidate()) {
+      try {
+        const res = await userStore.updateUserInfo(detailState);
+        showSuccess(res);
+      } catch (error: any) {
+        showError(error);
+      }
+    }
+  };
+
   return (
     <>
       <Box sx={{ borderBottom: 1, borderColor: "divider", marginBottom: 2 }}>
@@ -121,19 +250,15 @@ export default function AccountSettingPage() {
       </Box>
       <CustomTabPanel value={value} index={0}>
         <Grid container spacing={2}>
-          <Grid size={{ xs: 12, md: 6 }} sx={{ height: "400px" }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ height: profileHeight }}>
             <Card sx={{ padding: 2, height: "100%" }}>
               <CardContent>
-                <Typography variant="h6">
-                  {t("pages.accountSetting.account.profile.title")}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ fontSize: 14, color: "text.secondary", opacity: 0.6 }}
-                >
-                  {t("pages.accountSetting.account.profile.description")}
-                </Typography>
-
+                <CustomCardHeader
+                  title={t("pages.accountSetting.account.profile.title")}
+                  description={t(
+                    "pages.accountSetting.account.profile.description"
+                  )}
+                />
                 <Box
                   sx={{
                     display: "flex",
@@ -145,7 +270,11 @@ export default function AccountSettingPage() {
                   <Avatar
                     alt="Remy Sharp"
                     src={user.avatar ?? ""}
-                    sx={{ width: 120, height: 120 }}
+                    sx={{
+                      width: 120,
+                      height: 120,
+                      border: "0.5px solid rgba(0, 0, 0, 0.1)",
+                    }}
                   />
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
@@ -187,9 +316,141 @@ export default function AccountSettingPage() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Card sx={{ padding: 2 }}>
-              <CardContent></CardContent>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ height: profileHeight }}>
+            <Card sx={{ padding: 2, height: "100%" }}>
+              <CardContent>
+                <CustomCardHeader
+                  title={t("pages.accountSetting.account.password.title")}
+                  description={t(
+                    "pages.accountSetting.account.password.description"
+                  )}
+                />
+                <Box
+                  component="form"
+                  onSubmit={handlePasswordSubmit}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                    marginTop: 8,
+                  }}
+                >
+                  <TextField
+                    label={t("pages.register.password")}
+                    name="password"
+                    type="password"
+                    value={passwordState.password || ""}
+                    onChange={handlePasswordChange}
+                    variant="outlined"
+                    error={!!passwordErrors.password}
+                    helperText={passwordErrors.password}
+                    fullWidth
+                  />
+                  <TextField
+                    label={t("pages.register.confirmPassword")}
+                    name="confirmPassword"
+                    type="password"
+                    value={passwordState.confirmPassword || ""}
+                    onChange={handlePasswordChange}
+                    error={!!passwordErrors.confirmPassword}
+                    helperText={passwordErrors.confirmPassword}
+                    fullWidth
+                  />
+                  <Box
+                    sx={{ display: "flex", justifyContent: "flex-end", gap: 4 }}
+                  >
+                    <Button variant="contained" color="primary" type="submit">
+                      {t("pages.common.update")}
+                    </Button>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid size={{ xs: 24, md: 24 }}>
+            <Card sx={{ padding: 2, height: "100%" }}>
+              <CardContent>
+                <CustomCardHeader
+                  title={t("pages.accountSetting.account.detail.title")}
+                  description={t(
+                    "pages.accountSetting.account.detail.description"
+                  )}
+                />
+                <Box
+                  component="form"
+                  onSubmit={handleDetailSubmit}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginTop: 4,
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                      <TextField
+                        label={t("pages.admin.user.nickname")}
+                        name="nickname"
+                        type="nickname"
+                        value={detailState.nickname || ""}
+                        onChange={handleDetailChange}
+                        variant="outlined"
+                        error={!!detailErrors.nickname}
+                        helperText={detailErrors.nickname}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                      <TextField
+                        label={t("pages.admin.user.email")}
+                        name="email"
+                        type="email"
+                        value={detailState.email || ""}
+                        onChange={handleDetailChange}
+                        error={!!detailErrors.email}
+                        helperText={detailErrors.email}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                      <TextField
+                        label={t("pages.admin.user.mobile")}
+                        name="mobile"
+                        type="text"
+                        value={detailState.mobile || ""}
+                        onChange={handleDetailChange}
+                        error={!!detailErrors.mobile}
+                        helperText={detailErrors.mobile}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                      <BaseDictSelect
+                        label={t("pages.admin.user.gender")}
+                        name="gender"
+                        size="medium"
+                        allowAll={false}
+                        value={detailState.gender || ""}
+                        error={!!detailErrors.gender}
+                        helperText={detailErrors.gender}
+                        onChange={handleDetailChange as any}
+                        dictKey={DICT_KEYS.Gender}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      gap: 2,
+                      marginTop: 4,
+                    }}
+                  >
+                    <Button variant="contained" color="primary" type="submit">
+                      {t("pages.common.update")}
+                    </Button>
+                  </Box>
+                </Box>
+              </CardContent>
             </Card>
           </Grid>
         </Grid>

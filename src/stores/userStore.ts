@@ -1,44 +1,50 @@
 import api from "@/utils/request";
-import { Gender, User, UserStatus } from "@prisma/client";
+import { User } from "@prisma/client";
+import { ResponseType } from "@/utils/response";
 import { create } from "zustand";
 
+type StoreUser = Partial<User>;
+
 interface UserState {
-  user: User;
-  setUser: (user: User) => void;
-  getUser: () => User;
+  user: StoreUser;
+  setUser: (user: StoreUser) => void;
+  getUser: () => StoreUser;
   setUserId: (id: string) => void;
   getUserId: () => string;
   updateAvatar: (avatar: string) => void;
   resetAvatar: () => void;
+  updatePassword: (password: string) => Promise<ResponseType<unknown>>;
+  updateUserInfo: (user: StoreUser) => Promise<ResponseType<unknown>>;
 }
 
 export const useUserStore = create<UserState>()((set, get) => ({
   user: {
     id: "",
-    nickname: "",
-    email: "",
-    // avatar: "https://materialpro-nextjs-pro.vercel.app/images/profile/user-1.jpg",
-    avatar: "/api/image/cm194nkzl0005pukjug05s25k",
-    password: "",
-    gender: Gender.MALE,
-    mobile: "",
-    status: UserStatus.NORMAL,
-    superAdmin: false,
-    createdAt: new Date(),
+    avatar: "/assets/jpegs/user.jpg",
   },
   setUserId: (id: string) => {
     set({ user: { ...get().user, id } });
   },
-  getUserId: () => get().user.id,
+  getUserId: () => get().user.id || "",
+  setUser: (user: StoreUser) => {
+    set({ user: { ...get().user, ...user } });
+  },
+  getUser: () => get().user,
   updateAvatar: async (avatar: string) => {
     await api.put("/api/user/" + get().user.id, { avatar });
     set({ user: { ...get().user, avatar } });
   },
-  resetAvatar: () => {
+  resetAvatar: async () => {
+    await api.put("/api/user/" + get().user.id, { avatar: "" });
     set({ user: { ...get().user, avatar: "" } });
   },
-  setUser: (user: User) => {
-    set({ user });
+  updatePassword: async (password: string): Promise<ResponseType<unknown>> => {
+    const res = await api.put("/api/user/" + get().user.id, { password });
+    return res;
   },
-  getUser: () => get().user,
+  updateUserInfo: async (user: StoreUser): Promise<ResponseType<unknown>> => {
+    const res = await api.put("/api/user/" + get().user.id, user);
+    set({ user: { ...get().user, ...user } });
+    return res;
+  },
 }));

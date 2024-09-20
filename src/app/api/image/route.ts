@@ -1,4 +1,4 @@
-import { IMAGE_MIME_TYPE } from "@/contants";
+import { IMAGE_MAX_SIZE, IMAGE_MIME_TYPE } from "@/contants";
 import { prisma } from "@/libs/prisma";
 import { buildError, buildSuccess } from "@/utils/response";
 import { ImageMimeType } from "@prisma/client";
@@ -17,6 +17,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   if (!Object.values(IMAGE_MIME_TYPE).includes(mimeType)) {
     return buildError({ message: "server.image.upload.mimeType.invalid" });
+  }
+  // 检查文件大小
+  if (buffer.length > IMAGE_MAX_SIZE) {
+    return buildError({ message: "server.image.upload.size.invalid" });
   }
 
   const image = await prisma.image.create({
