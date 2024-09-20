@@ -1,10 +1,10 @@
 import { prisma } from "@/libs/prisma";
 import { buildSuccess } from "@/utils/response";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import { getUser } from "@/utils/authUtil";
 import { flatToTree } from "@/utils/tree";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
   // 1.查询该用户所有角色的所以菜单
   const { id: userId, superAdmin } = await getUser();
 

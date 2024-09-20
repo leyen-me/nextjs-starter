@@ -1,7 +1,7 @@
 "use client";
 
 import { SETTING_CONFIG } from "@/contants";
-import { translate, getLanguage, translationsMap, initTranslations } from "@/i18n";
+import { translate, getLanguage, translationsMap } from "@/i18n";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface I18nContextType {
@@ -13,8 +13,6 @@ interface I18nContextType {
 type Translations = { [key: string]: string };
 
 const I18nContext = createContext<I18nContextType | null>(null);
-
-initTranslations();
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLang] = useState(SETTING_CONFIG.language);

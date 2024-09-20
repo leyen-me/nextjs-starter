@@ -1,9 +1,8 @@
 import { prisma } from "@/libs/prisma";
-import { extractFiltersWithPagination } from "@/utils/extractFilters";
 import { buildSuccess } from "@/utils/response";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
   // 过滤条件
   const { searchParams } = new URL(req.url || "");
   const filters: any = {};

@@ -109,9 +109,9 @@ export function BaseTreeSelect({
     setFormatValue(
       Array.isArray(value)
         ? value.map((id) => treeMap.get(id)?.label).join(",")
-        : treeMap.get(value)?.label
+        : treeMap.get(value)?.label || ""
     );
-  }, [value, items]);
+  }, [value, items, treeMap]);
 
   const handleSelectedItemsChange = (
     event: React.SyntheticEvent,

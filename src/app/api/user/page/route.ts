@@ -3,7 +3,7 @@ import { getUser } from "@/utils/authUtil";
 import { extractFiltersWithPagination } from "@/utils/extractFilters";
 import { buildSuccess } from "@/utils/response";
 import { Gender, User, UserStatus } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 export type UserPageFilters = {
   email?: string;
@@ -15,7 +15,7 @@ export type UserPageFilters = {
 
 export type UserWithoutPassword = Omit<User, "password">;
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
   const { page, pageSize, filters } = extractFiltersWithPagination(
     req.url || "",
     ["email", "nickname", "gender", "mobile", "status"]

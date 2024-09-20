@@ -1,13 +1,11 @@
 import { LANGUAGES, SETTING_CONFIG } from "./contants";
+import en from "./locales/en";
+import zhCN from "./locales/zh-CN";
 
 export const translationsMap = new Map<string, any>();
 
-export const initTranslations = async () => {
-  await Promise.all(LANGUAGES.map(async (lang) => {
-    const res = await import(`./locales/${lang.value}.ts`);
-    translationsMap.set(lang.value, res.default);
-  }));
-};
+translationsMap.set(LANGUAGES[0].value, zhCN);
+translationsMap.set(LANGUAGES[1].value, en);
 
 export const translate = (key: string, translations: any): string => {
   // server component

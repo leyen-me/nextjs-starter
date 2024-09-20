@@ -20,6 +20,7 @@ const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
       icon,
       sort,
       createdAt,
+      // @ts-ignore
       children,
     }) => {
       const [isOpen, setIsOpen] = useState(false);

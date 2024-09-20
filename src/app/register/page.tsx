@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -17,7 +17,7 @@ import AuthBg from "@/components/auth/AuthBg";
 import api from "@/utils/request";
 import { useI18n } from "@/components/I18nProvider";
 
-export default function Login() {
+function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,8 +30,9 @@ export default function Login() {
   const { showSuccess, showError } = useToast();
 
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  // const searchParams = useSearchParams();
+  // const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const callbackUrl =  "/";
 
   const handleEmailRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,4 +142,12 @@ export default function Login() {
       </div>
     </div>
   );
+}
+
+export default function Register() {
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
+  )
 }

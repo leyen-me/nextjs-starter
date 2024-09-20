@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -28,7 +28,7 @@ import IconGoogle from "@/components/icons/IconGoogle";
 import IconGithub from "@/components/icons/IconGithub";
 import { I18nError } from "@/utils/error";
 
-export default function Login() {
+function LoginForm() {
   const { t, lang } = useI18n();
   const { showError } = useToast();
   const [email, setEmail] = useState("");
@@ -52,6 +52,7 @@ export default function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
+  
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -232,4 +233,13 @@ export default function Login() {
       </div>
     </div>
   );
+}
+
+export default function Login() {
+  return (
+    // You could have a loading skeleton as the `fallback` too
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  )
 }

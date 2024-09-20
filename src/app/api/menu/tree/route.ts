@@ -1,9 +1,9 @@
 import { prisma } from "@/libs/prisma";
 import { buildSuccess } from "@/utils/response";
 import { flatToTree } from "@/utils/tree";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
     const menus = await prisma.menu.findMany({
         orderBy: {
             sort: "asc",

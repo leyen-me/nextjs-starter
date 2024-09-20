@@ -2,13 +2,13 @@ import { prisma } from "@/libs/prisma";
 import { extractFiltersWithPagination } from "@/utils/extractFilters";
 import { buildSuccess } from "@/utils/response";
 import { Gender, Role, User, UserStatus } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 export type RolePageFilters = {
     name?: string;
 };
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
     const { page, pageSize, filters } = extractFiltersWithPagination(
         req.url || "",
         ["name"]

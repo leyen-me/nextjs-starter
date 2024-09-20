@@ -1,10 +1,10 @@
 import { prisma } from "@/libs/prisma";
 import { buildError, buildSuccess } from "@/utils/response";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { config } from "../../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(config);
   // @ts-ignore
   const id = session?.user?.id;
   try {

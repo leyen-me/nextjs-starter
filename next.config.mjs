@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // 严格模式
-    reactStrictMode: false,
+  // 严格模式
+  reactStrictMode: false,
 };
 
-export default nextConfig
+export default nextConfig;
