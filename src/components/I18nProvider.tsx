@@ -2,7 +2,7 @@
 
 import { SETTING_CONFIG } from "@/contants";
 import { translate, getLanguage, translationsMap } from "@/i18n";
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 interface I18nContextType {
   t: (key: string) => string;
@@ -34,9 +34,9 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("language", lang);
   }, [lang]);
 
-  const t = (key: string) => {
+  const t = useCallback((key: string) => {
     return translate(key, translations);
-  };
+  }, [translations]);
 
   return (
     <I18nContext.Provider value={{ t, lang, setLang }}>

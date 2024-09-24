@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -23,8 +23,6 @@ function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
-
-  useEffect(() => { }, []);
 
   const { t } = useI18n();
   const { showSuccess, showError } = useToast();

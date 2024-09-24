@@ -2,13 +2,15 @@ import { BaseDictSelect } from "@/components/BaseDictSelect";
 import { BaseTreeSelect, TreeViewBaseItem } from "@/components/BaseTreeSelect";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/ToastProvider";
-import {
-  ADD_ID,
-  DICT_KEYS,
-} from "@/contants";
+import { ADD_ID, DICT_KEYS, TREE_ROOT_ID } from "@/contants";
 import api from "@/utils/request";
-import { Box, Card, FormControl, TextField } from "@mui/material";
-import { LabelType, SysMenu, SysMenuOpenStyle, SysMenuType } from "@prisma/client";
+import { Box, Card, TextField } from "@mui/material";
+import {
+  LabelType,
+  SysMenu,
+  SysMenuOpenStyle,
+  SysMenuType,
+} from "@prisma/client";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { BaseIconSelect } from "@/components/BaseIconSelect";
 
@@ -23,6 +25,39 @@ type SavePageProps = {
   editLoading: boolean;
   setEditLoading: (loading: boolean) => void;
   onRefresh: () => void;
+};
+
+const getMenus = async ({
+  baseUrl,
+  t,
+  setMenus,
+}: {
+  baseUrl: string;
+  t: any;
+  setMenus: (menus: TreeViewBaseItem[]) => void;
+}) => {
+  const { data: _data } = await api.get<SysMenu[]>(`${baseUrl}/tree`);
+
+  const rootTreeItem: TreeViewBaseItem[] = [
+    {
+      id: TREE_ROOT_ID,
+      pid: TREE_ROOT_ID,
+      name: t("pages.admin.menus.root"),
+      label: t("pages.admin.menus.root"),
+      nameType: LabelType.I18N,
+      children: [],
+    } as TreeViewBaseItem,
+  ];
+
+  const addLabel = (item: TreeViewBaseItem): TreeViewBaseItem => ({
+    ...item,
+    label: item.nameType === LabelType.I18N ? t(item.name) : item.name,
+    children: item.children.length > 0 ? item.children.map(addLabel) : [],
+  });
+  const newData = _data.map(addLabel as any);
+  rootTreeItem[0].children = newData as TreeViewBaseItem[];
+
+  setMenus(rootTreeItem);
 };
 
 export const SavePage = forwardRef<SavePageRef, SavePageProps>(
@@ -53,31 +88,6 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
 
     const handleChange = (e: any) => {
       setData({ ...data, [e.target.name]: e.target.value });
-    };
-
-    const getMenus = async () => {
-      const { data: _data } = await api.get<SysMenu[]>(`${baseUrl}/tree`);
-
-      const newData1: TreeViewBaseItem[] = [
-        {
-          id: "0",
-          pid: "0",
-          name: t("pages.admin.menus.root"),
-          label: t("pages.admin.menus.root"),
-          nameType: LabelType.I18N,
-          children: [],
-        } as TreeViewBaseItem,
-      ];
-
-      const addLabel = (item: TreeViewBaseItem): TreeViewBaseItem => ({
-        ...item,
-        label: item.nameType === LabelType.I18N ? t(item.name) : item.name,
-        children: item.children.length > 0 ? item.children.map(addLabel) : [],
-      });
-      const newData = _data.map(addLabel as any);
-      newData1[0].children = newData as TreeViewBaseItem[];
-
-      setMenus(newData1);
     };
 
     const validate = () => {
@@ -140,6 +150,7 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
         }
       }
     };
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       submit();
@@ -150,8 +161,9 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
     }));
 
     useEffect(() => {
-      getMenus();
-    }, []);
+      getMenus({ baseUrl, t, setMenus });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [baseUrl]);
 
     useEffect(() => {
       if (id) {

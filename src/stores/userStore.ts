@@ -2,7 +2,7 @@ import api from "@/utils/request";
 import { ResponseType } from "@/utils/response";
 import { create } from "zustand";
 import { UserInfo } from "@/app/(server)/(sys)/api/user/info/route";
-import { DetailUser } from "@/app/(pages)/(sys)/admin/account-setting/page";
+import { SysDetailUser } from "@/app/(pages)/(sys)/admin/account-setting/page";
 
 type StoreUser = UserInfo;
 
@@ -15,7 +15,7 @@ interface UserState {
   updateAvatar: (avatar: string) => void;
   resetAvatar: () => void;
   updatePassword: (password: string) => Promise<ResponseType<unknown>>;
-  updateUserInfo: (user: DetailUser) => Promise<ResponseType<unknown>>;
+  updateUserInfo: (user: SysDetailUser) => Promise<ResponseType<unknown>>;
 }
 
 export const useUserStore = create<UserState>()((set, get) => ({
@@ -45,7 +45,7 @@ export const useUserStore = create<UserState>()((set, get) => ({
     const res = await api.put("/api/user/" + get().user.id, { password });
     return res;
   },
-  updateUserInfo: async (user: DetailUser): Promise<ResponseType<unknown>> => {
+  updateUserInfo: async (user: SysDetailUser): Promise<ResponseType<unknown>> => {
     const res = await api.put("/api/user/" + get().user.id, user);
     set({ user: { ...get().user, ...user } });
     return res;

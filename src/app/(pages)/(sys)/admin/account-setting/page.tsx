@@ -23,6 +23,7 @@ import { SysUserGender, SysImage, SysUser } from "@prisma/client";
 import { DICT_KEYS, SYS_IMAGE_MAX_SIZE, SYS_IMAGE_MIME_TYPE } from "@/contants";
 import { useRouter } from "next/navigation";
 import { BaseDictSelect } from "@/components/BaseDictSelect";
+import { validateEmail } from "@/utils/validateUtils";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -85,7 +86,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export type DetailUser = Omit<
+export type SysDetailUser = Omit<
   SysUser,
   "id" | "createdAt" | "superAdmin" | "status" | "password" | "avatar"
 >;
@@ -162,8 +163,7 @@ export default function AccountSettingPage() {
       : t("pages.admin.user.error.password.required");
 
     if (passwordState.password !== passwordState.confirmPassword) {
-      tempErrors.confirmPassword =
-        t("pages.register.passwordMismatch") || "Passwords do not match";
+      tempErrors.confirmPassword = t("pages.register.passwordMismatch");
     }
 
     setPasswordErrors(tempErrors);
@@ -189,7 +189,7 @@ export default function AccountSettingPage() {
     setPasswordState({ ...passwordState, [name]: value });
   };
 
-  const [detailState, setDetailState] = useState<DetailUser>({
+  const [detailState, setDetailState] = useState<SysDetailUser>({
     nickname: user.nickname || "",
     email: user.email || "",
     mobile: user.mobile || "",
@@ -209,9 +209,8 @@ export default function AccountSettingPage() {
       ? ""
       : t("pages.admin.user.error.nickname.required");
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     tempErrors.email = detailState.email
-      ? emailRegex.test(detailState.email)
+      ? validateEmail(detailState.email)
         ? ""
         : t("pages.admin.user.error.email.format")
       : t("pages.admin.user.error.email.required");

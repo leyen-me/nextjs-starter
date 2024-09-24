@@ -11,7 +11,7 @@ A lightweight Next.js starter template designed for building efficient admin das
 - **React Components**: Build user interfaces with React, enabling efficient component-based development.
 - **Zustand State Management**: A lightweight state management solution to simplify global state management.
 - **TailwindCSS Styling**: Utilize TailwindCSS for rapid, responsive UI development.
-- **Shadcn UI Components**: Integrate Shadcn UI library for beautiful, customizable UI components.
+- **Material-UI**: Integrate Material-UI library for beautiful, customizable UI components.
 - **Prisma ORM**: A powerful database tool that simplifies database operations and management.
 - **PostgreSQL Database**: Use reliable, high-performance PostgreSQL as the backend data storage.
 - **Framer Motion Animations**: Add smooth, engaging interface animation effects.

@@ -11,7 +11,7 @@
 - **React组件**：使用React构建用户界面，实现高效的组件化开发。
 - **Zustand状态管理**：轻量级的状态管理解决方案，简化全局状态管理。
 - **TailwindCSS样式**：使用TailwindCSS实现快速、响应式的UI开发。
-- **Shadcn UI组件**：集成Shadcn UI库，提供美观、可定制的UI组件。
+- **Material-UI**：集成Material-UI库，提供美观、可定制的UI组件。
 - **Prisma ORM**：强大的数据库工具，简化数据库操作和管理。
 - **PostgreSQL数据库**：使用可靠、高性能的PostgreSQL作为后端数据存储。
 - **Framer Motion动画**：添加流畅、吸引人的界面动画效果。

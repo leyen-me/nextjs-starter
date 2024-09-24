@@ -5,6 +5,7 @@ import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/ToastProvider";
 import { ADD_ID, DICT_KEYS } from "@/contants";
 import api from "@/utils/request";
+import { validateEmail } from "@/utils/validateUtils";
 import {
   Box,
   Button,
@@ -63,9 +64,8 @@ export const SavePage = forwardRef<SavePageRef, SavePageProps>(
 
     const validate = () => {
       let tempErrors: any = {};
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       tempErrors.email = data.email
-        ? emailRegex.test(data.email)
+        ? validateEmail(data.email)
           ? ""
           : t("pages.admin.user.error.email.format")
         : t("pages.admin.user.error.email.required");

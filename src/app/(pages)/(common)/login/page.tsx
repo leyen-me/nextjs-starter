@@ -29,7 +29,7 @@ import IconGithub from "@/components/icons/IconGithub";
 import { I18nError } from "@/utils/error";
 
 function LoginForm() {
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
   const { showError } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,7 +52,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
-  
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -241,5 +241,5 @@ export default function Login() {
     <Suspense>
       <LoginForm />
     </Suspense>
-  )
+  );
 }
