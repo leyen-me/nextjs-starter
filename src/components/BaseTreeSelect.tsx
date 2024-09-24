@@ -16,6 +16,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { treeToMap } from "../utils/tree";
 import { TREE_ROOT_ID } from "@/contants";
 import { BaseFormError } from "./BaseFormError";
+import { isFunction } from "@/utils/funcUtils";
 
 export type TreeViewBaseItem = {
   id: string;
@@ -35,6 +36,17 @@ type BaseTreeSelectProps = {
   helperText?: string;
   multiple?: boolean;
   onChange?: (e: SelectChangeEvent<string>) => void;
+  onSelectedItemsChange?: (
+    event: React.SyntheticEvent,
+    itemIds: string | string[] | null,
+    treeMap: Map<string, TreeViewBaseItem>
+  ) => boolean;
+  onItemSelectionToggle?: (
+    event: React.SyntheticEvent,
+    itemId: string,
+    isSelected: boolean,
+    treeMap: Map<string, TreeViewBaseItem>
+  ) => boolean;
 };
 
 function getItemDescendantsIds(item: TreeViewBaseItem) {
@@ -70,6 +82,8 @@ export function BaseTreeSelect({
   helperText = "",
   multiple = false,
   onChange,
+  onSelectedItemsChange,
+  onItemSelectionToggle,
 }: BaseTreeSelectProps) {
   const [open, setOpen] = useState(false);
   const treeMap = useMemo(() => treeToMap(items), [items]);
@@ -117,6 +131,14 @@ export function BaseTreeSelect({
     event: React.SyntheticEvent,
     itemIds: string | string[] | null
   ) => {
+    if (onSelectedItemsChange && isFunction(onSelectedItemsChange)) {
+      const res = onSelectedItemsChange(event, itemIds, treeMap);
+      // 返回false, 表示不能选择
+      if (!res) {
+        return;
+      }
+    }
+
     if (!multiple) {
       setSelectedItems([itemIds as string]);
       return;
@@ -154,6 +176,12 @@ export function BaseTreeSelect({
     itemId: string,
     isSelected: boolean
   ) => {
+    if (onItemSelectionToggle && isFunction(onItemSelectionToggle)) {
+      const res = onItemSelectionToggle(event, itemId, isSelected, treeMap);
+      if (!res) {
+        return;
+      }
+    }
     toggledItemRef.current[itemId] = isSelected;
   };
 

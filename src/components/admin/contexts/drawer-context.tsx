@@ -3,7 +3,7 @@ import { createContext, useState, useContext, useMemo } from "react";
 import type { SvgIconTypeMap } from "@mui/material";
 import type { OverridableComponent } from "@mui/material/OverridableComponent";
 import { useMenuContext } from "@/components/auth/AdminInfoProvider";
-import { Menu } from "@prisma/client";
+import { SysMenu } from "@prisma/client";
 
 // export interface IMenuItem {
 //   route?: string;
@@ -22,7 +22,7 @@ import { Menu } from "@prisma/client";
 type DrawerContextType = {
   isOpened: boolean;
   toggleIsOpened: (value: boolean) => void;
-  menu: Menu[];
+  menu: SysMenu[];
 };
 
 type DrawerContextProviderProps = {

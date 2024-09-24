@@ -1,8 +1,7 @@
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { Menu } from "@prisma/client";
 import { BaseDynamicIcon } from "../BaseDynamicIcon";
 import { useI18n } from "../I18nProvider";
-import { LABEL_TYPE, LabelType, MenuOpenStyle } from "@/contants";
+import { LabelType } from "@prisma/client";
 
 type Props = {
   icon: string;
@@ -51,7 +50,7 @@ export const MenuItem = ({
         >
           <BaseDynamicIcon name={icon} />
         </ListItemIcon>
-        <ListItemText primary={nameType === LABEL_TYPE.I18N ? t(name) : name} />
+        <ListItemText primary={nameType === LabelType.I18N ? t(name) : name} />
       </div>
       {endIcon && (
         <ListItemIcon sx={{ minWidth: "auto" }}>{endIcon}</ListItemIcon>

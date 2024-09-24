@@ -1,4 +1,4 @@
-import { DictItem, DictMap } from "@/app/api/config/route";
+import { DictItem, DictMap } from "@/app/(server)/(sys)/api/config/route";
 import { create } from "zustand";
 
 interface DictionaryState {

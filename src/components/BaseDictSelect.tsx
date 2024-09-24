@@ -1,4 +1,3 @@
-import { DictItem } from "@/app/api/config/route";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
 import {
   FormControl,
@@ -9,8 +8,8 @@ import {
 } from "@mui/material";
 import { useI18n } from "./I18nProvider";
 import { BaseFormError } from "./BaseFormError";
-import { LABEL_TYPE } from "@/contants";
-
+import { DictItem } from "@/app/(server)/(sys)/api/config/route";
+import { LabelType } from "@prisma/client";
 
 type BaseDictSelectProps = {
   dictKey: string;
@@ -62,7 +61,7 @@ export function BaseDictSelect({
         {getDictItems(dictKey).map((item: DictItem) => {
           return (
             <MenuItem key={item.value} value={item.value}>
-              {item.labelType === LABEL_TYPE.I18N ? t(item.label) : item.label}
+              {item.labelType === LabelType.I18N ? t(item.label) : item.label}
             </MenuItem>
           );
         })}

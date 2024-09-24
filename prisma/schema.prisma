@@ -13,33 +13,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Gender {
-  MALE
-  FEMALE
-  UNKNOWN
-}
-
-enum UserStatus {
-  NORMAL
-  DISABLED
-}
-
-enum MenuType {
-  MENU
-  INTERFACE
-}
-
-enum OpenStyle {
-  INTERNAL
-  EXTERNAL
-}
-
 enum LabelType {
   TEXT
   I18N
 }
 
-enum ImageMimeType {
+enum SysUserGender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum SysUserStatus {
+  NORMAL
+  DISABLED
+}
+
+enum SysMenuType {
+  MENU
+  INTERFACE
+}
+
+enum SysMenuOpenStyle {
+  INTERNAL
+  EXTERNAL
+}
+
+enum SysImageMimeType {
   JPEG
   PNG
   GIF
@@ -49,60 +49,76 @@ enum ImageMimeType {
   SVG
 }
 
-model User {
-  id         String     @id @default(cuid())
-  email      String     @unique
+// 用户
+model SysUser {
+  id         String        @id @default(cuid())
+  email      String        @unique
   nickname   String?
   password   String
   avatar     String?
-  gender     Gender     @default(UNKNOWN)
+  gender     SysUserGender @default(UNKNOWN)
   mobile     String?
-  status     UserStatus @default(NORMAL)
-  superAdmin Boolean    @default(false)
-  createdAt  DateTime   @default(now())
+  status     SysUserStatus @default(NORMAL)
+  superAdmin Boolean       @default(false)
+  createdAt  DateTime      @default(now())
 }
 
-model Menu {
-  id        String    @id @default(cuid())
+// 菜单
+model SysMenu {
+  id        String           @id @default(cuid())
   pid       String
-  name      String    @db.VarChar(200)
-  nameType  LabelType @default(I18N)
-  url       String    @db.VarChar(200)
-  type      MenuType
-  openStyle OpenStyle
-  icon      String?   @db.VarChar(50)
-  sort      Int       @default(0)
-  createdAt DateTime  @default(now())
+  name      String           @db.VarChar(200)
+  nameType  LabelType        @default(I18N)
+  url       String           @db.VarChar(200)
+  authority String?          @db.VarChar(200)
+  type      SysMenuType
+  openStyle SysMenuOpenStyle
+  icon      String?          @db.VarChar(50)
+  sort      Int              @default(0)
+  createdAt DateTime         @default(now())
 }
 
-model Role {
+// 角色
+model SysRole {
   id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
 }
 
-model RoleMenu {
+// 角色菜单
+model SysRoleMenu {
   id        String   @id @default(cuid())
   roleId    String
   menuId    String
   createdAt DateTime @default(now())
 }
 
-model UserRole {
+// 角色权限菜单
+model SysRoleAuthorityMenu {
+  id        String   @id @default(cuid())
+  roleId    String
+  menuId    String
+  createdAt DateTime @default(now())
+}
+
+// 用户角色
+model SysUserRole {
   id        String   @id @default(cuid())
   userId    String
   roleId    String
   createdAt DateTime @default(now())
 }
 
-model GlobalConfig {
+// 全局配置
+model SysConfig {
   id     String @id @default(cuid())
   config Json
 }
 
-model Image {
-  id        String        @id @default(cuid())
+// 图片
+model SysImage {
+  id        String           @id @default(cuid())
   data      Bytes
-  mimeType  ImageMimeType
-  createdAt DateTime      @default(now())
+  mimeType  SysImageMimeType
+  createdAt DateTime         @default(now())
 }

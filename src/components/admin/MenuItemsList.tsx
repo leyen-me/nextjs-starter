@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 import { MenuItem } from "./MenuItem";
 import { usePathname, useRouter } from "next/navigation";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
-import { Menu } from "@prisma/client";
-import { LABEL_TYPE, MENU_OPEN_STYLE } from "@/contants";
+import { LabelType, SysMenu, SysMenuOpenStyle } from "@prisma/client";
 import { isExternalUrl } from "@/utils/stringUtil";
 import { useMenuStore } from "@/stores/menuStore";
 import { useI18n } from "../I18nProvider";
 
-const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
+const renderMenuItems = (items: SysMenu[], pathname: string, level = 0) => {
   return items.map(
     ({
       name,
@@ -35,7 +34,7 @@ const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
           setIsOpen(!isOpen);
           return;
         }
-        if (openStyle === MENU_OPEN_STYLE.INTERNAL) {
+        if (openStyle === SysMenuOpenStyle.INTERNAL) {
           if (isExternalUrl(url)) {
             router.push(`/admin/iframe/${encodeURIComponent(url)}`);
           } else {
@@ -50,7 +49,7 @@ const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
       // Check if any child route is active
       const isChildActive =
         hasChildren &&
-        children.some((child: Menu) => pathname.startsWith(child.url || "/"));
+        children.some((child: SysMenu) => pathname.startsWith(child.url || "/"));
 
       // If a child is active, ensure the parent menu is open
       useEffect(() => {
@@ -61,7 +60,7 @@ const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
 
       useEffect(() => {
         if (pathname === url) {
-          setHeader(nameType === LABEL_TYPE.I18N ? t(name) : name);
+          setHeader(nameType === LabelType.I18N ? t(name) : name);
         }
       }, [pathname, url, name, nameType]);
 
@@ -90,7 +89,7 @@ const renderMenuItems = (items: Menu[], pathname: string, level = 0) => {
   );
 };
 
-export const MenuItemsList = ({ items = [] }: { items?: Menu[] }) => {
+export const MenuItemsList = ({ items = [] }: { items?: SysMenu[] }) => {
   const pathname = usePathname();
   if (!items.length) return null;
 

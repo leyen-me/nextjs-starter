@@ -63,6 +63,9 @@ export default {
       notFound: "配置不存在",
     },
     auth: {
+      authority: {
+        insufficient: "权限不足",
+      },
       register: {
         emailAlreadyExists: "邮箱已注册",
       },
@@ -110,6 +113,15 @@ export default {
       cancel: "取消",
       deleteSuccess: "删除成功",
       deleteFailed: "删除失败",
+
+      interface: {
+        add: "新增",
+        delete: "删除",
+        edit: "编辑",
+        info: "详情",
+        list: "列表",
+        page: "分页",
+      },
     },
     admin: {
       menus: {
@@ -154,6 +166,10 @@ export default {
       role: {
         name: "角色名",
         menuIdList: "菜单列表",
+        authorityMenuIdList: "权限列表",
+        warning: {
+          authorityMenu: "请不要选择菜单作为权限",
+        },
         error: {
           name: {
             required: "角色名是必填项",
@@ -165,6 +181,7 @@ export default {
         name: "菜单名",
         url: "菜单路径",
         type: "菜单类型",
+        authority: "权限标识",
         openStyle: "打开方式",
         icon: "菜单图标",
         sort: "排序",

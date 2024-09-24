@@ -10,9 +10,9 @@ import { DrawerContextProvider } from "./contexts/drawer-context";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import api from "@/utils/request";
-import type { GlobalConfig } from "@/app/api/config/route";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
 import { useToast } from "../ToastProvider";
+import { GlobalConfig } from "@/app/(server)/(sys)/api/config/route";
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();

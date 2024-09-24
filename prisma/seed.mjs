@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-const CONFIG_DATA = {
+const SYS_CONFIGS = {
   dictMap: {
     LabelType: {
       type: "dict",
@@ -18,7 +18,7 @@ const CONFIG_DATA = {
         },
       ],
     },
-    Gender: {
+    SysUserGender: {
       type: "dict",
       data: [
         {
@@ -41,7 +41,7 @@ const CONFIG_DATA = {
         },
       ],
     },
-    UserStatus: {
+    SysUserStatus: {
       type: "dict",
       data: [
         {
@@ -58,7 +58,7 @@ const CONFIG_DATA = {
         },
       ],
     },
-    MenuType: {
+    SysMenuType: {
       type: "dict",
       data: [
         {
@@ -75,7 +75,7 @@ const CONFIG_DATA = {
         },
       ],
     },
-    MenuOpenStyle: {
+    SysMenuOpenStyle: {
       type: "dict",
       data: [
         {
@@ -95,22 +95,22 @@ const CONFIG_DATA = {
   },
 };
 
-const initGlobalConfig = async () => {
-  const config = await prisma.globalConfig.findFirst();
-  await prisma.globalConfig.upsert({
+const initSysConfig = async () => {
+  const config = await prisma.sysConfig.findFirst();
+  await prisma.sysConfig.upsert({
     where: {
       id: config?.id || "default",
     },
     update: {
-      config: CONFIG_DATA,
+      config: SYS_CONFIGS,
     },
     create: {
-      config: CONFIG_DATA,
+      config: SYS_CONFIGS,
     },
   });
 };
 
-const USERS = [
+const SYS_USERS = [
   {
     id: "1",
     nickname: "a",
@@ -121,7 +121,7 @@ const USERS = [
     gender: "MALE",
   },
   {
-    id: "2",
+    id: "system",
     nickname: "b",
     avatar: "/assets/jpegs/user.jpg",
     email: "b@b.com",
@@ -138,9 +138,9 @@ const USERS = [
   },
 ];
 
-const initUser = async () => {
-  USERS.forEach(async (user) => {
-    await prisma.user.upsert({
+const initSysUser = async () => {
+  SYS_USERS.forEach(async (user) => {
+    await prisma.sysUser.upsert({
       where: {
         email: user.email,
       },
@@ -150,7 +150,7 @@ const initUser = async () => {
   });
 };
 
-const ROLES = [
+const SYS_ROLES = [
   {
     id: "admin",
     name: "admin",
@@ -161,9 +161,9 @@ const ROLES = [
   },
 ];
 
-const initRole = async () => {
-  ROLES.forEach(async (role) => {
-    await prisma.role.upsert({
+const initSysRole = async () => {
+  SYS_ROLES.forEach(async (role) => {
+    await prisma.sysRole.upsert({
       where: {
         id: role.id,
       },
@@ -178,22 +178,22 @@ const initRole = async () => {
   });
 };
 
-const USER_ROLES = [
+const SYS_USER_ROLES = [
   {
     id: "1",
     userId: "1",
     roleId: "admin",
   },
   {
-    id: "2",
+    id: "system",
     userId: "1",
     roleId: "user",
   },
 ];
 
-const initUserRole = async () => {
-  USER_ROLES.forEach(async (userRole) => {
-    await prisma.userRole.upsert({
+const initSysUserRole = async () => {
+  SYS_USER_ROLES.forEach(async (userRole) => {
+    await prisma.sysUserRole.upsert({
       where: {
         id: userRole.id,
       },
@@ -203,9 +203,9 @@ const initUserRole = async () => {
   });
 };
 
-const MENUS = [
+const SYS_MENUS = [
   {
-    id: "1",
+    id: "dashboard",
     pid: "0",
     name: "pages.admin.menus.dashboard",
     url: "/admin/dashboard",
@@ -214,8 +214,9 @@ const MENUS = [
     icon: "HomeOutlined",
     sort: 1,
   },
+
   {
-    id: "2",
+    id: "system",
     pid: "0",
     name: "pages.admin.menus.system",
     url: "/admin/system-management",
@@ -224,9 +225,10 @@ const MENUS = [
     icon: "SettingsOutlined",
     sort: 2,
   },
+
   {
-    id: "3",
-    pid: "2",
+    id: "user",
+    pid: "system",
     name: "pages.admin.menus.user",
     url: "/admin/user",
     type: "MENU",
@@ -235,8 +237,75 @@ const MENUS = [
     sort: 1,
   },
   {
-    id: "4",
-    pid: "2",
+    id: "user-add",
+    pid: "user",
+    name: "pages.common.interface.add",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:user:add",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 1,
+  },
+  {
+    id: "user-delete",
+    pid: "user",
+    name: "pages.common.interface.delete",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:user:delete",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 2,
+  },
+  {
+    id: "user-edit",
+    pid: "user",
+    name: "pages.common.interface.edit",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:user:edit",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 3,
+  },
+  {
+    id: "user-info",
+    pid: "user",
+    name: "pages.common.interface.info",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:user:info",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 4,
+  },
+  {
+    id: "user-list",
+    pid: "user",
+    name: "pages.common.interface.list",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:user:list",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 5,
+  },
+  {
+    id: "user-page",
+    pid: "user",
+    name: "pages.common.interface.page",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:user:page",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 6,
+  },
+
+  {
+    id: "role",
+    pid: "system",
     name: "pages.admin.menus.role",
     url: "/admin/role",
     type: "MENU",
@@ -245,8 +314,75 @@ const MENUS = [
     sort: 2,
   },
   {
-    id: "5",
-    pid: "2",
+    id: "role-add",
+    pid: "role",
+    name: "pages.common.interface.add",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:role:add",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 1,
+  },
+  {
+    id: "role-delete",
+    pid: "role",
+    name: "pages.common.interface.delete",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:role:delete",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 2,
+  },
+  {
+    id: "role-edit",
+    pid: "role",
+    name: "pages.common.interface.edit",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:role:edit",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 3,
+  },
+  {
+    id: "role-info",
+    pid: "role",
+    name: "pages.common.interface.info",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:role:info",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 4,
+  },
+  {
+    id: "role-list",
+    pid: "role",
+    name: "pages.common.interface.list",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:role:list",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 5,
+  },
+  {
+    id: "role-page",
+    pid: "role",
+    name: "pages.common.interface.page",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:role:page",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 6,
+  },
+
+  {
+    id: "menu",
+    pid: "system",
     name: "pages.admin.menus.menu",
     url: "/admin/menu",
     type: "MENU",
@@ -255,8 +391,75 @@ const MENUS = [
     sort: 3,
   },
   {
-    id: "6",
-    pid: "2",
+    id: "menu-add",
+    pid: "menu",
+    name: "pages.common.interface.add",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:menu:add",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 1,
+  },
+  {
+    id: "menu-delete",
+    pid: "menu",
+    name: "pages.common.interface.delete",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:menu:delete",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 2,
+  },
+  {
+    id: "menu-edit",
+    pid: "menu",
+    name: "pages.common.interface.edit",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:menu:edit",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 3,
+  },
+  {
+    id: "menu-info",
+    pid: "menu",
+    name: "pages.common.interface.info",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:menu:info",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 4,
+  },
+  {
+    id: "menu-list",
+    pid: "menu",
+    name: "pages.common.interface.list",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:menu:list",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 5,
+  },
+  {
+    id: "menu-page",
+    pid: "menu",
+    name: "pages.common.interface.page",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:menu:page",
+    openStyle: "INTERNAL",
+    icon: "",
+    sort: 6,
+  },
+
+  {
+    id: "config",
+    pid: "system",
     name: "pages.admin.menus.config",
     url: "/admin/config",
     type: "MENU",
@@ -264,11 +467,20 @@ const MENUS = [
     icon: "SettingsOutlined",
     sort: 4,
   },
+  {
+    id: "config-edit",
+    pid: "config",
+    name: "pages.common.interface.edit",
+    url: "",
+    type: "INTERFACE",
+    authority: "sys:config:edit",
+    openStyle: "INTERNAL",
+  },
 ];
 
-const initMenu = async () => {
-  for (const menu of MENUS) {
-    await prisma.menu.upsert({
+const initSysMenu = async () => {
+  for (const menu of SYS_MENUS) {
+    await prisma.sysMenu.upsert({
       where: { id: menu.id },
       update: menu,
       create: menu,
@@ -277,11 +489,11 @@ const initMenu = async () => {
 };
 
 async function main() {
-  await initGlobalConfig();
-  await initUser();
-  await initRole();
-  await initUserRole();
-  await initMenu();
+  await initSysConfig();
+  await initSysUser();
+  await initSysRole();
+  await initSysUserRole();
+  await initSysMenu();
 }
 
 main()

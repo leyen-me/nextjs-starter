@@ -19,7 +19,6 @@ import api from "@/utils/request";
 import {
   ADD_ID,
   DEFAULT_PAGE_SIZE,
-  LABEL_TYPE,
   PAGE_SIZE_OPTIONS,
 } from "@/contants";
 import { BaseTablePagination } from "@/components/BaseTablePagination";
@@ -46,6 +45,8 @@ import {
   GridRenderCellParams,
 } from "@mui/x-data-grid-premium";
 import { BaseDynamicIcon } from "./BaseDynamicIcon";
+import { BaseAuthority } from "./BaseAuthority";
+import { LabelType } from "@prisma/client";
 
 export type ResultColumn = {
   label: string;
@@ -64,6 +65,11 @@ export type BaseCrudProps = {
   filtersOptions: FiltersOption[];
   resultColumns: ResultColumn[];
   SavePage: any;
+  authorityMap?: {
+    add: string | string[];
+    edit: string | string[];
+    delete: string | string[];
+  };
 };
 
 const Transition = React.forwardRef(function Transition(
@@ -81,11 +87,13 @@ export function BaseCrud({
   filtersOptions,
   resultColumns,
   SavePage,
+  authorityMap,
 }: BaseCrudProps) {
   // 国际化
   const { t } = useI18n();
   // 提示
-  const { showToast } = useToast();
+  const { showSuccess, showError } = useToast();
+
   // 分页
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -121,15 +129,19 @@ export function BaseCrud({
           pageSize: pageSize.toString(),
           ...getFilterWithRequest(),
         };
-    const { data } = await api.get<any>(fetchUrl, {
-      params: params as Record<string, string>,
-    });
-    if (isTreeOrList) {
-      setData(data);
-    } else {
-      const { total: _total, data: _data } = data;
-      setData(_data);
-      setTotal(_total);
+    try {
+      const { data } = await api.get<any>(fetchUrl, {
+        params: params as Record<string, string>,
+      });
+      if (isTreeOrList) {
+        setData(data);
+      } else {
+        const { total: _total, data: _data } = data;
+        setData(_data);
+        setTotal(_total);
+      }
+    } catch (error: any) {
+      showError(error);
     }
   };
 
@@ -159,7 +171,7 @@ export function BaseCrud({
         headerAlign: "left",
         align: "left",
         headerName:
-          column.labelType === LABEL_TYPE.I18N ? t(column.label) : column.label,
+          column.labelType === LabelType.I18N ? t(column.label) : column.label,
         type: type,
         minWidth: column.minWidth,
         flex: 1,
@@ -212,22 +224,26 @@ export function BaseCrud({
                   mr: 100,
                 }}
               >
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  onClick={() => handleEdit(params.id)}
-                >
-                  {t("pages.common.edit")}
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                  onClick={() => handleDelete(params.id)}
-                >
-                  {t("pages.common.delete")}
-                </Button>
+                <BaseAuthority auth={authorityMap?.edit || ""}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={() => handleEdit(params.id)}
+                  >
+                    {t("pages.common.edit")}
+                  </Button>
+                </BaseAuthority>
+                <BaseAuthority auth={authorityMap?.delete || ""}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    onClick={() => handleDelete(params.id)}
+                  >
+                    {t("pages.common.delete")}
+                  </Button>
+                </BaseAuthority>
               </Box>
             );
           },
@@ -280,11 +296,11 @@ export function BaseCrud({
   const handleDeleteConfirm = async () => {
     try {
       setDeleteLoading(true);
-      await api.delete(`${baseUrl}/${deleteId}`);
+      const res = await api.delete(`${baseUrl}/${deleteId}`);
       fetchData();
-      showToast(t("pages.common.deleteSuccess"), "success");
-    } catch (error) {
-      showToast(t("pages.common.deleteFailed"), "error");
+      showSuccess(res);
+    } catch (error: any) {
+      showError(error);
     } finally {
       handleDeleteCancel();
       setDeleteLoading(false);
@@ -319,7 +335,7 @@ export function BaseCrud({
                 <TextField
                   key={option.name}
                   label={
-                    option.labelType === LABEL_TYPE.I18N
+                    option.labelType === LabelType.I18N
                       ? t(option.label)
                       : option.label
                   }
@@ -337,7 +353,7 @@ export function BaseCrud({
                   fullWidth={false}
                   dictKey={option.dictKey || ""}
                   label={
-                    option.labelType === LABEL_TYPE.I18N
+                    option.labelType === LabelType.I18N
                       ? t(option.label)
                       : option.label
                   }
@@ -377,21 +393,22 @@ export function BaseCrud({
             >
               {t("pages.common.export")}
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAdd}
-              startIcon={<Add />}
-            >
-              {t("pages.common.add")}
-            </Button>
+            <BaseAuthority auth={authorityMap?.add || ""}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAdd}
+                startIcon={<Add />}
+              >
+                {t("pages.common.add")}
+              </Button>
+            </BaseAuthority>
           </Box>
         }
       >
         {isTree ? (
           <DataGridPremium
             initialState={{
-              // pagination: { paginationModel: { pageSize: 100 } },
               columns: {
                 columnVisibilityModel: {
                   id: true,

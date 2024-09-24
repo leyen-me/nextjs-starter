@@ -26,33 +26,11 @@ export const TREE_ROOT_ID = "0";
 
 export const DICT_KEYS = {
   LabelType: "LabelType",
-  Gender: "Gender",
-  UserStatus: "UserStatus",
-  MenuType: "MenuType",
-  MenuOpenStyle: "MenuOpenStyle",
+  SysUserGender: "SysUserGender",
+  SysUserStatus: "SysUserStatus",
+  SysMenuType: "SysMenuType",
+  SysMenuOpenStyle: "SysMenuOpenStyle",
 };
-
-export const LABEL_TYPE = {
-  I18N: "I18N",
-  TEXT: "TEXT",
-} as const;
-
-export type LabelType = (typeof LABEL_TYPE)[keyof typeof LABEL_TYPE];
-
-export const MENU_OPEN_STYLE = {
-  INTERNAL: "INTERNAL",
-  EXTERNAL: "EXTERNAL",
-} as const;
-
-export type MenuOpenStyle =
-  (typeof MENU_OPEN_STYLE)[keyof typeof MENU_OPEN_STYLE];
-
-export const MENU_TYPE = {
-  MENU: "MENU",
-  INTERFACE: "INTERFACE",
-} as const;
-
-export type MenuType = (typeof MENU_TYPE)[keyof typeof MENU_TYPE];
 
 // 每个人都可以访问的路由
 export const CONSTENTS_MENU_URL = [
@@ -61,7 +39,7 @@ export const CONSTENTS_MENU_URL = [
 ];
 
 // 图片上传的类型
-export const IMAGE_MIME_TYPE = {
+export const SYS_IMAGE_MIME_TYPE = {
   JPEG: "image/jpeg",
   PNG: "image/png",
   GIF: "image/gif",
@@ -72,4 +50,4 @@ export const IMAGE_MIME_TYPE = {
 };
 
 // 图片上传的文件大小
-export const IMAGE_MAX_SIZE = 10 * 1024 * 1024;
+export const SYS_IMAGE_MAX_SIZE = 10 * 1024 * 1024;

@@ -2,19 +2,21 @@ import api from "@/utils/request";
 import { useEffect, useState } from "react";
 import Loading from "../Loading";
 import { createContext, useContext } from "react";
-import { Menu, User } from "@prisma/client";
+import { SysMenu, SysUser } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
 import { treeToMap } from "@/utils/tree";
-import { MenuWithChildren } from "@/app/api/menu/[id]/route";
 import { CONSTENTS_MENU_URL } from "@/contants";
 import { useUserStore } from "@/stores/userStore";
+import { MenuWithChildren } from "@/app/(server)/(sys)/api/menu/[id]/route";
+import { UserInfo } from "@/app/(server)/(sys)/api/user/info/route";
+
 
 type AdminInfoProviderProps = {
   children: React.ReactNode;
 };
 
 type MenuContextType = {
-  menuList: Menu[];
+  menuList: SysMenu[];
 };
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined);
@@ -30,7 +32,7 @@ export const useMenuContext = () => {
 export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [menuList, setMenuList] = useState<Menu[]>([]);
+  const [menuList, setMenuList] = useState<SysMenu[]>([]);
   const userStore = useUserStore();
   const router = useRouter();
   const pathname = usePathname();
@@ -38,7 +40,7 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data:userInfo } = await api.get<User>("/api/user/info");
+        const { data:userInfo } = await api.get<UserInfo>("/api/user/info");
         userStore.setUser(userInfo);
         
         const { data } = await api.get<MenuWithChildren[]>("/api/user/menu");

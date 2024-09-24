@@ -1,4 +1,5 @@
-import { LABEL_TYPE, LabelType, RESPONSE_CODE } from "@/contants";
+import { RESPONSE_CODE } from "@/contants";
+import { LabelType } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export type ResponseType<T> = {
@@ -11,7 +12,7 @@ export type ResponseType<T> = {
 export const buildSuccess = <T>({
   data = null as T,
   message = "server.common.success",
-  messageType = LABEL_TYPE.I18N,
+  messageType = LabelType.I18N,
 }: {
   data?: T;
   message?: string;
@@ -30,7 +31,7 @@ export const buildSuccess = <T>({
 
 export const buildError = ({
   message = "server.common.failed",
-  messageType = LABEL_TYPE.I18N,
+  messageType = LabelType.I18N,
 }: {
   message: string;
   messageType?: LabelType;
