@@ -1,6 +1,11 @@
 import { I18nError } from "./error";
 import { ResponseType } from "./response";
 
+export type Page<T> = {
+  total: number;
+  data: T[];
+};
+
 interface RequestOptions extends RequestInit {
   params?: Record<string, string>;
   data?: any;

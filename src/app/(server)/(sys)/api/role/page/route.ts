@@ -1,6 +1,7 @@
 import { prisma } from "@/libs/prisma";
 import { checkAuthority } from "@/utils/authUtil";
 import { extractFiltersWithPagination } from "@/utils/extractFilters";
+import { Page } from "@/utils/request";
 import { buildError, buildSuccess } from "@/utils/response";
 import { SysRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";

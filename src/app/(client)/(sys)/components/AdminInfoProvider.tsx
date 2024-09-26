@@ -1,6 +1,5 @@
 import api from "@/utils/request";
 import { useEffect, useState } from "react";
-import Loading from "../Loading";
 import { createContext, useContext } from "react";
 import { SysMenu, SysUser } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,6 +8,7 @@ import { CONSTENTS_MENU_URL } from "@/contants";
 import { useUserStore } from "@/stores/userStore";
 import { MenuWithChildren } from "@/app/(server)/(sys)/api/menu/[id]/route";
 import { UserInfo } from "@/app/(server)/(sys)/api/user/info/route";
+import Loading from "@/components/Loading";
 
 
 type AdminInfoProviderProps = {

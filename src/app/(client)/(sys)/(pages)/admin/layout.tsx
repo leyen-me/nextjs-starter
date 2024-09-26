@@ -1,5 +1,5 @@
-import { AdminProvider } from "@/components/auth/AdminProvider";
 import { Layout } from "@/components/admin/Layout";
+import { AdminProvider } from "../../components/AdminProvider";
 
 export default function AdminLayout({
   children,

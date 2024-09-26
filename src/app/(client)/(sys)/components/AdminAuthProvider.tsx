@@ -1,4 +1,3 @@
-import { useUserStore } from "@/stores/userStore";
 import { signOut, useSession } from "next-auth/react";
 
 type AdminAuthProviderProps = {
