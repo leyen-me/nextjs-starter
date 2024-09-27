@@ -3,6 +3,10 @@ export default {
   common: {
     dict: {
       all: "All",
+      labelType: {
+        text: "Text",
+        i18n: "Internationalization",
+      },
       gender: {
         male: "Male",
         female: "Female",
@@ -12,6 +16,20 @@ export default {
         normal: "Enabled",
         disabled: "Disabled",
       },
+      menu: {
+        type: {
+          menu: "Menu",
+          interface: "Interface",
+        },
+        openStyle: {
+          internal: "Internal",
+          external: "External",
+        },
+      },
+    },
+    language: {
+      zh: "Chinese",
+      en: "English",
     },
   },
   server: {
@@ -33,14 +51,41 @@ export default {
       info: {
         failed: "Data not found",
       },
+      upload: {
+        success: "Upload successful",
+        failed: "Upload failed",
+      },
+      error: {
+        internalServerError: "Internal server error",
+        networkError: "Network error",
+        notFound: "Request not found",
+      },
     },
     config: {
       notFound: "Configuration not found",
     },
     auth: {
+      loginExpired: "Login expired",
+      authority: {
+        insufficient: "Insufficient permissions",
+      },
       register: {
-        emailAlreadyExists: "Email already exists",
-        success: "Registration successful",
+        emailAlreadyExists: "Email already registered",
+      },
+    },
+    role: {
+      create: {
+        nameAlreadyExists: "Role name already exists",
+      },
+    },
+    image: {
+      upload: {
+        mimeType: {
+          invalid: "Unsupported file type",
+        },
+        size: {
+          invalid: "Image size must be less than 10MB",
+        },
       },
     },
   },
@@ -50,11 +95,17 @@ export default {
       delete: "Delete",
       edit: "Edit",
       search: "Search",
+
+      upload: "Upload",
       reset: "Reset",
       export: "Export",
+
       filter: "Filter",
       results: "Results",
+
       save: "Save",
+      update: "Update",
+
       index: "Index",
       actions: "Actions",
       pageSize: "Items per page",
@@ -63,10 +114,28 @@ export default {
       logout: "Logout",
       deleteConfirm: "Are you sure you want to delete this data?",
       cancel: "Cancel",
-      deleteSuccess: "Delete successful",
-      deleteFailed: "Delete failed",
+      deleteSuccess: "Deletion successful",
+      deleteFailed: "Deletion failed",
+
+      interface: {
+        add: "Add",
+        delete: "Delete",
+        edit: "Edit",
+        info: "Info",
+        list: "List",
+        page: "Page",
+      },
     },
     admin: {
+      menus: {
+        root: "Root Menu",
+        dashboard: "Dashboard",
+        system: "System",
+        user: "User",
+        role: "Role",
+        menu: "Menu",
+        config: "Config",
+      },
       user: {
         email: "Email",
         nickname: "Nickname",
@@ -74,6 +143,7 @@ export default {
         mobile: "Mobile",
         status: "Status",
         password: "Password",
+        roles: "Role List",
         error: {
           email: {
             required: "Email is required",
@@ -96,36 +166,108 @@ export default {
           },
         },
       },
+      role: {
+        name: "Role Name",
+        menuIdList: "Menu List",
+        authorityMenuIdList: "Authority List",
+        warning: {
+          authorityMenu: "Please do not select menus as authorities",
+        },
+        error: {
+          name: {
+            required: "Role name is required",
+          },
+        },
+      },
+      menu: {
+        parent: "Parent Menu",
+        name: "Menu Name",
+        url: "Menu URL",
+        type: "Menu Type",
+        authority: "Authority Identifier",
+        openStyle: "Open Style",
+        icon: "Menu Icon",
+        sort: "Sort",
+        nameType: "Menu Name Type",
+        error: {
+          pid: {
+            required: "Parent menu is required",
+          },
+          name: {
+            required: "Menu name is required",
+          },
+          nameType: {
+            required: "Menu name type is required",
+          },
+          url: {
+            required: "Menu URL is required",
+          },
+          type: {
+            required: "Menu type is required",
+          },
+          openStyle: {
+            required: "Open style is required",
+          },
+          sort: {
+            required: "Sort is required",
+            min: "Sort cannot be less than 0",
+          },
+        },
+      },
     },
     login: {
-      welcome: "Welcome to Admin Dashboard",
+      welcome: "Welcome to the admin panel",
       description: "Welcome to login",
-      signwith: "or sign in with",
+      signwith: "Or sign in with",
       email: "Email",
       password: "Password",
-      rememberPassword: "Remember Password",
-      forgotPassword: "Forgot Password",
+      rememberPassword: "Remember password",
+      forgotPassword: "Forgot password",
       noAccount: "Don't have an account?",
-      signin: "Sign In",
-      signingIn: "Signing In...",
-      signup: "Create an account",
+      signin: "Sign in",
+      signingIn: "Signing in...",
+      signup: "Sign up",
       invalidCredentials: "Invalid email or password",
+      accountNotExist: "Account does not exist",
+      accountDisabled: "Account has been disabled",
+      unknownError: "Unknown error",
       githubError: "GitHub login failed",
       googleError: "Google login failed",
     },
     register: {
-      welcome: "Welcome to Admin Registration",
+      welcome: "Welcome to register",
       description: "Welcome to register",
       email: "Email",
       password: "Password",
-      confirmPassword: "Confirm Password",
-      signup: "Sign Up",
-      signingUp: "Signing Up...",
+      confirmPassword: "Confirm password",
+      signup: "Sign up",
+      signingUp: "Signing up...",
       haveAccount: "Already have an account?",
-      signin: "Sign In",
+      signin: "Sign in",
       passwordMismatch: "Passwords do not match",
       registerSuccess: "Registration successful",
       registerFailed: "Registration failed",
+    },
+    accountSetting: {
+      account: {
+        label: "Account",
+        profile: {
+          title: "Edit Profile",
+          description: "Change your profile picture here",
+          tip: "Allowed file types: JPG, GIF, or PNG. Max size: 800K",
+        },
+        password: {
+          title: "Change Password",
+          description: "Change your password here",
+        },
+        detail: {
+          title: "Edit Account Information",
+          description: "Change your account information here",
+        },
+      },
+      password: {
+        label: "Password",
+      },
     },
   },
 };
