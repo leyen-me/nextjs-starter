@@ -57,12 +57,15 @@ export default {
       },
       error: {
         internalServerError: "服务器内部错误",
+        networkError: "网络错误",
+        notFound: "请求不存在",
       },
     },
     config: {
       notFound: "配置不存在",
     },
     auth: {
+      loginExpired: "登录已过期",
       authority: {
         insufficient: "权限不足",
       },
@@ -225,6 +228,9 @@ export default {
       signingIn: "登录中...",
       signup: "注册一个账号",
       invalidCredentials: "邮箱或密码错误",
+      accountNotExist: "账号或密码错误",
+      accountDisabled: "账号已被禁用",
+      unknownError: "未知错误",
       githubError: "GitHub 登录失败",
       googleError: "Google 登录失败",
     },

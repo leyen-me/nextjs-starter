@@ -3,8 +3,9 @@ import { prisma } from "@/libs/prisma";
 import { buildError, buildSuccess } from "@/utils/response";
 import { SysImageMimeType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+async function handlerPost(req: NextRequest, res: NextResponse) {
   const formData = await req.formData();
   const file = formData.get("file");
   if (!file) {
@@ -34,3 +35,5 @@ export async function POST(req: NextRequest, res: NextResponse) {
   });
   return buildSuccess({ data: image.id, message: "server.common.upload.success" });
 }
+
+export const POST = apiWrapper(handlerPost);

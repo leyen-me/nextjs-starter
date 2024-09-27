@@ -1,14 +1,16 @@
 import { prisma } from "@/libs/prisma";
-import { checkAuthority } from "@/utils/authUtil";
-import { updateManyToManyRelation } from "@/utils/relationUtils";
+import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
+import { updateManyToManyRelation } from "@/utils/relation";
 import { buildError, buildSuccess } from "@/utils/response";
 import { hash } from "bcrypt";
+import { NextRequest, NextResponse } from "next/server";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
 
-export async function PUT(
-  req: Request,
+async function handlerPut(
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  if (!(await checkAuthority("sys:user:edit"))) {
+  if (!(await checkAuthority(req, "sys:user:edit"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const { id } = params;
@@ -42,11 +44,11 @@ export async function PUT(
   return buildSuccess({ message: "server.common.update.success" });
 }
 
-export async function DELETE(
-  req: Request,
+async function handlerDelete(
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  if (!(await checkAuthority("sys:user:delete"))) {
+  if (!(await checkAuthority(req, "sys:user:delete"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const { id } = params;
@@ -63,11 +65,11 @@ export async function DELETE(
   return buildSuccess({ message: "server.common.delete.success" });
 }
 
-export async function GET(
-  req: Request,
+async function handlerGet(
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  if (!(await checkAuthority("sys:user:[id]"))) {
+  if (!(await checkAuthority(req, "sys:user:[id]"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const { id } = params;
@@ -94,3 +96,7 @@ export async function GET(
     return buildError({ message: "server.common.info.failed" });
   }
 }
+
+export const PUT = apiWrapper(handlerPut);
+export const DELETE = apiWrapper(handlerDelete);
+export const GET = apiWrapper(handlerGet);

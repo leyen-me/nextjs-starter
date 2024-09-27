@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "@/components/ThemeProvider";
 
 export const Main = ({ children }: PropsWithChildren<unknown>) => {
   const { theme } = useTheme();

@@ -1,9 +1,11 @@
 import { prisma } from "@/libs/prisma";
-import { checkAuthority } from "@/utils/authUtil";
+import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
 import { buildError, buildSuccess } from "@/utils/response";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  if (!(await checkAuthority("sys:menu:add"))) {
+async function handlerPost(req: NextRequest, res: NextResponse) {
+  if (!(await checkAuthority(req, "sys:menu:add"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const { sort, ...data } = await req.json();
@@ -20,3 +22,5 @@ export async function POST(req: Request) {
   }
   return buildSuccess({ message: "server.common.update.success" });
 }
+
+export const POST = apiWrapper(handlerPost);

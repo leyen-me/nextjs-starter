@@ -2,6 +2,7 @@ import { prisma } from "@/libs/prisma";
 import { buildError, buildSuccess } from "@/utils/response";
 import { NextResponse } from "next/server";
 
+// 该请求处于白名单，不用校验权限
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }

@@ -3,14 +3,15 @@ import { buildError, buildSuccess } from "@/utils/response";
 import { config } from "../../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { SysMenuType, SysUser } from "@prisma/client";
-
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
+import { NextRequest, NextResponse } from "next/server";
 type StorePartialUser = Partial<SysUser>;
 
 export type UserInfo = StorePartialUser & {
   authorityList: string[];
 };
 
-export async function GET(req: Request) {
+async function handlerGet(req: NextRequest, res: NextResponse) {
   const session = await getServerSession(config);
   // @ts-ignore
   const userId = session?.user?.id;
@@ -56,3 +57,5 @@ export async function GET(req: Request) {
     return buildError({ message: "server.common.info.failed" });
   }
 }
+
+export const GET = apiWrapper(handlerGet);

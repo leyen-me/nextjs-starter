@@ -1,6 +1,6 @@
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { BaseDynamicIcon } from "../BaseDynamicIcon";
-import { useI18n } from "../I18nProvider";
+import { BaseDynamicIcon } from "@/components/BaseDynamicIcon";
+import { useI18n } from "@/components/I18nProvider";
 import { LabelType } from "@prisma/client";
 
 type Props = {

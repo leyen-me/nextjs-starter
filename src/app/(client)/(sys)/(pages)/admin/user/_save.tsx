@@ -1,11 +1,10 @@
 import { BaseDataSelect } from "@/components/BaseDataSelect";
 import { BaseDictSelect } from "@/components/BaseDictSelect";
-import { BaseFormError } from "@/components/BaseFormError";
 import { useI18n } from "@/components/I18nProvider";
 import { useToast } from "@/components/ToastProvider";
 import { ADD_ID, DICT_KEYS } from "@/contants";
 import api from "@/utils/request";
-import { validateEmail } from "@/utils/validateUtils";
+import { validateEmail } from "@/utils/validate";
 import {
   Box,
   Button,

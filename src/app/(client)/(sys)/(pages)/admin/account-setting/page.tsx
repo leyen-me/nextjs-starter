@@ -23,7 +23,7 @@ import { SysUserGender, SysImage, SysUser } from "@prisma/client";
 import { DICT_KEYS, SYS_IMAGE_MAX_SIZE, SYS_IMAGE_MIME_TYPE } from "@/contants";
 import { useRouter } from "next/navigation";
 import { BaseDictSelect } from "@/components/BaseDictSelect";
-import { validateEmail } from "@/utils/validateUtils";
+import { validateEmail } from "@/utils/validate";
 
 interface TabPanelProps {
   children?: React.ReactNode;

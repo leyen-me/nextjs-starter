@@ -1,39 +1,24 @@
 import { prisma } from "@/libs/prisma";
-import { checkAuthority, getUser } from "@/utils/authUtil";
-import { extractFiltersWithPagination } from "@/utils/extractFilters";
 import { Page } from "@/utils/request";
 import { buildError, buildSuccess } from "@/utils/response";
-import { SysUserGender, SysUser, SysUserStatus } from "@prisma/client";
+import { SysUser } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-
-export type UserPageFilters = {
-  email?: string;
-  nickname?: string;
-  gender?: SysUserGender;
-  mobile?: string;
-  status?: SysUserStatus;
-};
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
+import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
+import { getParams } from "@/utils/params";
 
 export type UserWithoutPassword = Omit<SysUser, "password">;
 
-export async function GET(req: NextRequest, res: NextResponse) {
-  if (!(await checkAuthority("sys:user:page"))) {
+async function handlerGet(req: NextRequest, res: NextResponse) {
+  if (!(await checkAuthority(req, "sys:user:page"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
+  const { page, pageSize, ...filters } = getParams(req);
+  const { superAdmin } = req.context.user;
 
-  const { page, pageSize, filters } = extractFiltersWithPagination(
-    req.url || "",
-    ["email", "nickname", "gender", "mobile", "status"]
-  );
-
-  const { superAdmin } = await getUser();
-
-  // 过滤掉超级管理员
+  // 不能让普通用户看到超级管理员，数据权限
   if (!superAdmin) {
-    // @ts-ignore
-    filters.superAdmin = {
-      not: true,
-    };
+    filters.superAdmin = { not: true } as any;
   }
 
   const dbUsers = await prisma.sysUser.findMany({
@@ -55,3 +40,5 @@ export async function GET(req: NextRequest, res: NextResponse) {
     data: { total, data: users },
   });
 }
+
+export const GET = apiWrapper(handlerGet);

@@ -8,16 +8,15 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import Brightness4OutlinedIcon from "@mui/icons-material/Brightness4Outlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import Brightness7OutlinedIcon from "@mui/icons-material/Brightness7Outlined";
-import { useDrawerContext } from "./contexts/drawer-context";
 import { useState } from "react";
-import { useTheme } from "../ThemeProvider";
 import { signOut } from "next-auth/react";
-import { Logo } from "../Logo";
-import { I18nMenu } from "../I18nMenu";
+import { Logo } from "@/components/Logo";
+import { I18nMenu } from "@/components/I18nMenu";
 import { ProfileMenu } from "./ProfileMenu";
 import { useMenuStore } from "@/stores/menuStore";
 import { useRouter } from "next/navigation";
-
+import { useTheme } from "@/components/ThemeProvider";
+import { useDrawerContext } from "./DrawerProvider";
 export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const { isOpened, toggleIsOpened } = useDrawerContext();
   const { theme, toggleTheme } = useTheme();

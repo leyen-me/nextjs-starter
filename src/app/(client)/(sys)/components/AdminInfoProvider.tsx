@@ -4,12 +4,11 @@ import { createContext, useContext } from "react";
 import { SysMenu, SysUser } from "@prisma/client";
 import { usePathname, useRouter } from "next/navigation";
 import { treeToMap } from "@/utils/tree";
-import { CONSTENTS_MENU_URL } from "@/contants";
+import { CONSTENTS_MENU_URL, LOGIN_URL } from "@/contants";
 import { useUserStore } from "@/stores/userStore";
 import { MenuWithChildren } from "@/app/(server)/(sys)/api/menu/[id]/route";
 import { UserInfo } from "@/app/(server)/(sys)/api/user/info/route";
 import Loading from "@/components/Loading";
-
 
 type AdminInfoProviderProps = {
   children: React.ReactNode;
@@ -38,11 +37,14 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
   const pathname = usePathname();
 
   useEffect(() => {
+
+
     const loadData = async () => {
+      
       try {
-        const { data:userInfo } = await api.get<UserInfo>("/api/user/info");
+        const { data: userInfo } = await api.get<UserInfo>("/api/user/info");
         userStore.setUser(userInfo);
-        
+
         const { data } = await api.get<MenuWithChildren[]>("/api/user/menu");
         const menuMap = treeToMap<MenuWithChildren>(data);
         const menuList = Array.from(menuMap.values());
@@ -51,7 +53,7 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
             url,
           } as MenuWithChildren);
         });
-       
+
         setMenuList(data);
         if (menuList.length === 0) {
           router.replace("/admin/login");

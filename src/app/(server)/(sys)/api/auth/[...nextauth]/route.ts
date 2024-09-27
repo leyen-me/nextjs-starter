@@ -7,6 +7,25 @@ import { prisma } from "@/libs/prisma"; // 你的数据库连接
 import { SysMenuType, SysUserStatus } from "@prisma/client";
 import type { AuthOptions } from "next-auth";
 import { UserInfo } from "../../user/info/route";
+import { SYS_AUTH_ERROR } from "@/contants";
+
+const findUserInfoByEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
+  // 从数据库中查找用户
+  const user = await prisma.sysUser.findUnique({
+    where: { email },
+  });
+  // 如果用户存在，比较密码
+  if (user) {
+    // 如果密码不匹配，返回null
+    if (!(await compare(password, user.password))) {
+      return null;
+    }
+  }
+  return user;
+};
 
 const findUserInfoByEmail = async (email: string) => {
   const findUserAuthority = async (userId: string) => {
@@ -49,13 +68,17 @@ const findUserInfoByEmail = async (email: string) => {
     return null;
   }
   user.password = "";
-  user.authorityList = await findUserAuthority(user.id);
+  if (user.superAdmin) {
+    user.authorityList = [];
+  } else {
+    user.authorityList = await findUserAuthority(user.id);
+  }
   return user;
 };
 
 const clearSession = (session: Session) => {
   if (session.user) {
-    session.user.email = null;
+    session.user = undefined;
   }
   return session;
 };
@@ -88,65 +111,60 @@ const authOptions: AuthOptions = {
         password: { label: "Email", type: "text" },
       },
       async authorize(credentials, req) {
+        if (!credentials) {
+          throw new Error(SYS_AUTH_ERROR.UNKNOWN_ERROR);
+        }
         // 如果邮箱为空，返回null
-        if (!credentials?.email) {
-          return null;
+        if (!credentials.email) {
+          throw new Error(SYS_AUTH_ERROR.ACCOUNT_NOT_EXIST);
         }
-
-        // 从数据库中查找用户
-        const user = await prisma.sysUser.findUnique({
-          where: { email: credentials.email },
-        });
-
-        // 如果用户存在，比较密码
-        if (user) {
-          if (user.status === SysUserStatus.DISABLED) {
-            return null;
-          }
-
-          const isPasswordValid = await compare(
-            credentials?.password || "",
-            user.password
-          );
-
-          // 如果密码不匹配，返回null
-          if (!isPasswordValid) {
-            return null;
-          }
-
-          // 如果密码匹配，返回用户信息
-          return {
-            id: user.id,
-            email: user.email,
-          };
+        const user = await findUserInfoByEmailAndPassword(
+          credentials.email,
+          credentials.password
+        );
+        if (user === null) {
+          throw new Error(SYS_AUTH_ERROR.ACCOUNT_NOT_EXIST);
         }
-
-        return null;
+        if (user.status === SysUserStatus.DISABLED) {
+          throw new Error(SYS_AUTH_ERROR.ACCOUNT_DISABLED);
+        }
+        return {
+          id: user.id,
+          email: user.email,
+        };
       },
     }),
   ],
   callbacks: {
+    // 第三方登录校验，用户手动触发
     async signIn({ account, profile }) {
       if (account?.provider === "github" || account?.provider === "google") {
-        const user = await prisma.sysUser.findUnique({
-          where: { email: profile?.email },
-        });
-        return !!user;
+        const userInfo = await findUserInfoByEmail(profile?.email || "");
+        return !!userInfo;
       }
       return true;
     },
+    // 无论是服务端还是客户端，都使用共同的session管理器
+    // 这里相当于用户验证拦截器，基于middleware的配置文件，会拦截所有的api请求和admin路由，当然会有白名单
     async session({ session, token }) {
-      const user = await findUserInfoByEmail(token.email || "");
-      if (!user) {
-        return clearSession(session);
+      try {
+        const userInfo = await findUserInfoByEmail(token.email || "");
+        // 用户未注册，或者用户已被注销，获取用户已被禁用
+        if (!userInfo) {
+          return {
+            ...clearSession(session),
+          };
+        }
+        return {
+          ...session,
+          user: userInfo,
+        };
+      } catch (error) {
+        // 数据库连接错误
+        return {
+          ...clearSession(session),
+        };
       }
-      if (user?.status === SysUserStatus.DISABLED) {
-        return clearSession(session);
-      }
-      return {
-        ...session,
-        user,
-      };
     },
   },
 };

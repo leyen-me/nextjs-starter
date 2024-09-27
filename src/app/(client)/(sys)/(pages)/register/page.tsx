@@ -13,9 +13,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FormHelperText from "@mui/material/FormHelperText";
 
 import { useToast } from "@/components/ToastProvider";
-import AuthBg from "@/components/auth/AuthBg";
 import api from "@/utils/request";
 import { useI18n } from "@/components/I18nProvider";
+import { AuthBg } from "../../components/AuthBg";
 
 function RegisterForm() {
   const [email, setEmail] = useState("");
@@ -146,5 +146,5 @@ export default function Register() {
     <Suspense>
       <RegisterForm />
     </Suspense>
-  )
+  );
 }

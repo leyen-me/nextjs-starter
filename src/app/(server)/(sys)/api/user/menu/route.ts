@@ -1,13 +1,13 @@
 import { prisma } from "@/libs/prisma";
-import { buildError, buildSuccess } from "@/utils/response";
+import { buildSuccess } from "@/utils/response";
 import { NextRequest, NextResponse } from "next/server";
-import { checkAuthority, getUser } from "@/utils/authUtil";
 import { flatToTree } from "@/utils/tree";
 import { SysMenuType } from "@prisma/client";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+async function handlerGet(req: NextRequest, res: NextResponse) {
   // 1.查询该用户所有角色的所以菜单
-  const { id: userId, superAdmin } = await getUser();
+  const { id: userId, superAdmin } = req.context.user;
 
   // 2.超级管理员直接返回所有菜单
   if (superAdmin) {
@@ -42,3 +42,5 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   return buildSuccess({ data: flatToTree(menus) });
 }
+
+export const GET = apiWrapper(handlerGet);

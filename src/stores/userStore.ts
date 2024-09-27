@@ -1,8 +1,8 @@
 import api from "@/utils/request";
-import { ResponseType } from "@/utils/response";
 import { create } from "zustand";
 import { UserInfo } from "@/app/(server)/(sys)/api/user/info/route";
 import { SysDetailUser } from "@/app/(client)/(sys)/(pages)/admin/account-setting/page";
+import { ResponseType } from "@/app/(server)/(sys)/types";
 
 type StoreUser = UserInfo;
 

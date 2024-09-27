@@ -1,5 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 
+/**
+ * 更新多对多关系
+ * 
+ * @param prisma
+ * @param params
+ */
 export async function updateManyToManyRelation<T extends { id: string }>(
     prisma: Omit<PrismaClient, any>,
     params: {

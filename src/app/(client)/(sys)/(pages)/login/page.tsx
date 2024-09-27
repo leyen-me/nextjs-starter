@@ -21,12 +21,13 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { useToast } from "@/components/ToastProvider";
-import { getPassword, savePassword } from "@/utils";
-import AuthBg from "@/components/auth/AuthBg";
+import { getPassword, savePassword } from "@/utils/localPass";
 import { useI18n } from "@/components/I18nProvider";
 import IconGoogle from "@/components/icons/IconGoogle";
 import IconGithub from "@/components/icons/IconGithub";
 import { I18nError } from "@/utils/error";
+import { SYS_AUTH_ERROR } from "@/contants";
+import { AuthBg } from "../../components/AuthBg";
 
 function LoginForm() {
   const { t } = useI18n();
@@ -70,13 +71,31 @@ function LoginForm() {
       callbackUrl,
       redirect: false,
     });
-    if (result?.error) {
+
+    if (!result) {
       setLoading(false);
-      showError(new I18nError("pages.login.invalidCredentials"));
+      showError(new I18nError("pages.login.unknownError"));
       return;
     }
-    setLoading(false);
+    if (result.error) {
+      switch (result.error) {
+        case SYS_AUTH_ERROR.ACCOUNT_NOT_EXIST:
+          showError(new I18nError("pages.login.accountNotExist"));
+          break;
+        case SYS_AUTH_ERROR.ACCOUNT_DISABLED:
+          showError(new I18nError("pages.login.accountDisabled"));
+          break;
+        case SYS_AUTH_ERROR.UNKNOWN_ERROR:
+          showError(new I18nError("pages.login.unknownError"));
+          break;
+        default:
+          showError(new I18nError("pages.login.unknownError"));
+      }
+      setLoading(false);
+      return;
+    }
 
+    setLoading(false);
     // 记住账号
     localStorage.setItem("email", email);
     // 记住密码

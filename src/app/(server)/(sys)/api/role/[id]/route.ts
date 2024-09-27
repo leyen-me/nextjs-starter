@@ -1,14 +1,16 @@
 import { prisma } from "@/libs/prisma";
-import { checkAuthority } from "@/utils/authUtil";
-import { updateManyToManyRelation } from "@/utils/relationUtils";
+import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
+import { updateManyToManyRelation } from "@/utils/relation";
 import { buildError, buildSuccess } from "@/utils/response";
 import { SysRole } from "@prisma/client";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
+import { NextRequest } from "next/server";
 
-export async function PUT(
-  req: Request,
+export async function handlerPut(
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  if (!(await checkAuthority("sys:role:edit"))) {
+  if (!(await checkAuthority(req, "sys:role:edit"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const { id } = params;
@@ -52,11 +54,11 @@ export async function PUT(
 
 // todo: 删除角色时，需要判断角色是否被用户关联
 // todo: 删除角色时，需要删除角色关联的菜单
-export async function DELETE(
-  req: Request,
+export async function handlerDelete(
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  if (!(await checkAuthority("sys:role:delete"))) {
+  if (!(await checkAuthority(req, "sys:role:delete"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const { id } = params;
@@ -73,11 +75,11 @@ export async function DELETE(
   return buildSuccess({ message: "server.common.delete.success" });
 }
 
-export async function GET(
-  req: Request,
+async function handlerGet(
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  if (!(await checkAuthority("sys:role:info"))) {
+  if (!(await checkAuthority(req, "sys:role:info"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const { id } = params;
@@ -112,3 +114,7 @@ export async function GET(
     return buildError({ message: "server.common.info.failed" });
   }
 }
+
+export const PUT = apiWrapper(handlerPut);
+export const DELETE = apiWrapper(handlerDelete);
+export const GET = apiWrapper(handlerGet);

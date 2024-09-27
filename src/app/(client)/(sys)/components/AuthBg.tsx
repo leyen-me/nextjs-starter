@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import { Logo } from "../Logo";
+import { Logo } from "@/components/Logo";
 
-export default function AuthBg() {
+export const AuthBg = () => {
   return (
     <div className="h-16 xl:h-full relative justify-center items-center flex xl:flex-1">
       <div className="w-full h-full login-background absolute top-0 left-0"></div>

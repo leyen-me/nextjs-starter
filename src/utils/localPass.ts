@@ -1,9 +1,9 @@
-import { AES, enc } from 'crypto-js';
+import { AES, enc } from "crypto-js";
 
 export const encryptPassword = (password: string): string => {
   const secretKey = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
   if (!secretKey) {
-    throw new Error('Encryption key is not set in environment variables');
+    throw new Error("Encryption key is not set in environment variables");
   }
   return AES.encrypt(password, secretKey).toString();
 };
@@ -11,7 +11,7 @@ export const encryptPassword = (password: string): string => {
 export const decryptPassword = (encryptedPassword: string): string => {
   const secretKey = process.env.NEXT_PUBLIC_PASSWORD_ENCRYPTION_KEY;
   if (!secretKey) {
-    throw new Error('Encryption key is not set in environment variables');
+    throw new Error("Encryption key is not set in environment variables");
   }
   const bytes = AES.decrypt(encryptedPassword, secretKey);
   return bytes.toString(enc.Utf8);

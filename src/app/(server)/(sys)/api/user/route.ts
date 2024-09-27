@@ -1,10 +1,12 @@
 import { prisma } from "@/libs/prisma";
-import { encryptPassword } from "@/utils";
-import { checkAuthority } from "@/utils/authUtil";
+import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
 import { buildError, buildSuccess } from "@/utils/response";
+import { NextRequest, NextResponse } from "next/server";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
+import { hash } from "bcrypt";
 
-export async function POST(req: Request) {
-  if (!(await checkAuthority("sys:user:add"))) {
+async function handlerPost(req: NextRequest, res: NextResponse) {
+  if (!(await checkAuthority(req, "sys:user:add"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const { roleIdList, ...data } = await req.json();
@@ -16,13 +18,13 @@ export async function POST(req: Request) {
   if (existingUser) {
     return buildError({ message: "server.auth.register.emailAlreadyExists" });
   }
-  data.password = encryptPassword(data.password);
+  data.password = await hash(data.password, 10);
   try {
     await prisma.$transaction(async (prisma) => {
       const user = await prisma.sysUser.create({
         data,
       });
-      await prisma.userRole.createMany({
+      await prisma.sysUserRole.createMany({
         data: roleIdList.map((roleId: string) => ({
           userId: user.id,
           roleId,
@@ -35,3 +37,5 @@ export async function POST(req: Request) {
   }
   return buildSuccess({ message: "server.common.create.success" });
 }
+
+export const POST = apiWrapper(handlerPost);

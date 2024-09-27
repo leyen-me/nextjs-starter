@@ -4,9 +4,9 @@ import { MenuItem } from "./MenuItem";
 import { usePathname, useRouter } from "next/navigation";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { LabelType, SysMenu, SysMenuOpenStyle } from "@prisma/client";
-import { isExternalUrl } from "@/utils/stringUtil";
+import { isExternalUrl } from "@/utils/string";
 import { useMenuStore } from "@/stores/menuStore";
-import { useI18n } from "../I18nProvider";
+import { useI18n } from "@/components/I18nProvider";
 
 const renderMenuItems = (items: SysMenu[], pathname: string, level = 0) => {
   return items.map(
@@ -14,12 +14,8 @@ const renderMenuItems = (items: SysMenu[], pathname: string, level = 0) => {
       name,
       nameType,
       url,
-      type,
       openStyle,
       icon,
-      sort,
-      createdAt,
-      // @ts-ignore
       children,
     }) => {
       const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +45,9 @@ const renderMenuItems = (items: SysMenu[], pathname: string, level = 0) => {
       // Check if any child route is active
       const isChildActive =
         hasChildren &&
-        children.some((child: SysMenu) => pathname.startsWith(child.url || "/"));
+        children.some((child: SysMenu) =>
+          pathname.startsWith(child.url || "/")
+        );
 
       // If a child is active, ensure the parent menu is open
       useEffect(() => {
@@ -62,7 +60,7 @@ const renderMenuItems = (items: SysMenu[], pathname: string, level = 0) => {
         if (pathname === url) {
           setHeader(nameType === LabelType.I18N ? t(name) : name);
         }
-      }, [pathname, url, name, nameType]);
+      }, [url, name, nameType, setHeader, t]);
 
       return (
         <div key={url}>

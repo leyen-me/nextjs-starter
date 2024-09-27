@@ -1,6 +1,8 @@
 export const RESPONSE_CODE = {
   SUCCESS: 200,
   ERROR: 500,
+  UNAUTHORIZED: 401,
+  NOT_FOUND: 404,
 };
 
 export const LANGUAGES = [
@@ -51,3 +53,13 @@ export const SYS_IMAGE_MIME_TYPE = {
 
 // 图片上传的文件大小
 export const SYS_IMAGE_MAX_SIZE = 10 * 1024 * 1024;
+
+// 登录页面
+export const LOGIN_URL = "/login";
+
+// 认证错误
+export const SYS_AUTH_ERROR = {
+  ACCOUNT_NOT_EXIST: "AccountNotExist",
+  ACCOUNT_DISABLED: "AccountDisabled",
+  UNKNOWN_ERROR: "UnknownError",
+};

@@ -1,23 +1,17 @@
 import { prisma } from "@/libs/prisma";
-import { checkAuthority } from "@/utils/authUtil";
-import { extractFiltersWithPagination } from "@/utils/extractFilters";
+import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
 import { Page } from "@/utils/request";
 import { buildError, buildSuccess } from "@/utils/response";
 import { SysRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
+import { getParams } from "@/utils/params";
 
-export type RolePageFilters = {
-  name?: string;
-};
-
-export async function GET(req: NextRequest, res: NextResponse) {
-  if (!(await checkAuthority("sys:role:page"))) {
+export async function handlerGet(req: NextRequest, res: NextResponse) {
+  if (!(await checkAuthority(req, "sys:role:page"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
-  const { page, pageSize, filters } = extractFiltersWithPagination(
-    req.url || "",
-    ["name"]
-  );
+  const { page, pageSize, ...filters } = getParams(req);
 
   const roles = await prisma.sysRole.findMany({
     skip: (Number(page) - 1) * Number(pageSize),
@@ -31,3 +25,5 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   return buildSuccess<Page<SysRole>>({ data: { total, data: roles } });
 }
+
+export const GET = apiWrapper(handlerGet);

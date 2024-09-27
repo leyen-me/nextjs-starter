@@ -15,7 +15,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { treeToMap } from "../utils/tree";
 import { TREE_ROOT_ID } from "@/contants";
 import { BaseFormError } from "./BaseFormError";
-import { isFunction } from "@/utils/funcUtils";
+import { isFunction } from "@/utils/func";
 
 export type TreeViewBaseItem = {
   id: string;

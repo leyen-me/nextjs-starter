@@ -6,13 +6,14 @@ import { Toolbar, Box, styled } from "@mui/material";
 import { Header } from "./Header";
 import { Drawer } from "./Drawer";
 import { Main } from "./Main";
-import { DrawerContextProvider } from "./contexts/drawer-context";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import api from "@/utils/request";
 import { useDictionaryStore } from "@/stores/dictionaryStore";
-import { useToast } from "../ToastProvider";
 import { GlobalConfig } from "@/app/(server)/(sys)/api/config/route";
+import { useToast } from "@/components/ToastProvider";
+import { DrawerProvider } from "./DrawerProvider";
+
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();
@@ -31,10 +32,10 @@ export const Layout = ({ children }: { children: ReactNode }) => {
       }
     };
     fetchConfig();
-  }, []);
+  }, [setDictMap, showError]);
 
   return (
-    <DrawerContextProvider>
+    <DrawerProvider>
       <div className="flex flex-col overflow-hidden h-full min-h-screen">
         <Header isLargeScreen={isLargeScreen} />
         <Toolbar />
@@ -43,6 +44,6 @@ export const Layout = ({ children }: { children: ReactNode }) => {
           <Main>{children}</Main>
         </div>
       </div>
-    </DrawerContextProvider>
+    </DrawerProvider>
   );
 };

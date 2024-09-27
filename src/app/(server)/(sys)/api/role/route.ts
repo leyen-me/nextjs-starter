@@ -1,13 +1,15 @@
 import { prisma } from "@/libs/prisma";
-import { checkAuthority } from "@/utils/authUtil";
+import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
 import { buildError, buildSuccess } from "@/utils/response";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  if (!(await checkAuthority("sys:role:add"))) {
+export async function handlerPost(req: NextRequest, res: NextResponse) {
+  if (!(await checkAuthority(req, "sys:role:add"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
   const data = await req.json();
-  const existingRole = await prisma.role.findUnique({
+  const existingRole = await prisma.sysRole.findUnique({
     where: {
       name: data.name,
     },
@@ -16,7 +18,7 @@ export async function POST(req: Request) {
     return buildError({ message: "server.role.create.nameAlreadyExists" });
   }
   try {
-    await prisma.role.create({
+    await prisma.sysRole.create({
       data,
     });
   } catch (error) {
@@ -25,3 +27,5 @@ export async function POST(req: Request) {
   }
   return buildSuccess({ message: "server.common.create.success" });
 }
+
+export const POST = apiWrapper(handlerPost);

@@ -1,8 +1,9 @@
-import { LabelType } from "@/contants";
 import { prisma } from "@/libs/prisma";
-import { checkAuthority } from "@/utils/authUtil";
+import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
 import { buildError, buildSuccess } from "@/utils/response";
+import { LabelType } from "@prisma/client";
 import { NextRequest } from "next/server";
+import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
 
 export type DictItem = {
   label: string;
@@ -29,7 +30,7 @@ export type GlobalConfig = {
   dictMap: DictMap;
 };
 
-export async function GET(request: NextRequest) {
+async function handlerGet(request: NextRequest) {
   const config = await prisma.sysConfig.findFirst();
   if (!config) {
     return buildError({ message: "server.config.notFound" });
@@ -37,11 +38,11 @@ export async function GET(request: NextRequest) {
   return buildSuccess({ data: config.config as GlobalConfig });
 }
 
-export async function PUT(request: NextRequest) {
-  if (!(await checkAuthority("sys:config:edit"))) {
+async function handlerPut(req: NextRequest) {
+  if (!(await checkAuthority(req, "sys:config:edit"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
-  const config = await request.json();
+  const config = await req.json();
   const existingConfig = await prisma.sysConfig.findFirst();
   if (existingConfig) {
     await prisma.sysConfig.update({
@@ -56,3 +57,6 @@ export async function PUT(request: NextRequest) {
     message: "server.common.update.success",
   });
 }
+
+export const GET = apiWrapper(handlerGet);
+export const PUT = apiWrapper(handlerPut);

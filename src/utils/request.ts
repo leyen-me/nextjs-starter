@@ -1,5 +1,6 @@
+import { RESPONSE_CODE } from "@/contants";
 import { I18nError } from "./error";
-import { ResponseType } from "./response";
+import { ResponseType } from "@/app/(server)/(sys)/types";
 
 export type Page<T> = {
   total: number;
@@ -44,20 +45,24 @@ class ApiClient {
     };
 
     const response = await fetch(url, config);
-    if (response.status === 404) {
-      throw new I18nError("404");
-    }
     let responseData = null as unknown as ResponseType<T>;
-    try {
+
+    // todo:请求404
+    if (response.status === RESPONSE_CODE.NOT_FOUND) {
+      // 网络正常，请求404
+      throw new I18nError("server.common.error.notFound");
+    } else if (response.status === RESPONSE_CODE.SUCCESS) {
+      // 网络正常，判断逻辑错误
       responseData = await response.json();
-      if (response.status === 500) {
+      if (responseData.code !== RESPONSE_CODE.SUCCESS) {
         throw new I18nError(responseData.message);
       }
-    } catch (error) {
-      if(error instanceof I18nError) {
-        throw error;
-      }
+    } else if (response.status === RESPONSE_CODE.ERROR) {
+      // 网络正常，系统错误
       throw new I18nError("server.common.error.internalServerError");
+    } else {
+      // 网络错误
+      throw new I18nError("server.common.error.networkError");
     }
     return responseData;
   }

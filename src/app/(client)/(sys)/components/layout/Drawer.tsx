@@ -1,15 +1,13 @@
 import {
-  useMediaQuery,
-  useTheme,
   Drawer as MuiDrawer,
   styled,
   Box,
   Divider,
 } from "@mui/material";
-import { useDrawerContext } from "./contexts/drawer-context";
+import { useDrawerContext } from "./DrawerProvider";
 import { MenuItemsList } from "./MenuItemsList";
-import { Logo } from "../Logo";
 import { useEffect } from "react";
+import { Logo } from "@/components/Logo";
 
 const StyledDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "isOpened",

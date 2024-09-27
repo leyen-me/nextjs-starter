@@ -15,9 +15,7 @@ type DrawerContextProviderProps = {
 
 const DrawerContext = createContext<DrawerContextType | undefined>(undefined);
 
-export const DrawerContextProvider = ({
-  children,
-}: DrawerContextProviderProps) => {
+export const DrawerProvider = ({ children }: DrawerContextProviderProps) => {
   const [isOpened, toggleIsOpened] = useState(false);
   const { menuList } = useMenuContext();
 
@@ -27,7 +25,7 @@ export const DrawerContextProvider = ({
       toggleIsOpened,
       menu: menuList,
     }),
-    [isOpened]
+    [isOpened, menuList]
   );
 
   return (
