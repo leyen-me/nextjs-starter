@@ -1,7 +1,6 @@
 "use client";
 
 import { useI18n } from "@/components/I18nProvider";
-import { useUserStore } from "@/stores/userStore";
 import {
   Avatar,
   Box,
@@ -20,10 +19,14 @@ import api from "@/utils/request";
 import { useToast } from "@/components/ToastProvider";
 import { I18nError } from "@/utils/error";
 import { SysUserGender, SysImage, SysUser } from "@prisma/client";
-import { DICT_KEYS, SYS_IMAGE_MAX_SIZE, SYS_IMAGE_MIME_TYPE } from "@/contants";
+import { DICT_KEYS } from "@/contants";
 import { useRouter } from "next/navigation";
 import { BaseDictSelect } from "@/components/BaseDictSelect";
 import { validateEmail } from "@/utils/validate";
+import { useUserStore } from "@/app/(client)/(sys)/stores/userStore";
+import { SYS_IMAGE_MIME_TYPE, SYS_IMAGE_MAX_SIZE } from "@/app/(client)/(sys)/constans";
+import { signOut } from "next-auth/react";
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -177,7 +180,7 @@ export default function AccountSettingPage() {
         const res = await userStore.updatePassword(passwordState.password);
         showSuccess(res);
         // 重新登录
-        router.push("/login");
+        signOut();
       } catch (error: any) {
         showError(error);
       }

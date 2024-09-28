@@ -48,7 +48,7 @@ export const Drawer = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
     >
       {!isLargeScreen && (
         <Box className="w-full h-14 px-4" sx={{ color: "primary.textColor" }}>
-          <Logo height="46%" />
+          <Logo mode="header" />
           <Divider />
         </Box>
       )}

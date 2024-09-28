@@ -26,8 +26,8 @@ import { useI18n } from "@/components/I18nProvider";
 import IconGoogle from "@/components/icons/IconGoogle";
 import IconGithub from "@/components/icons/IconGithub";
 import { I18nError } from "@/utils/error";
-import { SYS_AUTH_ERROR } from "@/contants";
 import { AuthBg } from "../../components/AuthBg";
+import { SYS_AUTH_ERROR } from "@/app/(client)/(sys)/constans";
 
 function LoginForm() {
   const { t } = useI18n();

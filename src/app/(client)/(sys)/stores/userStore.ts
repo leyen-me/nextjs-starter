@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { UserInfo } from "@/app/(server)/(sys)/api/user/info/route";
 import { SysDetailUser } from "@/app/(client)/(sys)/(pages)/admin/account-setting/page";
 import { ResponseType } from "@/app/(server)/(sys)/types";
+import { SYS_DEFAULT_USER_AVATAR } from "@/app/(client)/(sys)/constans";
 
 type StoreUser = UserInfo;
 
@@ -21,7 +22,7 @@ interface UserState {
 export const useUserStore = create<UserState>()((set, get) => ({
   user: {
     id: "",
-    avatar: "/assets/jpegs/user.jpg",
+    avatar: SYS_DEFAULT_USER_AVATAR,
     superAdmin: false,
     authorityList: [],
   },

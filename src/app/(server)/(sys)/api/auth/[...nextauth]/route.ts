@@ -7,7 +7,8 @@ import { prisma } from "@/libs/prisma"; // 你的数据库连接
 import { SysMenuType, SysUserStatus } from "@prisma/client";
 import type { AuthOptions } from "next-auth";
 import { UserInfo } from "../../user/info/route";
-import { SYS_AUTH_ERROR } from "@/contants";
+import { LOGIN_URL } from "@/contants";
+import { SYS_AUTH_ERROR } from "@/app/(client)/(sys)/constans";
 
 const findUserInfoByEmailAndPassword = async (
   email: string,
@@ -90,7 +91,7 @@ const authOptions: AuthOptions = {
   },
   // 登录页面
   pages: {
-    signIn: "/login",
+    signIn: LOGIN_URL,
   },
   providers: [
     // https://github.com/settings/applications/new

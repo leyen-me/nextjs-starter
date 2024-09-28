@@ -1,6 +1,6 @@
-import { useDictionaryStore } from "@/stores/dictionaryStore";
 import { Chip } from "@mui/material";
 import { useI18n } from "./I18nProvider";
+import { useDictStore } from "@/app/(client)/(sys)/stores/dictStore";
 
 export function BaseDictTag({
   dictKey,
@@ -10,7 +10,7 @@ export function BaseDictTag({
   value: string;
 }) {
   const { t } = useI18n();
-  const { getDictItem } = useDictionaryStore();
+  const { getDictItem } = useDictStore();
   const Item = getDictItem(dictKey, value);
   return (
     <Chip

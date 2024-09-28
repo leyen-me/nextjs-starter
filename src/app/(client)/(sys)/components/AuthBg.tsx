@@ -5,17 +5,19 @@ import { Logo } from "@/components/Logo";
 export const AuthBg = () => {
   return (
     <div className="h-16 xl:h-full relative justify-center items-center flex xl:flex-1">
-      <div className="w-full h-full login-background absolute top-0 left-0"></div>
-      <div className="w-full h-16 absolute top-0 left-0 px-6">
-        <Logo height="36%" />
-      </div>
+      {/* background */}
       <Image
-        className="hidden xl:block z-10"
-        src="/assets/svgs/assets-login-bg.svg"
-        width={500}
-        height={500}
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        src="/assets/jpg/assets-default-login-bg.jpg"
+        width={1932}
+        height={1080}
         alt="login"
       />
+
+      {/* header */}
+      <div className="w-full h-16 absolute top-0 left-0 px-6 text-white">
+        <Logo mode="header" />
+      </div>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import { useDictionaryStore } from "@/stores/dictionaryStore";
 import {
   FormControl,
   InputLabel,
@@ -10,6 +9,7 @@ import { useI18n } from "./I18nProvider";
 import { BaseFormError } from "./BaseFormError";
 import { DictItem } from "@/app/(server)/(sys)/api/config/route";
 import { LabelType } from "@prisma/client";
+import { useDictStore } from "@/app/(client)/(sys)/stores/dictStore";
 
 type BaseDictSelectProps = {
   dictKey: string;
@@ -39,7 +39,7 @@ export function BaseDictSelect({
   allowAll = true,
 }: BaseDictSelectProps) {
   const { t } = useI18n();
-  const { getDictItems } = useDictionaryStore();
+  const { getDictItems } = useDictStore();
 
   return (
     <FormControl

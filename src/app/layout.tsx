@@ -7,15 +7,16 @@ import { ToastProvider } from "@/components/ToastProvider";
 import { I18nProvider } from "@/components/I18nProvider";
 import { HtmlProvider } from "@/components/HtmlProvide";
 import { SessionProvider } from "@/components/SessionProvider";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/contants";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Next.js Admin",
-    template: "%s | Next.js Admin",
+    default: SITE_TITLE,
+    template: "%s | " + SITE_TITLE,
   },
-  description: "Next.js Admin",
+  description: SITE_DESCRIPTION,
 };
 
 export default function RootLayout({

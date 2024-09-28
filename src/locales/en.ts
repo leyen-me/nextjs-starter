@@ -269,5 +269,19 @@ export default {
         label: "Password",
       },
     },
+    accountDeactivated: {
+      title: "Account Deactivated",
+      description: "Your account has been deactivated. Please contact support for more information.",
+      button: {
+        back: "Back",
+      },
+    },
+    accountClosed: {
+      title: "Account Closed or Not Registered",
+      description: "Your account has been closed or is not registered. Please contact support for more information.",
+      button: {
+        back: "Back",
+      },
+    },
   },
 };

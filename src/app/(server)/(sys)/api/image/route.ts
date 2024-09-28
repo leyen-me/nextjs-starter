@@ -1,9 +1,9 @@
-import { SYS_IMAGE_MAX_SIZE, SYS_IMAGE_MIME_TYPE } from "@/contants";
 import { prisma } from "@/libs/prisma";
 import { buildError, buildSuccess } from "@/utils/response";
 import { SysImageMimeType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
+import { SYS_IMAGE_MIME_TYPE, SYS_IMAGE_MAX_SIZE } from "@/app/(client)/(sys)/constans";
 
 async function handlerPost(req: NextRequest, res: NextResponse) {
   const formData = await req.formData();

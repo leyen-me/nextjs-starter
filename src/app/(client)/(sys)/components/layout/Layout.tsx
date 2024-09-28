@@ -9,16 +9,16 @@ import { Main } from "./Main";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material";
 import api from "@/utils/request";
-import { useDictionaryStore } from "@/stores/dictionaryStore";
 import { GlobalConfig } from "@/app/(server)/(sys)/api/config/route";
 import { useToast } from "@/components/ToastProvider";
 import { DrawerProvider } from "./DrawerProvider";
+import { useDictStore } from "@/app/(client)/(sys)/stores/dictStore";
 
 
 export const Layout = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
-  const { setDictMap } = useDictionaryStore();
+  const { setDictMap } = useDictStore();
   const { showError } = useToast();
 
   useEffect(() => {

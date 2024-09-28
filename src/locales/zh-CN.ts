@@ -269,5 +269,19 @@ export default {
         label: "密码",
       },
     },
+    accountDeactivated: {
+      title: "账户已停用",
+      description: "您的账户已被停用。请联系支持以获取更多信息。",
+      button: {
+        back: "返回",
+      },
+    },
+    accountClosed: {
+      title: "账号已注销或未注册",
+      description: "您的账号已注销或未注册。请联系支持以获取更多信息。",
+      button: {
+        back: "返回",
+      },
+    },
   },
 };

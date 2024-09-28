@@ -5,8 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { LabelType, SysMenu, SysMenuOpenStyle } from "@prisma/client";
 import { isExternalUrl } from "@/utils/string";
-import { useMenuStore } from "@/stores/menuStore";
 import { useI18n } from "@/components/I18nProvider";
+import { useMenuStore } from "@/app/(client)/(sys)/stores/menuStore";
 
 const renderMenuItems = (items: SysMenu[], pathname: string, level = 0) => {
   return items.map(

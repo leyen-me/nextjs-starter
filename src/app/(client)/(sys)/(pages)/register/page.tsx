@@ -16,6 +16,7 @@ import { useToast } from "@/components/ToastProvider";
 import api from "@/utils/request";
 import { useI18n } from "@/components/I18nProvider";
 import { AuthBg } from "../../components/AuthBg";
+import { LOGIN_URL } from "@/contants";
 
 function RegisterForm() {
   const [email, setEmail] = useState("");
@@ -129,7 +130,7 @@ function RegisterForm() {
             <div className="flex justify-between items-center mt-2">
               <Typography variant="body2">
                 {t("pages.register.haveAccount")}{" "}
-                <Link href="/login" className="text-blue-500">
+                <Link href={LOGIN_URL} className="text-blue-500">
                   {t("pages.register.signin")}
                 </Link>
               </Typography>

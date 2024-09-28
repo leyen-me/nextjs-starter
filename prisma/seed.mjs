@@ -112,26 +112,26 @@ const initSysConfig = async () => {
 
 const SYS_USERS = [
   {
-    id: "1",
+    id: "a",
     nickname: "a",
-    avatar: "/assets/jpegs/user.jpg",
+    avatar: "/assets/jpg/assets-default-avatar.jpg",
     email: "a@a.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
     superAdmin: true,
     gender: "MALE",
   },
   {
-    id: "system",
+    id: "b",
     nickname: "b",
-    avatar: "/assets/jpegs/user.jpg",
+    avatar: "/assets/jpg/assets-default-avatar.jpg",
     email: "b@b.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
     gender: "MALE",
   },
   {
-    id: "3",
+    id: "c",
     nickname: "c",
-    avatar: "/assets/jpegs/user.jpg",
+    avatar: "/assets/jpg/assets-default-avatar.jpg",
     email: "c@c.com",
     password: "$2b$10$okTMFKA2RCJQDW4pA06yqOpaCuSWgeIpZKCR6pAN5XI4tdC3RMU/.",
     gender: "MALE",
@@ -181,12 +181,17 @@ const initSysRole = async () => {
 const SYS_USER_ROLES = [
   {
     id: "1",
-    userId: "1",
+    userId: "b",
     roleId: "admin",
   },
   {
-    id: "system",
-    userId: "1",
+    id: "2",
+    userId: "b",
+    roleId: "user",
+  },
+  {
+    id: "3",
+    userId: "c",
     roleId: "user",
   },
 ];

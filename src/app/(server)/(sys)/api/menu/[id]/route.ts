@@ -1,13 +1,8 @@
 import { prisma } from "@/libs/prisma";
 import checkAuthority from "@/app/(server)/(sys)/utils/checkAuthority";
 import { buildError, buildSuccess } from "@/utils/response";
-import { SysMenu } from "@prisma/client";
 import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
 import { NextRequest } from "next/server";
-
-export type MenuWithChildren = SysMenu & {
-  children: MenuWithChildren[];
-};
 
 async function handlerPut(
   req: NextRequest,

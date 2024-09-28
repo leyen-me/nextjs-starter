@@ -1,5 +1,5 @@
-import { useUserStore } from "@/stores/userStore";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useUserStore } from "@/app/(client)/(sys)/stores/userStore";
 
 type BaseAuthorityProps = {
   children: React.ReactNode;

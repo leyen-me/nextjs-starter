@@ -13,10 +13,11 @@ import { signOut } from "next-auth/react";
 import { Logo } from "@/components/Logo";
 import { I18nMenu } from "@/components/I18nMenu";
 import { ProfileMenu } from "./ProfileMenu";
-import { useMenuStore } from "@/stores/menuStore";
 import { useRouter } from "next/navigation";
 import { useTheme } from "@/components/ThemeProvider";
 import { useDrawerContext } from "./DrawerProvider";
+import { useMenuStore } from "@/app/(client)/(sys)/stores/menuStore";
+
 export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
   const { isOpened, toggleIsOpened } = useDrawerContext();
   const { theme, toggleTheme } = useTheme();
@@ -44,7 +45,7 @@ export const Header = ({ isLargeScreen }: { isLargeScreen: boolean }) => {
         <div className="w-full h-full flex justify-between">
           {/* Toggle button for opening/closing the drawer */}
           <div className="flex items-center gap-2">
-            {isLargeScreen && <Logo height="56%" />}
+            {isLargeScreen && <Logo mode="header" />}
             {!isLargeScreen && (
               <>
                 <IconButton
