@@ -18,7 +18,7 @@ import { useState } from "react";
 import api from "@/utils/request";
 import { useToast } from "@/components/ToastProvider";
 import { I18nError } from "@/utils/error";
-import { SysUserGender, SysImage, SysUser } from "@prisma/client";
+import { SysUserGender, SysImage, SysUser, SysDetailUser } from "@prisma/client";
 import { DICT_KEYS } from "@/contants";
 import { useRouter } from "next/navigation";
 import { BaseDictSelect } from "@/components/BaseDictSelect";
@@ -88,11 +88,6 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
-
-export type SysDetailUser = Omit<
-  SysUser,
-  "id" | "createdAt" | "superAdmin" | "status" | "password" | "avatar"
->;
 
 export default function AccountSettingPage() {
   const profileHeight = "400px";
@@ -342,6 +337,7 @@ export default function AccountSettingPage() {
                     label={t("pages.register.password")}
                     name="password"
                     type="password"
+                    autoComplete="password"
                     value={passwordState.password || ""}
                     onChange={handlePasswordChange}
                     variant="outlined"
@@ -353,6 +349,7 @@ export default function AccountSettingPage() {
                     label={t("pages.register.confirmPassword")}
                     name="confirmPassword"
                     type="password"
+                    autoComplete="confirmPassword"
                     value={passwordState.confirmPassword || ""}
                     onChange={handlePasswordChange}
                     error={!!passwordErrors.confirmPassword}
@@ -432,10 +429,10 @@ export default function AccountSettingPage() {
                         name="gender"
                         size="medium"
                         allowAll={false}
-                        value={detailState.gender || ""}
+                        value={detailState.gender}
                         error={!!detailErrors.gender}
                         helperText={detailErrors.gender}
-                        onChange={handleDetailChange as any}
+                        onChange={handleDetailChange}
                         dictKey={DICT_KEYS.SysUserGender}
                       />
                     </Grid>

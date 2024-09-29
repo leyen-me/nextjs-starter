@@ -4,6 +4,17 @@ English | [简体中文](./README-zh_CN.md)
 
 A lightweight Next.js starter template designed for building efficient admin dashboards. This template provides you with a modern starting point for your management interface, including basic functionalities and common best practices to help you quickly begin developing your management system.
 
+## Demo
+
+You can access the demo version via the following link:
+
+[Demo Link](https://nextjs-starter.leyen.me)
+
+Log in using the following account information:
+
+- **Account**: a@a.com
+- **Password**: 123
+
 ## Features
 
 - **Next.js**: Leverage Next.js server-side rendering and static generation to enhance application performance and SEO.
@@ -63,31 +74,6 @@ Start the production server:
 
 ```bash
 npm start
-```
-
-## Directory Structure
-
-```plaintext
-nextjs-starter/
-├── public/              # Public static files
-├── src/                 # Source code
-│   ├── components/      # Shared components
-│   ├── pages/           # Page files
-│   ├── styles/          # Style files
-│   └── utils/           # Utility tools
-├── .env.example         # Environment variable example
-├── next.config.js       # Next.js configuration file
-├── package.json         # Project description and dependencies
-└── README.md            # Project documentation
-```
-
-## Configuration
-
-Copy the `.env.example` file in the root directory to `.env`, and configure the environment variables as needed:
-
-```env
-DATABASE_URL=your-database-url
-SECRET_KEY=your-secret-key
 ```
 
 ## Contributing

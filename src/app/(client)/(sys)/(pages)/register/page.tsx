@@ -51,9 +51,7 @@ function RegisterForm() {
 
   const validatePassword = () => {
     if (password !== confirmPassword) {
-      setPasswordError(
-        t("pages.register.passwordMismatch") || "Passwords do not match"
-      );
+      setPasswordError(t("pages.register.passwordMismatch"));
     } else {
       setPasswordError("");
     }

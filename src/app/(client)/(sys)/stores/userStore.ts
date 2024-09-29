@@ -1,9 +1,9 @@
 import api from "@/utils/request";
 import { create } from "zustand";
 import { UserInfo } from "@/app/(server)/(sys)/api/user/info/route";
-import { SysDetailUser } from "@/app/(client)/(sys)/(pages)/admin/account-setting/page";
 import { ResponseType } from "@/app/(server)/(sys)/types";
 import { SYS_DEFAULT_USER_AVATAR } from "@/app/(client)/(sys)/constans";
+import { SysDetailUser } from "@prisma/client";
 
 type StoreUser = UserInfo;
 

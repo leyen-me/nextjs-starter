@@ -7,7 +7,7 @@ import { prisma } from "@/libs/prisma"; // 你的数据库连接
 import { SysMenuType, SysUserStatus } from "@prisma/client";
 import type { AuthOptions } from "next-auth";
 import { UserInfo } from "../../user/info/route";
-import { LOGIN_URL } from "@/contants";
+import { LOGIN_ERROR_URL, LOGIN_URL } from "@/contants";
 import { SYS_AUTH_ERROR } from "@/app/(client)/(sys)/constans";
 
 const findUserInfoByEmailAndPassword = async (
@@ -92,6 +92,7 @@ const authOptions: AuthOptions = {
   // 登录页面
   pages: {
     signIn: LOGIN_URL,
+    error: LOGIN_ERROR_URL,
   },
   providers: [
     // https://github.com/settings/applications/new
@@ -119,29 +120,51 @@ const authOptions: AuthOptions = {
         if (!credentials.email) {
           throw new Error(SYS_AUTH_ERROR.ACCOUNT_NOT_EXIST);
         }
-        const user = await findUserInfoByEmailAndPassword(
+        const userInfo = await findUserInfoByEmailAndPassword(
           credentials.email,
           credentials.password
         );
-        if (user === null) {
+        if (userInfo === null) {
           throw new Error(SYS_AUTH_ERROR.ACCOUNT_NOT_EXIST);
         }
-        if (user.status === SysUserStatus.DISABLED) {
+        if (userInfo.status === SysUserStatus.DISABLED) {
           throw new Error(SYS_AUTH_ERROR.ACCOUNT_DISABLED);
         }
         return {
-          id: user.id,
-          email: user.email,
+          id: userInfo.id,
+          email: userInfo.email,
         };
       },
     }),
   ],
   callbacks: {
-    // 第三方登录校验，用户手动触发
+    /**
+     * This callback is called whenever a user tries to sign in.
+     * It checks if the user exists and if their account is enabled.
+     * If the user is signing in with GitHub or Google, it verifies the user's email.
+     * If the user does not exist or their account is disabled, it throws an error.
+     * Otherwise, it allows the sign-in process to continue.
+     *
+     * @param {Object} params - The parameters for the signIn callback.
+     * @param {Object} params.account - The account information of the user.
+     * @param {Object} params.profile - The profile information of the user.
+     * @returns {boolean} - Returns true if the sign-in process should continue, otherwise throws an error.
+     */
     async signIn({ account, profile }) {
-      if (account?.provider === "github" || account?.provider === "google") {
-        const userInfo = await findUserInfoByEmail(profile?.email || "");
-        return !!userInfo;
+      if (account) {
+        if (account.provider === "github" || account.provider === "google") {
+          const userInfo = await findUserInfoByEmail(profile?.email || "");
+          if (!userInfo) {
+            throw new Error(SYS_AUTH_ERROR.ACCOUNT_NOT_EXIST);
+          }
+          if (userInfo.status === SysUserStatus.DISABLED) {
+            throw new Error(SYS_AUTH_ERROR.ACCOUNT_DISABLED);
+          }
+          return !!userInfo;
+        }
+      } else {
+        // no account
+        return false;
       }
       return true;
     },

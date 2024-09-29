@@ -6,7 +6,8 @@ export const SITE_TITLE = "Nextjs Starter";
 /**
  * The description of the site displayed in the browser tab and used in various parts of the application.
  */
-export const SITE_DESCRIPTION = "Next, React Tailwind Admin Dashboard Template with Material-UI nextjs admin starter";
+export const SITE_DESCRIPTION =
+  "Next, React Tailwind Admin Dashboard Template with Material-UI nextjs admin starter";
 
 /**
  * HTTP response codes used in the application
@@ -83,7 +84,7 @@ export const TREE_ROOT_ID = "0";
  * Dictionary keys for various system enums and constants
  * These keys are used to access specific dictionaries or enumerations
  * throughout the application, ensuring consistency in naming and usage
- * 
+ *
  * LabelType: Types of labels (e.g., text, i18n)
  * SysUserGender: User gender options
  * SysUserStatus: User account status options
@@ -105,6 +106,13 @@ export const DICT_KEYS = {
  * or when users need to sign in to access certain features
  */
 export const LOGIN_URL = "/login";
+
+/**
+ * URL for the login error page
+ * This constant defines the path to the login error page in the application
+ * It is used for redirecting users to the login error page when an error occurs during login
+ */
+export const LOGIN_ERROR_URL = "/account-error";
 
 /**
  * URL for the account deactivated page

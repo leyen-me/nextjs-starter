@@ -5,12 +5,6 @@
 :root {
   --loading-element-color-1: #fff;
   --loading-element-color-2: rgb(61, 217, 235);
-  --login-background: radial-gradient(
-      rgb(210, 241, 223),
-      rgb(211, 215, 250),
-      rgb(186, 216, 244)
-    )
-    0% 0% / 400% 400%;
 }
 
 @keyframes gradient {
@@ -94,11 +88,7 @@
 }
 
 @layer utilities {
-  .login-background {
-    opacity: 0.3;
-    background: var(--login-background);
-    animation: 15s ease 0s infinite normal none running gradient;
-  }
+
 }
 
 html,

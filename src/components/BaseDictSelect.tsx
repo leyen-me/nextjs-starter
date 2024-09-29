@@ -10,6 +10,7 @@ import { BaseFormError } from "./BaseFormError";
 import { DictItem } from "@/app/(server)/(sys)/api/config/route";
 import { LabelType } from "@prisma/client";
 import { useDictStore } from "@/app/(client)/(sys)/stores/dictStore";
+import { SyntheticEvent } from "react";
 
 type BaseDictSelectProps = {
   dictKey: string;
@@ -21,8 +22,8 @@ type BaseDictSelectProps = {
   error?: boolean;
   helperText?: string;
   fullWidth?: boolean;
-  
-  onChange: (e: SelectChangeEvent<string>) => void;
+
+  onChange: (e: SyntheticEvent) => void;
   onBlur?: () => void;
 };
 export function BaseDictSelect({
@@ -33,10 +34,11 @@ export function BaseDictSelect({
   fullWidth = true,
   error = false,
   helperText = "",
-  onChange,
-  onBlur,
   size = "small",
   allowAll = true,
+
+  onChange,
+  onBlur,
 }: BaseDictSelectProps) {
   const { t } = useI18n();
   const { getDictItems } = useDictStore();
@@ -54,7 +56,7 @@ export function BaseDictSelect({
         label={label}
         name={name}
         value={value}
-        onChange={(e) => onChange(e)}
+        onChange={(e) => onChange(e as any)}
         onBlur={onBlur}
       >
         {allowAll && <MenuItem value="">{t("common.dict.all")}</MenuItem>}

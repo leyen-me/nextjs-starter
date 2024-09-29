@@ -4,6 +4,17 @@
 
 一个轻量级的Next.js启动模板，专为构建高效的管理后台而设计。这个模板为你提供了一个现代化的管理界面起点，包含了基本的功能和常用的最佳实践，帮助你快速开始开发你的管理系统。
 
+## 演示
+
+你可以通过以下链接访问演示版本：
+
+[演示链接](https://nextjs-starter.leyen.me)
+
+使用以下账户信息登录：
+
+- **账户**: a@a.com
+- **密码**: 123
+
 ## 特性
 
 - **Next.js**：利用Next.js的服务器端渲染和静态生成，提升应用性能和SEO。
@@ -63,31 +74,6 @@ npm run build
 
 ```bash
 npm start
-```
-
-## 目录结构
-
-```plaintext
-nextjs-starter/
-├── public/              # 公共静态文件
-├── src/                 # 源代码
-│   ├── components/      # 共享组件
-│   ├── pages/           # 页面文件
-│   ├── styles/          # 样式文件
-│   └── utils/           # 实用工具
-├── .env.example         # 环境变量示例
-├── next.config.js       # Next.js 配置文件
-├── package.json         # 项目描述和依赖
-└── README.md            # 项目说明
-```
-
-## 配置
-
-在根目录下复制 `.env.example` 文件为 `.env`，并根据需要配置环境变量：
-
-```env
-DATABASE_URL=your-database-url
-SECRET_KEY=your-secret-key
 ```
 
 ## 贡献

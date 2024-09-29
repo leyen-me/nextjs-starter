@@ -14,9 +14,3 @@ declare module "next/server" {
     };
   }
 }
-
-declare module "@prisma/client" {
-  export type SysMenu = SysMenu & {
-    children: SysMenu[];
-  };
-}
