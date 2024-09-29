@@ -5,8 +5,9 @@ import { SYS_AUTH_ERROR } from "../../constans";
 import AccountClosed from "../account-closed/page";
 import AccountDeactivated from "../account-deactivated/page";
 import { LOGIN_URL } from "@/contants";
+import { Suspense } from "react";
 
-export default function AccountErrorPage() {
+function AccountError() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
   const router = useRouter();
@@ -19,4 +20,13 @@ export default function AccountErrorPage() {
     router.replace(LOGIN_URL);
   }
   return <></>;
+}
+
+export default function AccountErrorPage() {
+  return (
+    // You could have a loading skeleton as the `fallback` too
+    <Suspense>
+      <AccountError />
+    </Suspense>
+  );
 }
