@@ -92,7 +92,7 @@ const authOptions: AuthOptions = {
   // 登录页面
   pages: {
     signIn: LOGIN_URL,
-    error: LOGIN_ERROR_URL,
+    // error: LOGIN_ERROR_URL,
   },
   providers: [
     // https://github.com/settings/applications/new
