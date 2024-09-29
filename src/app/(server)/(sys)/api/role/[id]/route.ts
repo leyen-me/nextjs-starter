@@ -6,7 +6,7 @@ import { SysRole } from "@prisma/client";
 import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
 import { NextRequest } from "next/server";
 
-export async function handlerPut(
+async function handlerPut(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
@@ -54,7 +54,7 @@ export async function handlerPut(
 
 // todo: 删除角色时，需要判断角色是否被用户关联
 // todo: 删除角色时，需要删除角色关联的菜单
-export async function handlerDelete(
+async function handlerDelete(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {

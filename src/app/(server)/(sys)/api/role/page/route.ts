@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
 import { getParams } from "@/utils/params";
 
-export async function handlerGet(req: NextRequest, res: NextResponse) {
+async function handlerGet(req: NextRequest, res: NextResponse) {
   if (!(await checkAuthority(req, "sys:role:page"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }

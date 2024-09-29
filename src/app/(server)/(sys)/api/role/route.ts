@@ -4,7 +4,7 @@ import { buildError, buildSuccess } from "@/utils/response";
 import apiWrapper from "@/app/(server)/(sys)/utils/apiWrapper";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function handlerPost(req: NextRequest, res: NextResponse) {
+async function handlerPost(req: NextRequest, res: NextResponse) {
   if (!(await checkAuthority(req, "sys:role:add"))) {
     return buildError({ message: "server.auth.authority.insufficient" });
   }
