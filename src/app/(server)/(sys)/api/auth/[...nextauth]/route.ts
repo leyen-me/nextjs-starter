@@ -92,8 +92,9 @@ const authOptions: AuthOptions = {
   // 登录页面
   pages: {
     signIn: LOGIN_URL,
-    // error: LOGIN_ERROR_URL,
+    error: LOGIN_ERROR_URL,
   },
+  secret: process.env.NEXTAUTH_SECRET as string,
   providers: [
     // https://github.com/settings/applications/new
     GithubProvider({
