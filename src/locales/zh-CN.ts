@@ -71,6 +71,7 @@ export default {
       },
       register: {
         emailAlreadyExists: "邮箱已注册",
+        success: "注册成功",
       },
     },
     role: {
