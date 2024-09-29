@@ -61,10 +61,9 @@ export const SYS_IMAGE_MAX_SIZE = 10 * 1024 * 1024;
  * Includes:
  * - ACCOUNT_NOT_EXIST: Used when the provided account credentials do not match any existing account
  * - ACCOUNT_DISABLED: Used when the account exists but has been disabled or deactivated
- * - UNKNOWN_ERROR: A general error code for unexpected issues during the authentication process
  */
 export const SYS_AUTH_ERROR = {
     ACCOUNT_NOT_EXIST: "AccountNotExist",
     ACCOUNT_DISABLED: "AccountDisabled",
-    UNKNOWN_ERROR: "UnknownError",
+    PASSWORD_NOT_MATCH: "PasswordNotMatch",
 };

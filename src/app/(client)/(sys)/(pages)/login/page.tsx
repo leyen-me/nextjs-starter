@@ -72,12 +72,7 @@ function LoginForm() {
       redirect: false,
     });
 
-    if (!result) {
-      setLoading(false);
-      showError(new I18nError("pages.login.unknownError"));
-      return;
-    }
-    if (result.error) {
+    if (result?.error) {
       switch (result.error) {
         case SYS_AUTH_ERROR.ACCOUNT_NOT_EXIST:
           showError(new I18nError("pages.login.accountNotExist"));
@@ -85,8 +80,8 @@ function LoginForm() {
         case SYS_AUTH_ERROR.ACCOUNT_DISABLED:
           showError(new I18nError("pages.login.accountDisabled"));
           break;
-        case SYS_AUTH_ERROR.UNKNOWN_ERROR:
-          showError(new I18nError("pages.login.unknownError"));
+        case SYS_AUTH_ERROR.PASSWORD_NOT_MATCH:
+          showError(new I18nError("pages.login.passwordNotMatch"));
           break;
         default:
           showError(new I18nError("pages.login.unknownError"));
@@ -110,21 +105,11 @@ function LoginForm() {
   };
 
   const handleGithubLogin = async () => {
-    const result = await signIn("github", { callbackUrl, redirect: false });
-    if (result?.error) {
-      showError(new I18nError("pages.login.githubError"));
-      return;
-    }
-    router.push(callbackUrl);
+    await signIn("github", { callbackUrl, redirect: true });
   };
 
   const handleGoogleLogin = async () => {
-    const result = await signIn("google", { callbackUrl, redirect: false });
-    if (result?.error) {
-      showError(new I18nError("pages.login.googleError"));
-      return;
-    }
-    router.push(callbackUrl);
+    await signIn("google", { callbackUrl, redirect: true });
   };
 
   return (

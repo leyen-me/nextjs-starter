@@ -16,10 +16,8 @@ function AccountError() {
     return <AccountClosed />;
   } else if (error === SYS_AUTH_ERROR.ACCOUNT_DISABLED) {
     return <AccountDeactivated />;
-  } else if (error === SYS_AUTH_ERROR.UNKNOWN_ERROR) {
-    router.replace(LOGIN_URL);
   }
-  return <></>;
+  return <>Unknown Error</>;
 }
 
 export default function AccountErrorPage() {

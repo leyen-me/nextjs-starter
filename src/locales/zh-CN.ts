@@ -227,12 +227,11 @@ export default {
       signin: "登录",
       signingIn: "登录中...",
       signup: "注册一个账号",
-      invalidCredentials: "邮箱或密码错误",
+      
       accountNotExist: "账号或密码错误",
       accountDisabled: "账号已被禁用",
+      passwordNotMatch: "密码不匹配",
       unknownError: "未知错误",
-      githubError: "GitHub 登录失败",
-      googleError: "Google 登录失败",
     },
     register: {
       welcome: "欢迎注册后台管理",

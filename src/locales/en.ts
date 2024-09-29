@@ -227,12 +227,11 @@ export default {
       signin: "Sign in",
       signingIn: "Signing in...",
       signup: "Sign up",
-      invalidCredentials: "Invalid email or password",
+
       accountNotExist: "Account does not exist",
       accountDisabled: "Account has been disabled",
+      passwordNotMatch: "Passwords do not match",
       unknownError: "Unknown error",
-      githubError: "GitHub login failed",
-      googleError: "Google login failed",
     },
     register: {
       welcome: "Welcome to register",

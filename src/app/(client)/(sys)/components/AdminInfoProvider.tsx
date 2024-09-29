@@ -68,8 +68,7 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
           }
         }
       } catch (error) {
-        console.error("Failed to load data:", error);
-        setError("Failed to load necessary data. Please try again.");
+        signOut();
       } finally {
         setIsLoading(false);
       }
