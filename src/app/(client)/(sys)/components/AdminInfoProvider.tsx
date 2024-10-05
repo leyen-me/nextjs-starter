@@ -6,9 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { treeToMap } from "@/utils/tree";
 import { UserInfo } from "@/app/(server)/(sys)/api/user/info/route";
 import { useUserStore } from "@/app/(client)/(sys)/stores/userStore";
+import { useDictStore } from "@/app/(client)/(sys)/stores/dictStore";
 import Loading from "@/components/Loading";
 import { SYS_CONSTENTS_MENUS } from "../constans";
 import { signOut } from "next-auth/react";
+import { GlobalConfig } from "@/app/(server)/(sys)/api/config/route";
 
 type AdminInfoProviderProps = {
   children: React.ReactNode;
@@ -32,15 +34,15 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [menuList, setMenuList] = useState<SysMenu[]>([]);
-  const userStore = useUserStore();
+  
   const router = useRouter();
   const pathname = usePathname();
 
+  const userStore = useUserStore();
+  const { setDictMap } = useDictStore();
+
   useEffect(() => {
-
-
     const loadData = async () => {
-
       try {
         const { data: userInfo } = await api.get<UserInfo>("/api/user/info");
         userStore.setUser(userInfo);
@@ -53,6 +55,10 @@ export function AdminInfoProvider({ children }: AdminInfoProviderProps) {
             url,
           });
         });
+
+        const { data: configData } = await api.get<GlobalConfig>("/api/config");
+        const { dictMap } = configData;
+        setDictMap(dictMap);
 
         setMenuList(data);
         if (menuList.length === 0) {

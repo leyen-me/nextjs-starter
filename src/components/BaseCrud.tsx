@@ -320,10 +320,10 @@ export function BaseCrud({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageSize]);
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <>
